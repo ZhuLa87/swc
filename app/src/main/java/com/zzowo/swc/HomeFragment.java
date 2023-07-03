@@ -1,12 +1,24 @@
 package com.zzowo.swc;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +26,11 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
+
+    Toolbar toolbar;
+    AppCompatActivity activity;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,6 +65,10 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        sp = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
+        editor = sp.edit();
+
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -58,7 +79,43 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        // 讀取資料
+        String mySWC_name = sp.getString("mySWC_name", "我的智慧輪椅");
+
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        toolbar = view.findViewById(R.id.toolbar);
+        activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setTitle(mySWC_name);
+
+        return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.toolbar_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+       if (id == R.id.toolbar_rename) {
+           Toast.makeText(getContext(), "輸入界面待製作", Toast.LENGTH_SHORT).show();
+//           TODO: 輸入界面
+//           更新儲存
+           editor.putString("mySWC_name", "我的智慧輪椅");
+           editor.commit();
+//           更新介面
+           activity.getSupportActionBar().setTitle("我的智慧輪椅 No." + (int)(Math.random()*100));
+       } else if (id == R.id.toolbar_connect) {
+//           TODO: 操作待編輯.
+           Toast.makeText(getContext(), "連接設備界面待製作", Toast.LENGTH_SHORT).show();
+       } else if (id == R.id.toolbar_disconnect) {
+//           TODO: 操作待編輯.
+           Toast.makeText(getContext(), "斷連設備界面待製作", Toast.LENGTH_SHORT).show();
+       }
+       return true;
     }
 }

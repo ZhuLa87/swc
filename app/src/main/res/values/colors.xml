@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="transparent">#00000000</color>
     <color name="white">#E5E9EC</color>
     <color name="gray">#767C76</color>
     <color name="green_100">#97A092</color>
@@ -7,6 +8,7 @@
     <color name="green_300">#36453B</color>
     <color name="black_100">#353736</color>
     <color name="black_200">#303030</color>
+    <color name="black_300">#2E2D2D</color>
     <color name="black">#2B2929</color>
     <color name="deed_pink">#B29392</color>
     <color name="lavender">#8692F7</color>

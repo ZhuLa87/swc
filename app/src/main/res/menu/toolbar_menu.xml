@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/toolbar_rename"
+        android:title="重新命名輪椅"
+        android:icon="@drawable/baseline_edit_24"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/toolbar_connect"
+        android:title="連接新的輪椅" />
+
+    <item
+        android:id="@+id/toolbar_disconnect"
+        android:title="斷開輪椅連結" />
+</menu>
