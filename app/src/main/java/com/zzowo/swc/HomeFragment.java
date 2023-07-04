@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
@@ -26,11 +27,11 @@ import androidx.appcompat.widget.Toolbar;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
-
     Toolbar toolbar;
     AppCompatActivity activity;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private TextView toolBarTextView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -82,13 +83,15 @@ public class HomeFragment extends Fragment {
         // 讀取資料
         String mySWC_name = sp.getString("mySWC_name", "我的智慧輪椅");
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        toolbar = view.findViewById(R.id.toolbar);
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        toolbar = rootView.findViewById(R.id.toolbar);
         activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setTitle(mySWC_name);
+        toolBarTextView = rootView.findViewById(R.id.toolbar_text);
+        toolBarTextView.setText(mySWC_name);
+        activity.getSupportActionBar().setTitle("");
 
-        return view;
+        return rootView;
     }
 
     @Override
@@ -101,14 +104,15 @@ public class HomeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-       if (id == R.id.toolbar_rename) {
+        if (id == R.id.toolbar_rename) {
+           String newTitle = "我的智慧輪椅" + " No." + (int)(Math.random()*100);
            Toast.makeText(getContext(), "輸入界面待製作", Toast.LENGTH_SHORT).show();
 //           TODO: 輸入界面
 //           更新儲存
-           editor.putString("mySWC_name", "我的智慧輪椅");
+           editor.putString("mySWC_name", newTitle);
            editor.commit();
 //           更新介面
-           activity.getSupportActionBar().setTitle("我的智慧輪椅 No." + (int)(Math.random()*100));
+           toolBarTextView.setText(newTitle);
        } else if (id == R.id.toolbar_connect) {
 //           TODO: 操作待編輯.
            Toast.makeText(getContext(), "連接設備界面待製作", Toast.LENGTH_SHORT).show();

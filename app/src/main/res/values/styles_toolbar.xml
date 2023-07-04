@@ -17,8 +17,8 @@
         <item name="colorControlNormal">@color/white</item>
     </style>
 
-    <!--Title大小-->
-    <style name="TitleTextSize" parent="@style/Base.TextAppearance.AppCompat.Title">
+    <!--Title-->
+    <style name="TitleText" parent="@style/Base.TextAppearance.AppCompat.Title">
         <item name="android:textSize">26sp</item>
         <item name="android:textColor">@color/white</item>
     </style>

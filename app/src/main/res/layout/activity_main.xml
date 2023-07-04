@@ -17,20 +17,20 @@
 <!--    底部導覽欄 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="25dp"
         android:background="@drawable/bottom_background"
         android:elevation="2dp"
+        app:menu="@menu/bottom_menu"
+        app:itemActiveIndicatorStyle="@style/Indicator"
         app:itemIconSize="35dp"
         app:itemIconTint="@drawable/item_selector"
         app:itemRippleColor="@android:color/transparent"
         app:itemTextColor="@drawable/item_selector"
         app:labelVisibilityMode="selected"
-        app:menu="@menu/bottom_menu"
-        app:itemActiveIndicatorStyle="@style/Indicator"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="25dp" />
 
 </RelativeLayout>
