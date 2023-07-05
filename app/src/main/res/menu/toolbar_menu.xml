@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/toolbar_rename"
-        android:title="重新命名輪椅"
+        android:title="@string/toolbar_menu_rename"
         android:icon="@drawable/baseline_edit_24"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/toolbar_connect"
-        android:title="連接新的輪椅" />
+        android:id="@+id/toolbar_add"
+        android:title="@string/toolbar_menu_add" />
 
     <item
-        android:id="@+id/toolbar_disconnect"
-        android:title="斷開輪椅連結" />
+        android:id="@+id/toolbar_remove"
+        android:title="@string/toolbar_menu_remove" />
 </menu>

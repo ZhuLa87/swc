@@ -10,7 +10,6 @@
         android:id="@+id/toolbar"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,13 +30,16 @@
         android:layout_below="@+id/toolbar"
         android:layout_alignParentBottom="true"
         >
-        <TextView
-            android:text="Home"
-            android:textColor="@color/green_100"
-            android:textSize="36sp"
-            android:layout_width="wrap_content"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            app:lottie_rawRes="@raw/home"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_speed="0.8"
+            app:lottie_colorFilter="@color/white" />
+
     </RelativeLayout>
 
 

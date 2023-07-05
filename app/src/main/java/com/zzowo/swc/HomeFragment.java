@@ -7,9 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -81,7 +79,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // 讀取資料
-        String mySWC_name = sp.getString("mySWC_name", "我的智慧輪椅");
+        String mySWC_name_default = getString(R.string.mySWC_name_default);
+        String mySWC_name = sp.getString("mySWC_name", mySWC_name_default);
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         toolbar = rootView.findViewById(R.id.toolbar);
@@ -105,18 +104,19 @@ public class HomeFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.toolbar_rename) {
-           String newTitle = "我的智慧輪椅" + " No." + (int)(Math.random()*100);
-           Toast.makeText(getContext(), "輸入界面待製作", Toast.LENGTH_SHORT).show();
+            String mySWC_name_default = getString(R.string.mySWC_name_default);
+            String newTitle = mySWC_name_default + " No." + (int)(Math.random()*100);
 //           TODO: 輸入界面
-//           更新儲存
+           Toast.makeText(getContext(), "輸入界面待製作", Toast.LENGTH_SHORT).show();
+//           儲存新名稱
            editor.putString("mySWC_name", newTitle);
            editor.commit();
 //           更新介面
            toolBarTextView.setText(newTitle);
-       } else if (id == R.id.toolbar_connect) {
+       } else if (id == R.id.toolbar_add) {
 //           TODO: 操作待編輯.
            Toast.makeText(getContext(), "連接設備界面待製作", Toast.LENGTH_SHORT).show();
-       } else if (id == R.id.toolbar_disconnect) {
+       } else if (id == R.id.toolbar_remove) {
 //           TODO: 操作待編輯.
            Toast.makeText(getContext(), "斷連設備界面待製作", Toast.LENGTH_SHORT).show();
        }

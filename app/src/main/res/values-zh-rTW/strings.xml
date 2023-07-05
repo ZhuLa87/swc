@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">智慧輪椅</string>
+    <string name="bottom_menu_home">首頁</string>
+    <string name="bottom_menu_map">地圖</string>
+    <string name="bottom_menu_notifications">通知</string>
+    <string name="bottom_menu_settings">設定</string>
+    <string name="toolbar_menu_rename">重新命名</string>
+    <string name="toolbar_menu_add">新增輪椅</string>
+    <string name="toolbar_menu_remove">移除輪椅</string>
+    <string name="mySWC_name_default">我的物聯網輪椅</string>
+</resources>
