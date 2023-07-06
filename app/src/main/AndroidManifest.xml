@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-feature android:name="android.hardware.location.gps"
+        android:required="false">
+    </uses-feature>
+    <uses-feature android:name="android.hardware.location"
+        android:required="false">
+    </uses-feature>
+
+<!--    防止處理器休眠或螢幕變暗-->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+<!--    允許應用程序訪問有關網絡的信息-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+<!--    震動-->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+<!--    允許應用訪問大概位置-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+<!--    允許應用程序訪問精確位置-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<!--    允許應用程序訪問有關 Wi-Fi 網絡的信息-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+<!--    允許應用程序連接到配對的藍牙設備-->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+<!--    允許應用程序發現並配對藍牙設備-->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
     <application
         android:allowBackup="true"

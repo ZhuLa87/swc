@@ -8,6 +8,7 @@
     >
 
     <com.airbnb.lottie.LottieAnimationView
+        android:onClick="sendNotification"
         android:id="@+id/animationView_notifications"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +18,7 @@
         app:lottie_rawRes="@raw/notifications" />
 
     <com.airbnb.lottie.LottieAnimationView
+        android:onClick="cancelNotification"
         android:id="@+id/animationView_cancel"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
