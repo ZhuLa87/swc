@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "935533087939",
+    "project_id": "smartwheelchair-6c021",
+    "storage_bucket": "smartwheelchair-6c021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935533087939:android:5a71bf5e21d5a09a35e676",
+        "android_client_info": {
+          "package_name": "com.zzowo.swc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "935533087939-qa0tqtro7kea5b8a0bippjp9rk1tg7cc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zzowo.swc",
+            "certificate_hash": "42d05f141e52c76a9919a6a9d339541d2069834d"
+          }
+        },
+        {
+          "client_id": "935533087939-b80183cb0a59vtvvvhh6a3e48k85bpf7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7IXAjYQRO_BThsxbIlamKxpjuAYmtqiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "935533087939-b80183cb0a59vtvvvhh6a3e48k85bpf7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

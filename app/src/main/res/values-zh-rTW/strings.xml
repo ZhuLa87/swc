@@ -9,4 +9,8 @@
     <string name="toolbar_menu_add">新增輪椅</string>
     <string name="toolbar_menu_remove">移除輪椅</string>
     <string name="mySWC_name_default">我的物聯網輪椅</string>
+    <string name="settings">設定</string>
+    <string name="func_text_01">功能一</string>
+    <string name="func_text_02">功能二</string>
+    <string name="func_text_03">功能三</string>
 </resources>

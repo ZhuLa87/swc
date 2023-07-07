@@ -28,7 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_alignParentBottom="true"
         >
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animationView"
@@ -40,6 +39,100 @@
             app:lottie_speed="0.8" />
 
     </RelativeLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@drawable/function_button_background_home_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="120dp"
+        android:elevation="2dp">
+        <RelativeLayout
+            android:id="@+id/func_01"
+            android:background="@drawable/function_button_home_fragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:elevation="3dp">
+            <ImageView
+                android:id="@+id/func_img_01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_above="@id/func_text_01"
+                android:src="@drawable/ic_add" />
+            <TextView
+                android:id="@+id/func_text_01"
+                android:text="@string/func_text_01"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold|italic"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/func_02"
+            android:background="@drawable/function_button_home_fragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:elevation="3dp">
+            <ImageView
+                android:id="@+id/func_img_02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_above="@id/func_text_02"
+                android:src="@drawable/ic_add" />
+            <TextView
+                android:id="@+id/func_text_02"
+                android:text="@string/func_text_02"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold|italic"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/func_03"
+            android:background="@drawable/function_button_home_fragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:elevation="3dp">
+            <ImageView
+                android:id="@+id/func_img_03"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_above="@id/func_text_03"
+                android:src="@drawable/ic_add" />
+            <TextView
+                android:id="@+id/func_text_03"
+                android:text="@string/func_text_03"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold|italic"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
 
+    </LinearLayout>
 
 </RelativeLayout>

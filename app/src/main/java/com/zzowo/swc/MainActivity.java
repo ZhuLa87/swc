@@ -3,6 +3,7 @@ package com.zzowo.swc;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Night mode is enable by default
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Night mode is enable by default
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -52,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        通知管理
-
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         NotificationChannel notificationChannel = new NotificationChannel("alert", "通知LaGan", NotificationManager.IMPORTANCE_HIGH);

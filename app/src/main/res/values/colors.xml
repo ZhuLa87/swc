@@ -13,5 +13,6 @@
     <color name="deed_pink">#B29392</color>
     <color name="lavender">#8692F7</color>
     <color name="purple">#6200EE</color>
+    <color name="link">#03A9F4</color>
     <color name="error">#B00020</color>
 </resources>

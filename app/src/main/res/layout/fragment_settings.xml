@@ -6,15 +6,77 @@
     android:layout_height="match_parent"
     tools:context=".SettingsFragment"
     >
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:lottie_rawRes="@raw/settings"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_speed="0.5"
-        app:lottie_colorFilter="@color/white" />
+        android:layout_height="match_parent"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_info"
+            android:background="@drawable/user_background_settings_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_margin="16dp">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/people"
+                app:lottie_speed="0.5"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                app:layout_constraintStart_toEndOf="@id/animationView"
+                app:layout_constraintTop_toTopOf="@id/animationView"
+                app:layout_constraintBottom_toBottomOf="@id/animationView" >
+                <TextView
+                    android:id="@+id/user_email"
+                    android:text="user@zzowo.com"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
+                <TextView
+                    android:id="@+id/user_uid"
+                    android:text="UID not established"
+                    android:textSize="13sp"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/title"
+            android:text="@string/settings"
+            android:textSize="36sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_info"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="15dp"/>
+    </LinearLayout>
+
+
+
 
 </RelativeLayout>

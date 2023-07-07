@@ -8,4 +8,10 @@
     <string name="toolbar_menu_add">Add Wheel Chair</string>
     <string name="toolbar_menu_remove">Remove Wheel Chair</string>
     <string name="mySWC_name_default">My IOT Wheel Chair</string>
+    <string name="settings">Settings</string>
+    <string name="func_text_01">Func 01</string>
+    <string name="func_text_02">Func 02</string>
+    <string name="func_text_03">Func 03</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

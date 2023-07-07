@@ -1,19 +1,24 @@
 package com.zzowo.swc;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -107,19 +112,19 @@ public class HomeFragment extends Fragment {
             String mySWC_name_default = getString(R.string.mySWC_name_default);
             String newTitle = mySWC_name_default + " No." + (int)(Math.random()*100);
 //           TODO: 輸入界面
-           Toast.makeText(getContext(), "輸入界面待製作", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "輸入界面待製作", Toast.LENGTH_SHORT).show();
 //           儲存新名稱
-           editor.putString("mySWC_name", newTitle);
-           editor.commit();
+            editor.putString("mySWC_name", newTitle);
+            editor.commit();
 //           更新介面
-           toolBarTextView.setText(newTitle);
-       } else if (id == R.id.toolbar_add) {
-//           TODO: 操作待編輯.
-           Toast.makeText(getContext(), "連接設備界面待製作", Toast.LENGTH_SHORT).show();
-       } else if (id == R.id.toolbar_remove) {
-//           TODO: 操作待編輯.
-           Toast.makeText(getContext(), "斷連設備界面待製作", Toast.LENGTH_SHORT).show();
-       }
-       return true;
+            toolBarTextView.setText(newTitle);
+        } else if (id == R.id.toolbar_add) {
+//            TODO: toolbar_add操作待編輯.
+            Toast.makeText(getContext(), "連接設備界面待製作", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.toolbar_remove) {
+//            TODO: toolbar_remove操作待編輯.
+            Toast.makeText(getContext(), "斷連設備界面待製作", Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 }
