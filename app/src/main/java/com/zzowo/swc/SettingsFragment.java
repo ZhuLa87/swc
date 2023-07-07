@@ -87,6 +87,7 @@ public class SettingsFragment extends Fragment {
 //            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
         }
 
+//        設定介面未完成, 登出按鈕僅供測試
         Button logout = rootView.findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

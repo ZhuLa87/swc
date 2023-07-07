@@ -87,7 +87,8 @@ public class SignUpPage extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(SignUpPage.this, R.string.toast_account_created, Toast.LENGTH_SHORT).show();
+                                    String[] user = mAuth.getCurrentUser().getEmail().split("@");
+                                    Toast.makeText(SignUpPage.this, R.string.toast_account_created + user[0], Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                     finish();

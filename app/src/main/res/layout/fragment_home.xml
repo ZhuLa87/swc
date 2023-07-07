@@ -32,7 +32,7 @@
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animationView"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="300dp"
             app:lottie_rawRes="@raw/wheelchair"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"

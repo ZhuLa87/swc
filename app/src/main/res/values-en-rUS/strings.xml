@@ -28,9 +28,9 @@
     <string name="toast_enter_email">Enter email</string>
     <string name="toast_enter_password">Enter password</string>
     <string name="settings_logout">Logout</string>
-    <string name="toast_welcome_back">"Welcome back, "</string>
+    <string name="toast_welcome_back">"Hi, "</string>
     <string name="toast_authentication_failed">Authentication failed.</string>
     <string name="input_empty_error">Must be needed</string>
-    <string name="toast_account_created">Account created.</string>
+    <string name="toast_account_created">"Hi, "</string>
     <string name="toast_registration_failed">Registration failed, please log in if you already have an account.</string>
 </resources>

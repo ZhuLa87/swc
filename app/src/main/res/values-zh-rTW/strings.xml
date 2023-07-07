@@ -31,6 +31,6 @@
     <string name="toast_welcome_back">"歡迎回來, "</string>
     <string name="toast_authentication_failed">認證失敗</string>
     <string name="input_empty_error">必須要</string>
-    <string name="toast_account_created">帳號創建成功</string>
+    <string name="toast_account_created">"歡迎, "</string>
     <string name="toast_registration_failed">註冊失敗, 若您已有帳號, 請登入</string>
 </resources>
