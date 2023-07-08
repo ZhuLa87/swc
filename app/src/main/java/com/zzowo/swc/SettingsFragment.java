@@ -10,10 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +29,8 @@ public class SettingsFragment extends Fragment {
     TextView userName; // userName 未製作
     TextView userEmail;
     TextView userUid;
+    LottieAnimationView lottieAnimationView;
+    ImageView userAvatar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,24 +77,37 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        lottieAnimationView = rootView.findViewById(R.id.animation_avatar);
+        userAvatar = rootView.findViewById(R.id.user_avatar);
         userName = rootView.findViewById(R.id.user_name);
         userEmail = rootView.findViewById(R.id.user_email);
         userUid = rootView.findViewById(R.id.user_uid);
 
         mAuth = FirebaseAuth.getInstance(); // 第一次寫少了這行, Debug1個半小時才找到, 所以我決定給他個註解; 附上錯誤訊息"java.lang.NullPointerException: Attempt to invoke virtual method 'com.google.firebase.auth.FirebaseUser com.google.firebase.auth.FirebaseAuth.getCurrentUser()' on a null object reference"
         user = mAuth.getCurrentUser();
+
         if (user == null) {
             Intent intent = new Intent(getContext(), LoginPage.class);
             startActivity(intent);
             getActivity().finish();
         } else {
+            // 使用者頭像是否存在
+            String userAvatarLink = user.getPhotoUrl().toString();
+            if (userAvatarLink != null) {
+                Picasso.get().load(userAvatarLink).into(userAvatar);
+                lottieAnimationView.setVisibility(View.INVISIBLE);
+                userAvatar.setVisibility(View.VISIBLE);
+            }
+
+            // 使用者名稱是否存在
             String userDisplayName = user.getDisplayName();
             if (userName != null) {
                 userName.setVisibility(View.VISIBLE);
                 userName.setText(userDisplayName);
             }
             userEmail.setText(user.getEmail());
-            userUid.setText(user.getUid());
+            userUid.setText("UID: " + user.getUid());
+
 //            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
         }
 

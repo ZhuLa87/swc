@@ -11,66 +11,82 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/user_info"
-            android:background="@drawable/user_background_settings_fragment"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:layout_margin="16dp">
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/user_background_settings_fragment">
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animationView"
+                android:id="@+id/animation_avatar"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/people"
-                app:lottie_speed="0.5"
+                app:lottie_speed="0.5" />
+
+            <ImageView
+                android:id="@+id/user_avatar"
+                android:visibility="gone"
+                android:background="@drawable/avatar_settings_fragment"
+                android:scaleType="centerCrop"
+                android:clipToOutline="true"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                app:layout_constraintStart_toEndOf="@id/animationView"
-                app:layout_constraintTop_toTopOf="@id/animationView"
-                app:layout_constraintBottom_toBottomOf="@id/animationView" >
+                android:layout_marginStart="10dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@id/animation_avatar"
+                app:layout_constraintStart_toEndOf="@id/animation_avatar"
+                app:layout_constraintTop_toTopOf="@id/animation_avatar">
 
-<!--                user_name 尚未製作-->
+                <!--                user_name 尚未製作-->
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
                     android:text="user123"
-                    android:textSize="26sp"
-                    android:textStyle="bold"
                     android:textColor="@color/white"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/user_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:text="user@zzowo.com"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/user_uid"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    />
-                <TextView
-                    android:id="@+id/user_email"
-                    android:text="user@zzowo.com"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    />
-                <TextView
-                    android:id="@+id/user_uid"
                     android:text="UID not established"
-                    android:textSize="13sp"
                     android:textColor="@color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    />
+                    android:textSize="15sp" />
             </LinearLayout>
 
 

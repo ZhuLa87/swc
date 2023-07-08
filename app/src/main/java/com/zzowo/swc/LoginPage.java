@@ -30,7 +30,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginPage extends AppCompatActivity {
-    FirebaseAuth mAuth;
+    private static final int RC_SIGN_IN = 100;
+    private FirebaseAuth mAuth;
 //    FirebaseDatabase database;
     GoogleSignInClient mGoogleSignInClient;
     TextInputEditText editTextEmail, editTextPassword;
@@ -125,21 +126,18 @@ public class LoginPage extends AppCompatActivity {
         buttonGoogleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn();
+                progressBar.setVisibility(View.VISIBLE);
+                Intent intent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(intent, RC_SIGN_IN);
             }
         });
-    }
-
-    int RC_SIGN_IN = 100;
-    private void signIn() {
-        Intent intent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(intent, RC_SIGN_IN);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        progressBar.setVisibility(View.GONE);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {

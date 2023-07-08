@@ -30,7 +30,7 @@
         android:layout_below="@+id/toolbar"
         >
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/animationView"
+            android:id="@+id/animation_avatar"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             app:lottie_rawRes="@raw/wheelchair"
