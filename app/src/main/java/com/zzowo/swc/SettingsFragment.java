@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
  * create an instance of this fragment.
  */
 public class SettingsFragment extends Fragment {
-    FirebaseAuth auth;
+    FirebaseAuth mAuth;
     FirebaseUser user;
     TextView userName; // userName 未製作
     TextView userEmail;
@@ -75,13 +76,18 @@ public class SettingsFragment extends Fragment {
         userEmail = rootView.findViewById(R.id.user_email);
         userUid = rootView.findViewById(R.id.user_uid);
 
-        auth = FirebaseAuth.getInstance(); // 第一次寫少了這行, Debug1個半小時才找到, 所以我決定給他個註解; 附上錯誤訊息"java.lang.NullPointerException: Attempt to invoke virtual method 'com.google.firebase.auth.FirebaseUser com.google.firebase.auth.FirebaseAuth.getCurrentUser()' on a null object reference"
-        user = auth.getCurrentUser();
+        mAuth = FirebaseAuth.getInstance(); // 第一次寫少了這行, Debug1個半小時才找到, 所以我決定給他個註解; 附上錯誤訊息"java.lang.NullPointerException: Attempt to invoke virtual method 'com.google.firebase.auth.FirebaseUser com.google.firebase.auth.FirebaseAuth.getCurrentUser()' on a null object reference"
+        user = mAuth.getCurrentUser();
         if (user == null) {
             Intent intent = new Intent(getContext(), LoginPage.class);
             startActivity(intent);
             getActivity().finish();
         } else {
+            String userDisplayName = user.getDisplayName();
+            if (userName != null) {
+                userName.setVisibility(View.VISIBLE);
+                userName.setText(userDisplayName);
+            }
             userEmail.setText(user.getEmail());
             userUid.setText(user.getUid());
 //            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
@@ -92,7 +98,7 @@ public class SettingsFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
+                mAuth.signOut();
                 Intent intent = new Intent(getContext(), LoginPage.class);
                 startActivity(intent);
                 getActivity().finish();

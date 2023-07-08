@@ -1,11 +1,8 @@
 package com.zzowo.swc;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,20 +13,16 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.zzowo.swc.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    FirebaseAuth auth;
+    FirebaseAuth mAuth;
     FirebaseUser user;
 
     private ActivityMainBinding binding;
@@ -42,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Night mode is enable by default
         super.onCreate(savedInstanceState);
 
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
         if (user == null) {
             Intent intent = new Intent(getApplicationContext(), LoginPage.class);
             startActivity(intent);
