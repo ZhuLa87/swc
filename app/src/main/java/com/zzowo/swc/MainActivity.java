@@ -18,12 +18,22 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.zzowo.swc.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+    FirebaseAuth auth;
+    FirebaseUser user;
+    TextView textViewUserName;
+    Button buttonLogout;
+
     private ActivityMainBinding binding;
     private NotificationManager notificationManager;
     private Notification notification;
@@ -33,6 +43,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Night mode is enable by default
         super.onCreate(savedInstanceState);
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Log.d("zhu", "UserEmail: " + user.getEmail());
+            Log.d("zhu", "UserUID: " + user.getUid());
+        }
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());

@@ -13,4 +13,24 @@
     <string name="func_text_01">功能一</string>
     <string name="func_text_02">功能二</string>
     <string name="func_text_03">功能三</string>
+    <string name="title_login">登入</string>
+    <string name="title_welcome_back">歡迎回來</string>
+    <string name="hint_email">電子郵件地址</string>
+    <string name="login_btn">登入</string>
+    <string name="login_bottom_hint">還沒有帳賀嗎?</string>
+    <string name="hint_password">密碼</string>
+    <string name="sign_up_link">點我註冊</string>
+    <string name="title_hello">歡迎</string>
+    <string name="title_sign_up">註冊</string>
+    <string name="sign_up_btn">登入</string>
+    <string name="sign_up_bottom_hint">已經有帳號了?</string>
+    <string name="login_link">點我登入</string>
+    <string name="toast_enter_email">請輸入帳號</string>
+    <string name="toast_enter_password">請輸入密碼</string>
+    <string name="settings_logout">登出</string>
+    <string name="toast_welcome_back">"歡迎回來, "</string>
+    <string name="toast_authentication_failed">認證失敗</string>
+    <string name="input_empty_error">必須要</string>
+    <string name="toast_account_created">帳號創建成功</string>
+    <string name="toast_registration_failed">註冊失敗, 若您已有帳號, 請登入</string>
 </resources>
