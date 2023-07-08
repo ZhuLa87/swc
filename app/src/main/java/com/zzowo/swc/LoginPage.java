@@ -69,10 +69,12 @@ public class LoginPage extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(email)) {
                     progressBar.setVisibility(View.GONE);
+                    editTextEmail.setError(getString(R.string.input_empty_error));
                     Toast.makeText(LoginPage.this, R.string.toast_enter_email, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (TextUtils.isEmpty(password)) {
                     progressBar.setVisibility(View.GONE);
+                    editTextPassword.setError(getString(R.string.input_empty_error));
                     Toast.makeText(LoginPage.this, R.string.toast_enter_password, Toast.LENGTH_SHORT).show();
                     return;
                 }

@@ -78,8 +78,10 @@
     <!--    Progress Bar-->
     <ProgressBar
         android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:visibility="gone"
-        android:layout_width="wrap_content"
+        android:indeterminate="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_gravity="center" />
@@ -94,7 +96,7 @@
         android:backgroundTint="@color/green_300"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"/>
+        android:layout_marginTop="40dp"/>
     <!--    Switch to Login-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -119,5 +121,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"/>
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp">
+        <ImageView
+            android:id="@+id/login_google"
+            android:src="@drawable/btn_google_sign_in_dark_normal_web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
 
 </LinearLayout>

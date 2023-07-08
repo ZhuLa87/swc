@@ -31,8 +31,6 @@ import com.zzowo.swc.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser user;
-    TextView textViewUserName;
-    Button buttonLogout;
 
     private ActivityMainBinding binding;
     private NotificationManager notificationManager;
