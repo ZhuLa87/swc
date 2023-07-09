@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MapFragment"
     >
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animation_avatar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:lottie_rawRes="@raw/map"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true" />
+
 
 </RelativeLayout>

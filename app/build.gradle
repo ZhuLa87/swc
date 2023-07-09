@@ -62,4 +62,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.2.2'
     implementation 'com.google.android.gms:play-services-auth:20.6.0'
 
+    // google maps
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.karumi:dexter:6.2.1'
+
 }

@@ -3,6 +3,7 @@ package com.zzowo.swc;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -35,6 +36,13 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Night mode is enable by default
         super.onCreate(savedInstanceState);
 
+//        init
+        autoAuth();
+        bottomNavSetup();
+        notificationSetup(); // 通知管理
+    }
+
+    private void autoAuth() {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         if (user == null) {
@@ -42,10 +50,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
+            Log.d("zhu", "UserName: " + user.getDisplayName());
             Log.d("zhu", "UserEmail: " + user.getEmail());
             Log.d("zhu", "UserUID: " + user.getUid());
         }
+    }
 
+    private void bottomNavSetup() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
@@ -64,8 +75,16 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
 
-//        通知管理
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void notificationSetup() {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         NotificationChannel notificationChannel = new NotificationChannel("alert", "通知LaGan", NotificationManager.IMPORTANCE_HIGH);
@@ -74,21 +93,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new  Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
+        int color = ContextCompat.getColor(this, R.color.green_300);
         notification = new NotificationCompat.Builder(this, "alert")
                 .setContentTitle("早安!")
                 .setContentText("世界那麼大, 想去走走嗎")
                 .setSmallIcon(R.drawable.wheelchair_100)
-                .setColor(R.color.white)
+                .setColor(color)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .build();
-    }
-
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
     }
 
     public void sendNotification(View view) {
