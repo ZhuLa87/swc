@@ -1,5 +1,6 @@
 package com.zzowo.swc;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.os.Bundle;
@@ -11,6 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,7 +70,26 @@ public class NotificationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notifications, container, false);
-
+        grantPermission();
         return rootView;
+    }
+
+    private void grantPermission() {
+        // grant permission
+        Dexter.withContext(getActivity().getApplicationContext()).withPermission(Manifest.permission.POST_NOTIFICATIONS)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                        permissionToken.continuePermissionRequest();
+                    }
+                }).check();
     }
 }

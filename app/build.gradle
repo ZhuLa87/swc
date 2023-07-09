@@ -3,6 +3,10 @@ plugins {
 
 //    Add the Google services Gradle plugin
     id 'com.google.gms.google-services'
+
+//    google maps
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+
 }
 
 android {
