@@ -1,6 +1,7 @@
 package com.zzowo.swc;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -91,20 +92,25 @@ public class SettingsFragment extends Fragment {
             startActivity(intent);
             getActivity().finish();
         } else {
-            // 使用者頭像是否存在
-            String userAvatarLink = user.getPhotoUrl().toString();
-            if (userAvatarLink != null) {
-                Picasso.get().load(userAvatarLink).into(userAvatar);
+
+            // get provider
+            String provider = user.getProviderData().get(1).getProviderId();
+
+            if (provider.contains("google.com")) { // Can't use provider == "google.com", but idk why
+                // 顯示使用者頭像
+                Uri userAvatarUrl = user.getPhotoUrl();
+                Picasso.get().load(userAvatarUrl).into(userAvatar);
                 lottieAnimationView.setVisibility(View.INVISIBLE);
                 userAvatar.setVisibility(View.VISIBLE);
+
+                // 顯示使用者名稱
+                String userDisplayName = user.getDisplayName();
+                userName.setText(userDisplayName);
+                userName.setVisibility(View.VISIBLE);
+            } else if (provider.contains("password")) {
+                // sign in with password
             }
 
-            // 使用者名稱是否存在
-            String userDisplayName = user.getDisplayName();
-            if (userName != null) {
-                userName.setVisibility(View.VISIBLE);
-                userName.setText(userDisplayName);
-            }
             userEmail.setText(user.getEmail());
             userUid.setText("UID: " + user.getUid());
 

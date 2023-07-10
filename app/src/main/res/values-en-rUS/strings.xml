@@ -36,4 +36,6 @@
     <string name="current_location">Current Location!</string>
     <string name="plz_check_location_permission">Please on your Location App Permissions</string>
     <string name="map">Map</string>
+    <string name="location_perm_denied_msg">The geographic location permission is only used to display your location on the map, and your location data will only be shared with users bound to you</string>
+    <string name="notification">Notification</string>
 </resources>

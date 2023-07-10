@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginPage extends AppCompatActivity {
+    private static final String TAG = "LOGIN";
     private static final int RC_SIGN_IN = 100;
     private FirebaseAuth mAuth;
 //    FirebaseDatabase database;
@@ -178,15 +179,16 @@ public class LoginPage extends AppCompatActivity {
 
     private void welcomeToast() {
         FirebaseUser user = mAuth.getCurrentUser();
+        String provider = user.getProviderData().get(1).getProviderId();
         String userDisplayName = user.getDisplayName();
         String welcomeMsg = getString(R.string.toast_account_created);
-        if (userDisplayName != null) {
-            welcomeMsg += userDisplayName;
-        } else {
+        if (provider.contains("password")) {
             String[] userName = user.getEmail().split("@");
             welcomeMsg += userName[0];
+        } else if (provider.contains("google.com")) {
+            welcomeMsg += userDisplayName;
         }
-        Log.d("zhu", "welcomeMsg: " + welcomeMsg);
+        Log.d(TAG, "welcomeMsg: " + welcomeMsg);
         Toast.makeText(this, welcomeMsg, Toast.LENGTH_SHORT).show();
     }
 }

@@ -25,12 +25,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.karumi.dexter.listener.single.SnackbarOnDeniedPermissionListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +43,7 @@ public class MapFragment extends Fragment {
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient fusedLocationProviderClient;
     ProgressBar progressBar;
+    Snackbar snackbar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -114,11 +117,11 @@ public class MapFragment extends Fragment {
                         // Set position of marker
                         markerOptions.position(latLng);
                         // Set title of marker
-                        markerOptions.title(latLng.latitude+" : "+latLng.longitude);
+                        markerOptions.title(String.format("%.2f", latLng.latitude) + " : " + String.format("%.2f", latLng.longitude));
                         // Remove all marker
                         googleMap.clear();
                         // Animating to zoom the marker
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17f));
                         // Add marker on map
                         googleMap.addMarker(markerOptions);
                     }
@@ -142,6 +145,7 @@ public class MapFragment extends Fragment {
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                        Toast.makeText(getActivity(), R.string.location_perm_denied_msg, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -151,6 +155,7 @@ public class MapFragment extends Fragment {
                 }).check();
     }
 
+    // 取得當前位置並將地圖移動至當前所在位置
     public void getCurrentLocation() {
         @SuppressLint("MissingPermission") Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -160,10 +165,17 @@ public class MapFragment extends Fragment {
                     @Override
                     public void onMapReady(@NonNull GoogleMap googleMap) {
                         if (location != null) {
+                            progressBar.setVisibility(View.VISIBLE);
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(getString(R.string.current_location));
                             googleMap.addMarker(markerOptions);
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f));
+                            googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                @Override
+                                public void onMapLoaded() {
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            });
                         } else {
                             Toast.makeText(getActivity(), getString(R.string.plz_check_location_permission), Toast.LENGTH_SHORT).show();
                         }

@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
+            // 'FirebaseAuth.getInstance().getCurrentUser().getProviderId()' always return 'firebase'
+            // Solution: https://www.qiniu.com/qfans/qnso-49484003#comments
+            String providerId = user.getProviderData().get(1).getProviderId();
+            Log.d("zhu", "ProviderId: " + providerId);
             Log.d("zhu", "UserName: " + user.getDisplayName());
             Log.d("zhu", "UserEmail: " + user.getEmail());
             Log.d("zhu", "UserUID: " + user.getUid());

@@ -36,4 +36,6 @@
     <string name="current_location">現在位置</string>
     <string name="plz_check_location_permission">請檢查應用程式的位置權限</string>
     <string name="map">地圖</string>
+    <string name="location_perm_denied_msg">地理位置權限僅供於地圖中顯示您的位置, 您的位置資料僅會與您綁定的使用者分享</string>
+    <string name="notification">通知</string>
 </resources>
