@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,14 +32,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SignUpPage extends AppCompatActivity {
+    private static final String TAG = "SIGNUP";
     private static final int RC_SIGN_IN = 100;
     private FirebaseAuth mAuth;
-    GoogleSignInClient mGoogleSignInClient;
-    TextInputEditText editTextEmail, editTextPassword;
-    Button buttonSignUp;
-    ImageView buttonGoogleLogin;
-    ProgressBar progressBar;
-    TextView loginNow;
+    private GoogleSignInClient mGoogleSignInClient;
+    private TextInputEditText editTextEmail, editTextPassword;
+    private Button buttonSignUp;
+    private ImageView buttonGoogleLogin;
+    private ProgressBar progressBar;
+    private TextView loginNow;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
     @Override
     public void onStart() {
@@ -65,6 +69,10 @@ public class SignUpPage extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         loginNow = findViewById(R.id.loginNow);
         buttonGoogleLogin = findViewById(R.id.login_google);
+
+//        init
+        initPreferences();
+        initGoogleSignUp();
 
         loginNow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,8 +110,9 @@ public class SignUpPage extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    String[] user = mAuth.getCurrentUser().getEmail().split("@");
-                                    Toast.makeText(SignUpPage.this, R.string.toast_account_created + user[0], Toast.LENGTH_SHORT).show();
+                                    saveUserInfoPreferences(mAuth.getCurrentUser());
+                                    welcomeToast();
+                                    // 切換到主頁面
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                     finish();
@@ -116,11 +125,6 @@ public class SignUpPage extends AppCompatActivity {
             }
         });
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         buttonGoogleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +133,19 @@ public class SignUpPage extends AppCompatActivity {
                 startActivityForResult(intent, RC_SIGN_IN);
             }
         });
+    }
+
+    private void initPreferences() {
+        sp = this.getSharedPreferences("data", MODE_PRIVATE);
+        editor = sp.edit();
+    }
+
+    private void initGoogleSignUp() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
     @Override
@@ -154,6 +171,7 @@ public class SignUpPage extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            saveUserInfoPreferences(mAuth.getCurrentUser());
                             welcomeToast();
 
 //                             TODO: Bug here, can't update to database
@@ -174,17 +192,24 @@ public class SignUpPage extends AppCompatActivity {
                 });
     }
 
+    private void saveUserInfoPreferences(FirebaseUser user) {
+        String userUid = user.getUid();
+        editor.putString("userUid", userUid);
+        editor.commit();
+        Log.d(TAG, "saveUserUid: " + userUid);
+    }
+
     private void welcomeToast() {
         FirebaseUser user = mAuth.getCurrentUser();
-        String userDisplayName = user.getDisplayName();
+        String provider = user.getProviderData().get(1).getProviderId();
         String welcomeMsg = getString(R.string.toast_account_created);
-        if (userDisplayName != null) {
-            welcomeMsg += userDisplayName;
-        } else {
+        if (provider.contains("password")) {
             String[] userName = user.getEmail().split("@");
             welcomeMsg += userName[0];
+        } else if (provider.contains("google.com")) {
+            welcomeMsg += user.getDisplayName();
         }
-        Log.d("zhu", "welcomeMsg: " + welcomeMsg);
+        Log.d(TAG, "Hi: " + welcomeMsg);
         Toast.makeText(this, welcomeMsg, Toast.LENGTH_SHORT).show();
     }
 }

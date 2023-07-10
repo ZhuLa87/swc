@@ -7,7 +7,7 @@
     <string name="bottom_menu_settings">Settings</string>
     <string name="toolbar_menu_rename">Rename</string>
     <string name="toolbar_menu_add">Add Wheel Chair</string>
-    <string name="toolbar_menu_remove">Remove Wheel Chair</string>
+    <string name="toolbar_menu_disconnect">Remove Wheel Chair</string>
     <string name="mySWC_name_default">My IOT Wheel Chair</string>
     <string name="settings">Settings</string>
     <string name="func_text_01">Func 01</string>
@@ -38,4 +38,5 @@
     <string name="map">Map</string>
     <string name="location_perm_denied_msg">The geographic location permission is only used to display your location on the map, and your location data will only be shared with users bound to you</string>
     <string name="notification">Notification</string>
+    <string name="input_wheelchair_name">Input wheelchair name hare.</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.zzowo.swc;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -25,13 +27,15 @@ import com.squareup.picasso.Picasso;
  * create an instance of this fragment.
  */
 public class SettingsFragment extends Fragment {
-    FirebaseAuth mAuth;
-    FirebaseUser user;
-    TextView userName; // userName 未製作
-    TextView userEmail;
-    TextView userUid;
-    LottieAnimationView lottieAnimationView;
-    ImageView userAvatar;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+    private TextView userName; // userName 未製作
+    private TextView userEmail;
+    private TextView userUid;
+    private LottieAnimationView lottieAnimationView;
+    private ImageView userAvatar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,48 +91,65 @@ public class SettingsFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance(); // 第一次寫少了這行, Debug1個半小時才找到, 所以我決定給他個註解; 附上錯誤訊息"java.lang.NullPointerException: Attempt to invoke virtual method 'com.google.firebase.auth.FirebaseUser com.google.firebase.auth.FirebaseAuth.getCurrentUser()' on a null object reference"
         user = mAuth.getCurrentUser();
 
-        if (user == null) {
-            Intent intent = new Intent(getContext(), LoginPage.class);
-            startActivity(intent);
-            getActivity().finish();
-        } else {
+//        init
+        initPreferences();
+        initAccountInfo(user);
 
-            // get provider
-            String provider = user.getProviderData().get(1).getProviderId();
-
-            if (provider.contains("google.com")) { // Can't use provider == "google.com", but idk why
-                // 顯示使用者頭像
-                Uri userAvatarUrl = user.getPhotoUrl();
-                Picasso.get().load(userAvatarUrl).into(userAvatar);
-                lottieAnimationView.setVisibility(View.INVISIBLE);
-                userAvatar.setVisibility(View.VISIBLE);
-
-                // 顯示使用者名稱
-                String userDisplayName = user.getDisplayName();
-                userName.setText(userDisplayName);
-                userName.setVisibility(View.VISIBLE);
-            } else if (provider.contains("password")) {
-                // sign in with password
-            }
-
-            userEmail.setText(user.getEmail());
-            userUid.setText("UID: " + user.getUid());
-
-//            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
-        }
 
 //        設定介面未完成, 登出按鈕僅供測試
-        Button logout = rootView.findViewById(R.id.logout);
+        btn_logout(rootView);
+
+        return rootView;
+    }
+
+    private void initPreferences() {
+        sp = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
+        editor = sp.edit();
+    }
+
+    private void initAccountInfo(FirebaseUser user) {
+        // get provider
+        String provider = user.getProviderData().get(1).getProviderId();
+
+        if (provider.contains("google.com")) { // Can't use provider == "google.com", but idk why
+            // 顯示使用者頭像
+            Uri userAvatarUrl = user.getPhotoUrl();
+            Picasso.get().load(userAvatarUrl).into(userAvatar);
+            lottieAnimationView.setVisibility(View.INVISIBLE);
+            userAvatar.setVisibility(View.VISIBLE);
+
+            // 顯示使用者名稱
+            String userDisplayName = user.getDisplayName();
+            userName.setText(userDisplayName);
+            userName.setVisibility(View.VISIBLE);
+        } else if (provider.contains("password")) {
+            // sign in with password
+        }
+
+        userEmail.setText(user.getEmail());
+        userUid.setText("UID: " + user.getUid());
+//            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
+    }
+
+    private void btn_logout(View view) {
+        Button logout = view.findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                Intent intent = new Intent(getContext(), LoginPage.class);
-                startActivity(intent);
-                getActivity().finish();
+                logout();
             }
         });
+    }
 
-        return rootView;
+    private void logout() {
+//        Delete Saved preferences.
+        editor.remove("userUid")
+                .remove("mySWC_name")
+                .apply();
+
+        Intent intent = new Intent(getContext(), LoginPage.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 }
