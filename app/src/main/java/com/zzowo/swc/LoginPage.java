@@ -22,20 +22,25 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginPage extends AppCompatActivity {
     private static final String TAG = "LOGIN";
     private static final int RC_SIGN_IN = 100;
     private FirebaseAuth mAuth;
-//    FirebaseDatabase database;
+    private FirebaseFirestore db;
     private GoogleSignInClient mGoogleSignInClient;
     private TextInputEditText editTextEmail, editTextPassword;
     private Button buttonLogin;
@@ -45,12 +50,17 @@ public class LoginPage extends AppCompatActivity {
     private TextView signUpNow;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
     @Override
     public void onStart() {
         super.onStart();
         // 初始化 Firebase 應用程式的方法, 該方法用於建立與 Firebase 相關的基礎設定, 並設置應用程式與 Firebase 之間的連接
         FirebaseApp.initializeApp(this);
+        // 初始化應用檢查
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        firebaseAppCheck.installAppCheckProviderFactory(
+                PlayIntegrityAppCheckProviderFactory.getInstance());
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
@@ -66,7 +76,11 @@ public class LoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
 
+        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        // Initialize Firebase FireStore
+        db = FirebaseFirestore.getInstance();
+
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonLogin = findViewById(R.id.login_btn);
@@ -74,7 +88,6 @@ public class LoginPage extends AppCompatActivity {
         signUpNow = findViewById(R.id.signUpNow);
         buttonGoogleLogin = findViewById(R.id.login_google);
         forgotPassword = findViewById(R.id.forgotPassword);
-//        database = FirebaseDatabase.getInstance();
 
 //        init
         initPreferences();
@@ -106,6 +119,11 @@ public class LoginPage extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     editTextPassword.setError(getString(R.string.input_empty_error));
                     Toast.makeText(LoginPage.this, R.string.toast_enter_password, Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (!email.matches(emailPattern)) {
+                    progressBar.setVisibility(View.GONE);
+                    editTextPassword.setError(getString(R.string.email_pattern_wrong));
+                    Toast.makeText(LoginPage.this, R.string.email_pattern_wrong, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -185,23 +203,39 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            saveUserInfoPreferences(mAuth.getCurrentUser());
-                            welcomeToast();
-
-//                             TODO: Bug here, can't update to database
-//                            UsersData usersData = new UsersData();
-//                            usersData.setUserId(user.getUid());
-//                            usersData.setName(user.getDisplayName());
-//                            usersData.setProfile(user.getPhotoUrl().toString());
-//
-//                            database.getReference().child("Users").child(user.getUid()).setValue(users);
-
-                            Intent intent = new Intent(LoginPage.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            saveUserInfoPreferences(firebaseUser);
+                            saveUserInfoDatabaseAndJumpPage(firebaseUser);
                         } else {
                             Toast.makeText(LoginPage.this, "Error", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                });
+    }
+
+    private void saveUserInfoDatabaseAndJumpPage(FirebaseUser firebaseUser) {
+        UsersData usersData = new UsersData();
+        usersData.setEmail(firebaseUser.getEmail());
+        usersData.setFullName(firebaseUser.getDisplayName());
+
+        db.collection("users").document(firebaseUser.getUid())
+                .set(usersData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        welcomeToast();
+
+                        Intent intent = new Intent(LoginPage.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                        Toast.makeText(LoginPage.this, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

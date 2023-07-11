@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,6 +22,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
@@ -30,11 +31,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpPage extends AppCompatActivity {
     private static final String TAG = "SIGNUP";
     private static final int RC_SIGN_IN = 100;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private GoogleSignInClient mGoogleSignInClient;
     private TextInputEditText editTextEmail, editTextPassword;
     private Button buttonSignUp;
@@ -44,26 +47,18 @@ public class SignUpPage extends AppCompatActivity {
     private TextView loginNow;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            welcomeToast();
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
+    private String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_page);
 
+        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        // Initialize Firebase FireStore
+        db = FirebaseFirestore.getInstance();
+
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonSignUp = findViewById(R.id.sign_up_btn);
@@ -103,8 +98,12 @@ public class SignUpPage extends AppCompatActivity {
                     editTextPassword.setError(getString(R.string.input_empty_error));
                     Toast.makeText(SignUpPage.this, R.string.toast_enter_password, Toast.LENGTH_SHORT).show();
                     return;
+                } else if (!email.matches(emailPattern)) {
+                    progressBar.setVisibility(View.GONE);
+                    editTextPassword.setError(getString(R.string.email_pattern_wrong));
+                    Toast.makeText(SignUpPage.this, R.string.email_pattern_wrong, Toast.LENGTH_SHORT).show();
+                    return;
                 }
-
 
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -112,7 +111,6 @@ public class SignUpPage extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    saveUserInfoPreferences(mAuth.getCurrentUser());
                                     // Send verify email
                                     mAuth.getCurrentUser().sendEmailVerification()
                                             .addOnCompleteListener(task1 -> {
@@ -121,10 +119,9 @@ public class SignUpPage extends AppCompatActivity {
                                                 }
                                             });
                                     Toast.makeText(SignUpPage.this, getString(R.string.plz_check_mailbox), Toast.LENGTH_SHORT).show();
-                                    // 切換到主頁面
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+
+                                    saveUserInfoPreferences(mAuth.getCurrentUser());
+                                    saveUserInfoDatabaseAndJumpPage(mAuth.getCurrentUser());
                                 } else {
                                     Toast.makeText(SignUpPage.this, R.string.toast_registration_failed,
                                             Toast.LENGTH_SHORT).show();
@@ -189,23 +186,39 @@ public class SignUpPage extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            saveUserInfoPreferences(mAuth.getCurrentUser());
-                            welcomeToast();
-
-//                             TODO: Bug here, can't update to database
-//                            UsersData usersData = new UsersData();
-//                            usersData.setUserId(user.getUid());
-//                            usersData.setName(user.getDisplayName());
-//                            usersData.setProfile(user.getPhotoUrl().toString());
-//
-//                            database.getReference().child("Users").child(user.getUid()).setValue(users);
-
-                            Intent intent = new Intent(SignUpPage.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            saveUserInfoPreferences(firebaseUser);
+                            saveUserInfoDatabaseAndJumpPage(firebaseUser);
                         } else {
                             Toast.makeText(SignUpPage.this, "Error", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                });
+    }
+
+    private void saveUserInfoDatabaseAndJumpPage(FirebaseUser firebaseUser) {
+        UsersData usersData = new UsersData();
+        usersData.setEmail(firebaseUser.getEmail());
+        usersData.setFullName(firebaseUser.getDisplayName());
+
+        db.collection("users").document(firebaseUser.getUid())
+                .set(usersData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        welcomeToast();
+
+                        Intent intent = new Intent(SignUpPage.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                        Toast.makeText(SignUpPage.this, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

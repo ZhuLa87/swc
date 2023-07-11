@@ -1,5 +1,7 @@
 package com.zzowo.swc;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,6 +49,7 @@ public class SettingsFragment extends Fragment {
     private TextView userName; // userName 未製作
     private TextView userEmail;
     private TextView userUid;
+    private TextView copyUid;
     private LottieAnimationView lottieAnimationView;
     private ImageView userAvatar;
 
@@ -101,6 +104,7 @@ public class SettingsFragment extends Fragment {
         userName = rootView.findViewById(R.id.user_name);
         userEmail = rootView.findViewById(R.id.user_email);
         userUid = rootView.findViewById(R.id.user_uid);
+        copyUid = rootView.findViewById(R.id.copy_uid);
 
         mAuth = FirebaseAuth.getInstance(); // 第一次寫少了這行, Debug1個半小時才找到, 所以我決定給他個註解; 附上錯誤訊息"java.lang.NullPointerException: Attempt to invoke virtual method 'com.google.firebase.auth.FirebaseUser com.google.firebase.auth.FirebaseAuth.getCurrentUser()' on a null object reference"
         user = mAuth.getCurrentUser();
@@ -109,6 +113,14 @@ public class SettingsFragment extends Fragment {
         initPreferences();
         initAccountInfo(user);
 
+        copyUid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("uid", user.getUid().substring(0, 8)); // label為系統可見標籤, 非使用者可見標籤
+                clipboard.setPrimaryClip(clipData);
+            }
+        });
 
 //        設定介面未完成, 登出按鈕僅供測試
 //        profileUpdates();
@@ -158,7 +170,7 @@ public class SettingsFragment extends Fragment {
         }
 
         userEmail.setText(user.getEmail());
-        userUid.setText("UID: " + user.getUid());
+        userUid.setText("UID: " + user.getUid().substring(0, 8));
 //            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
     }
 

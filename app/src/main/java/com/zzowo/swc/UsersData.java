@@ -1,38 +1,30 @@
 package com.zzowo.swc;
 
 public class UsersData {
-    String userId, name, profile;
+    String email, FullName;
 
-    public UsersData(String userId, String name, String profile) {
-        this.userId = userId;
-        this.name = name;
-        this.profile = profile;
+    public UsersData(String email, String name) {
+        this.email = email;
+        this.FullName = name;
     }
 
     public UsersData() {
     }
 
-    public String getUserId() {
-        return userId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return FullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.FullName = fullName;
     }
 
-    public String getProfile() {
-        return profile;
-    }
-
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
 }
