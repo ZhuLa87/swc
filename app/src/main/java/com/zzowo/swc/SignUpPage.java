@@ -111,7 +111,14 @@ public class SignUpPage extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     saveUserInfoPreferences(mAuth.getCurrentUser());
-                                    welcomeToast();
+                                    // Send verify email
+                                    mAuth.getCurrentUser().sendEmailVerification()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    Log.d(TAG, "Verify email sent.");
+                                                }
+                                            });
+                                    Toast.makeText(SignUpPage.this, getString(R.string.plz_check_mailbox), Toast.LENGTH_SHORT).show();
                                     // 切換到主頁面
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);

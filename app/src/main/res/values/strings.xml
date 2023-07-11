@@ -38,4 +38,5 @@
     <string name="location_perm_denied_msg" >The geographic location permission is only used to display your location on the map, and your location data will only be shared with users bound to you</string>
     <string name="notification">Notification</string>
     <string name="input_wheelchair_name">Input wheelchair name hare.</string>
+    <string name="plz_check_mailbox">Please check your mailbox to verify your email</string>
 </resources>

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -17,9 +18,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
+
+//在 Firebase 中管理用户
+//> https://firebase.google.com/docs/auth/android/manage-users?hl=zh-cn
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,9 +106,26 @@ public class SettingsFragment extends Fragment {
 
 
 //        設定介面未完成, 登出按鈕僅供測試
+        profileUpdates();
         btn_logout(rootView);
 
         return rootView;
+    }
+
+    private void profileUpdates() {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName("")
+                .setPhotoUri(Uri.parse(""))
+                .build();
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("SETTINGS", "User profile updated.");
+                        }
+                    }
+                });
     }
 
     private void initPreferences() {
@@ -137,6 +163,9 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
+                // Clear persistence.
+                // https://stackoverflow.com/questions/63930954/how-to-properly-call-firebasefirestore-instance-clearpersistence-in-flutter
+
                 logout();
             }
         });

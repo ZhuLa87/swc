@@ -39,4 +39,5 @@
     <string name="location_perm_denied_msg">地理位置權限僅供於地圖中顯示您的位置, 您的位置資料僅會與您綁定的使用者分享</string>
     <string name="notification">通知</string>
     <string name="input_wheelchair_name">輸入輪椅的名子</string>
+    <string name="plz_check_mailbox">請檢查您的郵箱以驗證您的電子郵件</string>
 </resources>
