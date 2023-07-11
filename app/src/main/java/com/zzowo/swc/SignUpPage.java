@@ -40,6 +40,7 @@ public class SignUpPage extends AppCompatActivity {
     private Button buttonSignUp;
     private ImageView buttonGoogleLogin;
     private ProgressBar progressBar;
+    private TextView forgotPassword;
     private TextView loginNow;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -69,6 +70,7 @@ public class SignUpPage extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         loginNow = findViewById(R.id.loginNow);
         buttonGoogleLogin = findViewById(R.id.login_google);
+        forgotPassword = findViewById(R.id.forgotPassword);
 
 //        init
         initPreferences();
@@ -77,9 +79,9 @@ public class SignUpPage extends AppCompatActivity {
         loginNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finish();
                 Intent intent = new Intent(getApplicationContext(), LoginPage.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -138,6 +140,15 @@ public class SignUpPage extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 Intent intent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(intent, RC_SIGN_IN);
+            }
+        });
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(getApplicationContext(), ResetPasswordPage.class);
+                startActivity(intent);
             }
         });
     }

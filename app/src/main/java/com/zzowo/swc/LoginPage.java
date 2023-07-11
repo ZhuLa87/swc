@@ -41,6 +41,7 @@ public class LoginPage extends AppCompatActivity {
     private Button buttonLogin;
     private ImageView buttonGoogleLogin;
     private ProgressBar progressBar;
+    private TextView forgotPassword;
     private TextView signUpNow;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -72,6 +73,7 @@ public class LoginPage extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         signUpNow = findViewById(R.id.signUpNow);
         buttonGoogleLogin = findViewById(R.id.login_google);
+        forgotPassword = findViewById(R.id.forgotPassword);
 //        database = FirebaseDatabase.getInstance();
 
 //        init
@@ -81,9 +83,9 @@ public class LoginPage extends AppCompatActivity {
         signUpNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finish();
                 Intent intent = new Intent(getApplicationContext(), SignUpPage.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -134,6 +136,15 @@ public class LoginPage extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 Intent intent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(intent, RC_SIGN_IN);
+            }
+        });
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(getApplicationContext(), ResetPasswordPage.class);
+                startActivity(intent);
             }
         });
     }

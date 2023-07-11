@@ -29,8 +29,8 @@
     <string name="toast_enter_password">請輸入密碼</string>
     <string name="settings_logout">登出</string>
     <string name="toast_welcome_back">"歡迎回來, "</string>
-    <string name="toast_authentication_failed">認證失敗</string>
-    <string name="input_empty_error">必須要</string>
+    <string name="toast_authentication_failed">認證失敗, 請重試或點擊“忘記密碼”進行重置</string>
+    <string name="input_empty_error">必須提供</string>
     <string name="toast_account_created">"歡迎, "</string>
     <string name="toast_registration_failed">註冊失敗, 若您已有帳號, 請登入</string>
     <string name="current_location">現在位置</string>
@@ -40,4 +40,10 @@
     <string name="notification">通知</string>
     <string name="input_wheelchair_name">輸入輪椅的名子</string>
     <string name="plz_check_mailbox">請檢查您的郵箱以驗證您的電子郵件</string>
+    <string name="account_recovery">帳戶救援</string>
+    <string name="reset_your_password">重設密碼</string>
+    <string name="next">下一步</string>
+    <string name="forgot_password">忘記密碼?</string>
+    <string name="back">回到登入頁</string>
+    <string name="account_not_found">無此帳號</string>
 </resources>

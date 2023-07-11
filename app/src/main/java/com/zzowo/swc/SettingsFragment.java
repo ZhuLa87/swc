@@ -106,7 +106,7 @@ public class SettingsFragment extends Fragment {
 
 
 //        設定介面未完成, 登出按鈕僅供測試
-        profileUpdates();
+//        profileUpdates();
         btn_logout(rootView);
 
         return rootView;

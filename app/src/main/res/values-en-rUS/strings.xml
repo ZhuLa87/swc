@@ -29,7 +29,7 @@
     <string name="toast_enter_password">Enter password</string>
     <string name="settings_logout">Logout</string>
     <string name="toast_welcome_back">"Hi, "</string>
-    <string name="toast_authentication_failed">Authentication failed.</string>
+    <string name="toast_authentication_failed">Authentication failed.Try again or click Forgot password to reset it.</string>
     <string name="input_empty_error">Must be needed</string>
     <string name="toast_account_created">"Hi, "</string>
     <string name="toast_registration_failed">Registration failed, please log in if you already have an account.</string>
@@ -40,4 +40,10 @@
     <string name="notification">Notification</string>
     <string name="input_wheelchair_name">Input wheelchair name hare.</string>
     <string name="plz_check_mailbox">Please check your mailbox to verify your email</string>
+    <string name="account_recovery">Account recovery</string>
+    <string name="reset_your_password">Reset your password</string>
+    <string name="next">Next</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="back">BACK TO LOGIN</string>
+    <string name="account_not_found">Account not found</string>
 </resources>
