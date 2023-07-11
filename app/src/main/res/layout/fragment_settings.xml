@@ -86,7 +86,7 @@
                     android:layout_weight="2"
                     android:text="UID not established"
                     android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
 

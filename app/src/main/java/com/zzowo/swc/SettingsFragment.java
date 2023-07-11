@@ -18,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +41,7 @@ import com.squareup.picasso.Picasso;
 public class SettingsFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    private GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private TextView userName; // userName 未製作
@@ -91,6 +95,7 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), GoogleSignInOptions.DEFAULT_SIGN_IN);
         lottieAnimationView = rootView.findViewById(R.id.animation_avatar);
         userAvatar = rootView.findViewById(R.id.user_avatar);
         userName = rootView.findViewById(R.id.user_name);
@@ -163,9 +168,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                // Clear persistence.
-                // https://stackoverflow.com/questions/63930954/how-to-properly-call-firebasefirestore-instance-clearpersistence-in-flutter
-
+                mGoogleSignInClient.signOut();
                 logout();
             }
         });
