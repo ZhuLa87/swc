@@ -22,7 +22,7 @@
     <string name="sign_up_link">點我註冊</string>
     <string name="title_hello">歡迎</string>
     <string name="title_sign_up">註冊</string>
-    <string name="sign_up_btn">登入</string>
+    <string name="sign_up_btn">註冊</string>
     <string name="sign_up_bottom_hint">已經有帳號了?</string>
     <string name="login_link">點我登入</string>
     <string name="toast_enter_email">請輸入帳號</string>

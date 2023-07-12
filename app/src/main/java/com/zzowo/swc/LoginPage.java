@@ -210,6 +210,12 @@ public class LoginPage extends AppCompatActivity {
                             Toast.makeText(LoginPage.this, "Error", Toast.LENGTH_SHORT).show();
                         }
                     }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error: " + e);
+                    }
                 });
     }
 

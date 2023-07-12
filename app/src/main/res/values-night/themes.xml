@@ -17,5 +17,18 @@
         <item name="colorError">@color/error</item>
     </style>
 
+    <!--Theme Style for Night mode Switch-->
+    <style name="nightModeSwitch" parent="Theme.AppCompat.DayNight">
+        <item name="colorControlActivated">@color/night_mode</item>
+        <item name="colorSwitchThumbNormal">@color/white</item>
+        <item name="android:colorForeground">#99E5E9EC</item>
+    </style>
+    <!--Theme Style for Notification Switch-->
+    <style name="notificationSwitch" parent="Theme.AppCompat.DayNight">
+        <item name="colorControlActivated">@color/notification</item>
+        <item name="colorSwitchThumbNormal">@color/white</item>
+        <item name="android:colorForeground">#99E5E9EC</item>
+    </style>
+
     <style name="Theme.Swc" parent="Base.Theme.Swc" />
 </resources>

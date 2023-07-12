@@ -3,16 +3,27 @@
     <color name="transparent">#00000000</color>
     <color name="white">#E5E9EC</color>
     <color name="gray">#767C76</color>
+    <color name="black">#2B2929</color>
+    <color name="deed_pink">#B29392</color>
+    <color name="lavender">#8692F7</color>
+    <color name="purple">#6200EE</color>
+    <color name="dark_blue">#1B023B</color>
+    <color name="blue_green">#03DaC5</color>
+    <color name="orange">#E6A326</color>
+
     <color name="green_100">#97A092</color>
     <color name="green_200">#606B64</color>
     <color name="green_300">#36453B</color>
     <color name="black_100">#353736</color>
     <color name="black_200">#303030</color>
     <color name="black_300">#2E2D2D</color>
-    <color name="black">#2B2929</color>
-    <color name="deed_pink">#B29392</color>
-    <color name="lavender">#8692F7</color>
-    <color name="purple">#6200EE</color>
+
+    <color name="primary">@color/black</color>
+    <color name="secondary">@color/green_300</color>
     <color name="link">#03A9F4</color>
     <color name="error">#B00020</color>
+    <color name="night_mode">#6124B1</color>
+    <color name="notification">#13B2C3</color>
+    <color name="security">#D95F69</color>
+    
 </resources>
