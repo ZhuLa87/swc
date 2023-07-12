@@ -1,6 +1,7 @@
 package com.zzowo.swc;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -151,6 +152,10 @@ public class HomeFragment extends Fragment {
     private void toolbarAdd() {
 //        TODO: toolbar_add操作待編輯.
         Toast.makeText(getContext(), "連接設備界面待製作", Toast.LENGTH_SHORT).show();
+
+        // switch to new activity
+        Intent intent = new Intent(getContext(), AddWheelChairActivity.class);
+        startActivity(intent);
     }
 
     private void toolbarDisconnect() {

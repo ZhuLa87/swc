@@ -31,6 +31,9 @@
         android:theme="@style/Theme.Swc"
         tools:targetApi="31">
         <activity
+            android:name=".AddWheelChairActivity"
+            android:exported="false" />
+        <activity
             android:name=".ResetPasswordPage"
             android:exported="false" />
 
