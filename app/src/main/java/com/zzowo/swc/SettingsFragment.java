@@ -175,7 +175,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void btn_logout(View view) {
-        Button logout = view.findViewById(R.id.logout);
+        View logout = view.findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

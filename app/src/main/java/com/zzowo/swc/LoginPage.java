@@ -214,7 +214,7 @@ public class LoginPage extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error: " + e);
+                        Log.d(TAG, "Google auth error: " + e);
                     }
                 });
     }

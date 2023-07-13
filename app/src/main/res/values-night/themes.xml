@@ -2,18 +2,21 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Swc" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/green_300</item>
-        <item name="colorPrimaryVariant">@color/green_200</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
         <!-- Primary brand color. -->
-        <item name="colorSecondary">@color/lavender</item>
-        <item name="colorSecondaryVariant">@color/purple</item>
-        <item name="colorOnSecondary">@color/black_200</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+        <!-- Surface brand color. -->
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <item name="android:navigationBarColor">@color/black</item>
-        <!-- Customize your theme here. -->
-        <item name="colorOnBackground">@color/black</item>
+        <item name="android:statusBarColor">@color/black_900</item>
+        <item name="android:navigationBarColor">@color/background</item>
+        <!-- Customize theme -->
+        <item name="colorOnBackground">@color/on_background</item>
         <item name="colorError">@color/error</item>
     </style>
 
@@ -23,6 +26,7 @@
         <item name="colorSwitchThumbNormal">@color/white</item>
         <item name="android:colorForeground">#99E5E9EC</item>
     </style>
+
     <!--Theme Style for Notification Switch-->
     <style name="notificationSwitch" parent="Theme.AppCompat.DayNight">
         <item name="colorControlActivated">@color/notification</item>

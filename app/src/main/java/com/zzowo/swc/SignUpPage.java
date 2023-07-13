@@ -193,6 +193,12 @@ public class SignUpPage extends AppCompatActivity {
                             Toast.makeText(SignUpPage.this, "Error", Toast.LENGTH_SHORT).show();
                         }
                     }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Google auth error: " + e);
+                    }
                 });
     }
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".HomeFragment"
     >
     <androidx.appcompat.widget.Toolbar
@@ -16,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
         <TextView
+            android:text="SWC"
             android:id="@+id/toolbar_text"
             android:textAppearance="@style/TitleText"
             android:layout_gravity="center"
@@ -41,13 +43,14 @@
     </RelativeLayout>
     <LinearLayout
         android:orientation="horizontal"
-        android:background="@drawable/function_button_background_home_fragment"
+        android:background="@drawable/round_back_white"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="120dp"
-        android:elevation="2dp">
+        android:elevation="2dp"
+        >
         <RelativeLayout
             android:id="@+id/func_01"
             android:background="@drawable/function_button_home_fragment"
@@ -55,7 +58,8 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:elevation="3dp">
+            android:elevation="3dp"
+            >
             <ImageView
                 android:id="@+id/func_img_01"
                 android:layout_width="match_parent"
@@ -74,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true" />
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/func_02"
@@ -83,7 +87,8 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:elevation="3dp">
+            android:elevation="3dp"
+            >
             <ImageView
                 android:id="@+id/func_img_02"
                 android:layout_width="match_parent"
@@ -102,16 +107,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true" />
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/func_03"
             android:background="@drawable/function_button_home_fragment"
+            android:backgroundTint="@color/warning"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:elevation="3dp">
+            android:elevation="3dp"
+            >
             <ImageView
                 android:id="@+id/func_img_03"
                 android:layout_width="match_parent"
@@ -130,7 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true" />
         </RelativeLayout>
 
     </LinearLayout>

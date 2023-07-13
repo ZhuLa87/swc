@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".SettingsFragment"
     >
-
+    <!-- 將下方往上推, 避免擋住下方導覽列 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         >
-
+        <!-- 使用者資訊顯示 -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/user_info"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:layout_marginVertical="16dp"
             android:layout_marginHorizontal="16dp"
-            android:background="@drawable/user_background_settings_fragment">
-
+            android:layout_marginVertical="16dp"
+            android:background="@drawable/user_background_settings_fragment"
+            >
+            <!-- 預設圖片 -->
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animation_avatar"
                 android:layout_width="110dp"
@@ -32,227 +38,353 @@
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/people"
                 app:lottie_speed="0.5" />
-
+            <!-- 導入使用者圖片 (與預設圖片不同時顯示) -->
             <ImageView
                 android:id="@+id/user_avatar"
-                android:visibility="gone"
-                android:background="@drawable/avatar_settings_fragment"
-                android:scaleType="centerCrop"
-                android:clipToOutline="true"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
+                android:background="@drawable/avatar_settings_fragment"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
+            <!-- 使用者資訊 (文字) -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="@id/animation_avatar"
+                app:layout_constraintEnd_toEndOf="@+id/user_info"
                 app:layout_constraintStart_toEndOf="@id/animation_avatar"
                 app:layout_constraintTop_toTopOf="@id/animation_avatar"
-                app:layout_constraintEnd_toEndOf="@+id/user_info">
-
-                <!--                user_name 尚未製作-->
+                >
+                <!-- 使用者名稱 (若存在才顯示) -->
                 <TextView
                     android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="4"
                     android:text="user123"
-                    android:textColor="@color/white"
+                    android:textColor="@color/on_surface"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
-
+                <!-- 使用者郵件 -->
                 <TextView
                     android:id="@+id/user_email"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="3"
                     android:text="user@zzowo.com"
-                    android:textColor="@color/white"
+                    android:textColor="@color/on_surface"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
+                <!-- 使用者ID -->
                 <RelativeLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2" >
+                    android:layout_weight="2"
+                    android:orientation="horizontal"
+                    >
+                    <!-- 使用者ID (文字) -->
                     <TextView
                         android:id="@+id/user_uid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="UID"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
                         android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:text="UID"
+                        android:textColor="@color/on_surface"
+                        android:textSize="15sp" />
+                    <!-- 複製使用者ID -->
                     <TextView
                         android:id="@+id/copy_uid"
-                        android:text="COPY"
-                        android:textSize="13sp"
-                        android:textColor="@color/link"
-                        android:textStyle="bold"
-                        android:background="@drawable/copy_uid_background_settings_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/user_uid"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:background="@drawable/copy_uid_background_settings_fragment"
                         android:paddingHorizontal="3dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true" />
+                        android:text="COPY"
+                        android:textColor="@color/link"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
             </LinearLayout>
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- 設定選項 -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_info"
-            android:layout_marginBottom="120dp" >
+            >
+            <!-- 可滾動 -->
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                >
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-                    <!--Switch Settings-->
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <!-- 設定 (開關) -->
                     <LinearLayout
-                        android:background="@drawable/round_back_white"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="40dp"
-                        android:padding="15dp" >
-
-                        <!--Night mode-->
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" >
-                            <ImageView
-                                android:id="@+id/night_mode_icon"
-                                android:src="@drawable/baseline_mode_night_24"
-                                android:background="@drawable/round_back_settings_icon"
-                                android:backgroundTint="@color/night_mode"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:padding="12dp" />
-                            <TextView
-                                android:text="Night Mode"
-                                android:textColor="@color/white"
-                                android:textSize="22sp"
-                                android:textStyle="bold"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginStart="20dp"
-                                android:layout_toEndOf="@id/night_mode_icon"/>
-                            <androidx.appcompat.widget.SwitchCompat
-                                android:switchMinWidth="50dp"
-                                android:theme="@style/nightModeSwitch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"/>
-                        </RelativeLayout>
-
-                        <!--Notification-->
+                        android:background="@drawable/round_back_white"
+                        android:orientation="vertical"
+                        android:padding="15dp"
+                        >
+                        <!-- Night Mode -->
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
+                            >
+                            <!-- 圖標 -->
                             <ImageView
-                                android:id="@+id/notification_icon"
-                                android:src="@drawable/baseline_notifications_24"
-                                android:background="@drawable/round_back_settings_icon"
-                                android:backgroundTint="@color/notification"
+                                android:id="@+id/night_mode_icon"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:padding="12dp" />
+                                android:background="@drawable/round_back_settings_icon"
+                                android:backgroundTint="@color/night_mode"
+                                android:padding="12dp"
+                                android:src="@drawable/baseline_mode_night_24" />
+                            <!-- 功能文字 -->
                             <TextView
-                                android:text="Notification"
-                                android:textColor="@color/white"
-                                android:textSize="22sp"
-                                android:textStyle="bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="20dp"
-                                android:layout_toEndOf="@id/notification_icon"/>
+                                android:layout_toEndOf="@id/night_mode_icon"
+                                android:text="@string/night_mode"
+                                android:textColor="@color/on_surface"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+                            <!-- 開關 -->
                             <androidx.appcompat.widget.SwitchCompat
-                                android:switchMinWidth="50dp"
-                                android:theme="@style/nightModeSwitch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"/>
+                                android:layout_centerVertical="true"
+                                android:switchMinWidth="55dp"
+                                android:theme="@style/nightModeSwitch" />
                         </RelativeLayout>
 
+                        <!-- Notification -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            >
+                            <!-- 圖標 -->
+                            <ImageView
+                                android:id="@+id/notification_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/round_back_settings_icon"
+                                android:backgroundTint="@color/notification"
+                                android:padding="12dp"
+                                android:src="@drawable/baseline_notifications_24" />
+                            <!-- 功能文字 -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="20dp"
+                                android:layout_toEndOf="@id/notification_icon"
+                                android:text="@string/notification"
+                                android:textColor="@color/on_surface"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+                            <!-- 開關 -->
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:switchMinWidth="50dp"
+                                android:theme="@style/notificationSwitch" />
+                        </RelativeLayout>
                     </LinearLayout>
 
-
-                    <!--More Settings-->
+                    <!-- 其他設定 -->
                     <LinearLayout
-                        android:background="@drawable/round_back_white"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="20dp"
-                        android:padding="15dp" >
-
-                        <!--Edit Profile-->
+                        android:background="@drawable/round_back_white"
+                        android:orientation="vertical"
+                        android:padding="15dp"
+                        >
+                        <!-- Edit Profile -->
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" >
+                            android:layout_height="wrap_content"
+                            >
+                            <!-- 圖標 -->
                             <ImageView
                                 android:id="@+id/edit_profile_icon"
-                                android:src="@drawable/baseline_person_24"
-                                android:background="@drawable/round_back_settings_icon"
-                                android:backgroundTint="@color/security"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:padding="12dp" />
+                                android:background="@drawable/round_back_settings_icon"
+                                android:backgroundTint="@color/profile"
+                                android:padding="12dp"
+                                android:src="@drawable/baseline_person_24" />
+                            <!-- 功能文字 -->
                             <TextView
-                                android:text="Edit profiles"
-                                android:textColor="@color/white"
-                                android:textSize="22sp"
-                                android:textStyle="bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="20dp"
-                                android:layout_toEndOf="@id/edit_profile_icon"/>
+                                android:layout_toEndOf="@id/edit_profile_icon"
+                                android:text="@string/edit_profiles"
+                                android:textColor="@color/on_surface"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+                            <!-- 指示圖標 -->
                             <ImageView
-                                android:src="@drawable/baseline_chevron_right_24"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true" />
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/baseline_chevron_right_24" />
+                        </RelativeLayout>
+
+                        <!-- Account Security -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            >
+                            <!-- 圖標 -->
+                            <ImageView
+                                android:id="@+id/account_security_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/round_back_settings_icon"
+                                android:backgroundTint="@color/security"
+                                android:padding="12dp"
+                                android:src="@drawable/baseline_lock_24" />
+                            <!-- 功能文字 -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="20dp"
+                                android:layout_toEndOf="@id/account_security_icon"
+                                android:text="@string/account_security"
+                                android:textColor="@color/on_surface"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+                            <!-- 指示圖標 -->
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/baseline_chevron_right_24" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <!-- 其他資訊 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/round_back_white"
+                        android:orientation="vertical"
+                        android:padding="15dp"
+                        >
+                        <!-- Version Info -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <!-- 圖標 -->
+                            <ImageView
+                                android:id="@+id/version_info_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/round_back_settings_icon"
+                                android:backgroundTint="@color/version"
+                                android:padding="12dp"
+                                android:src="@drawable/icons8_version_100" />
+                            <!-- 功能文字 -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="20dp"
+                                android:layout_toEndOf="@id/version_info_icon"
+                                android:text="@string/settings_version_info"
+                                android:textColor="@color/on_surface"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+                            <!-- 功能內容 -->
+                            <TextView
+                                android:id="@+id/version_info"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:text="0.0.0"
+                                android:textColor="@color/on_surface"
+                                android:textSize="20sp" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <!-- 帳號操作 -->
+                    <LinearLayout
+                        android:id="@+id/logout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/round_back_white"
+                        android:orientation="vertical"
+                        android:padding="15dp"
+                        >
+                        <!-- Logout -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <!-- 圖標 -->
+                            <ImageView
+                                android:id="@+id/logout_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/round_back_settings_icon"
+                                android:backgroundTint="@color/logout"
+                                android:padding="12dp"
+                                android:src="@drawable/baseline_logout_24" />
+                            <!-- 功能文字 -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="20dp"
+                                android:layout_toEndOf="@id/logout_icon"
+                                android:text="@string/settings_logout"
+                                android:textColor="@color/on_surface"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
                         </RelativeLayout>
                     </LinearLayout>
                 </LinearLayout>
-
             </ScrollView>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/logout"
-                android:text="@string/settings_logout"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:background="@drawable/round_back_secondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="20dp" />
         </RelativeLayout>
-
     </RelativeLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

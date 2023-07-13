@@ -4,18 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".AddWheelChairActivity" >
-
+    android:background="@color/background"
+    tools:context=".AddWheelChairActivity"
+    >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="2dp"
+        android:background="@color/surface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingBottom="6dp">
+        android:paddingBottom="6dp"
+        >
         <ImageView
             android:id="@+id/btn_back"
             android:src="@drawable/baseline_arrow_back_24"
@@ -31,7 +33,7 @@
             android:gravity="center"
             android:paddingVertical="5dp"
             android:text="@string/title_connect_to_swc"
-            android:textColor="@color/white"
+            android:textColor="@color/on_surface"
             android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +53,7 @@
         android:elevation="3dp"
         android:indeterminate="true"
         android:theme="@style/ProgressBarStyle"
-        app:layout_constraintBottom_toBottomOf="@+id/title_bar"/>
+        app:layout_constraintBottom_toBottomOf="@+id/title_bar" />
 
     <RelativeLayout
         android:id="@+id/animationView_notifications"
@@ -59,11 +61,12 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar">
+        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        >
         <TextView
             android:id="@+id/bluetooth_status"
             android:text="Loading..."
-            android:textColor="@color/white"
+            android:textColor="@color/on_background"
             android:textSize="20sp"
             android:gravity="center"
             android:layout_width="match_parent"
@@ -74,33 +77,33 @@
             android:src="@drawable/baseline_bluetooth_searching_100"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:layout_below="@id/bluetooth_status"/>
+            android:layout_below="@id/bluetooth_status" />
         <TextView
             android:id="@+id/my_device"
             android:text="My Device"
-            android:textColor="@color/white"
+            android:textColor="@color/on_background"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/bluetooth_img"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp" />
         <!--    View-->
         <TextView
             android:id="@+id/other_devices"
             android:text="Other devices"
-            android:textColor="@color/white"
+            android:textColor="@color/on_background"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/my_device"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp" />
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/other_devices" >
-
+            android:layout_below="@id/other_devices"
+            >
         </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

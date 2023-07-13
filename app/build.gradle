@@ -57,9 +57,11 @@ dependencies {
 //    lottie animation
     implementation "com.airbnb.android:lottie:6.0.1"
 
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
+
     // firebase
     implementation 'com.google.firebase:firebase-analytics'
-    implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.firebase:firebase-database'
