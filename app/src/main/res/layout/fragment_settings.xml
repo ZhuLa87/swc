@@ -143,12 +143,15 @@
                         android:layout_marginTop="40dp"
                         android:background="@drawable/round_back_white"
                         android:orientation="vertical"
-                        android:padding="15dp"
                         >
                         <!-- Night Mode -->
                         <RelativeLayout
+                            android:id="@+id/option_night_mode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:paddingTop="15dp"
+                            android:paddingHorizontal="15dp"
+                            android:paddingBottom="5dp"
                             >
                             <!-- 圖標 -->
                             <ImageView
@@ -172,6 +175,8 @@
                                 android:textStyle="bold" />
                             <!-- 開關 -->
                             <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/switch_night_mode"
+                                android:clickable="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
@@ -182,9 +187,12 @@
 
                         <!-- Notification -->
                         <RelativeLayout
+                            android:id="@+id/option_notification"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingHorizontal="15dp"
+                            android:paddingBottom="15dp"
                             >
                             <!-- 圖標 -->
                             <ImageView
@@ -208,6 +216,8 @@
                                 android:textStyle="bold" />
                             <!-- 開關 -->
                             <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/switch_notification"
+                                android:clickable="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
@@ -225,12 +235,15 @@
                         android:layout_marginTop="20dp"
                         android:background="@drawable/round_back_white"
                         android:orientation="vertical"
-                        android:padding="15dp"
                         >
                         <!-- Edit Profile -->
                         <RelativeLayout
+                            android:id="@+id/option_profile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:paddingTop="15dp"
+                            android:paddingHorizontal="15dp"
+                            android:paddingBottom="5dp"
                             >
                             <!-- 圖標 -->
                             <ImageView
@@ -263,9 +276,12 @@
 
                         <!-- Account Security -->
                         <RelativeLayout
+                            android:id="@+id/option_security"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingHorizontal="15dp"
+                            android:paddingBottom="15dp"
                             >
                             <!-- 圖標 -->
                             <ImageView
@@ -305,12 +321,14 @@
                         android:layout_marginTop="20dp"
                         android:background="@drawable/round_back_white"
                         android:orientation="vertical"
-                        android:padding="15dp"
                         >
                         <!-- Version Info -->
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:paddingTop="15dp"
+                            android:paddingHorizontal="15dp"
+                            android:paddingBottom="15dp"
                             >
                             <!-- 圖標 -->
                             <ImageView
@@ -334,11 +352,12 @@
                                 android:textStyle="bold" />
                             <!-- 功能內容 -->
                             <TextView
-                                android:id="@+id/version_info"
+                                android:id="@+id/text_version"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
                                 android:text="0.0.0"
                                 android:textColor="@color/on_surface"
                                 android:textSize="20sp" />
@@ -347,19 +366,19 @@
 
                     <!-- 帳號操作 -->
                     <LinearLayout
-                        android:id="@+id/logout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="20dp"
                         android:background="@drawable/round_back_white"
                         android:orientation="vertical"
-                        android:padding="15dp"
                         >
                         <!-- Logout -->
                         <RelativeLayout
+                            android:id="@+id/logout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:padding="15dp"
                             >
                             <!-- 圖標 -->
                             <ImageView

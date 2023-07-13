@@ -5,10 +5,13 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -43,6 +46,7 @@ import com.squareup.picasso.Picasso;
  * create an instance of this fragment.
  */
 public class SettingsFragment extends Fragment {
+    private static final String TAG = "SETTINGS";
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private GoogleSignInClient mGoogleSignInClient;
@@ -54,6 +58,9 @@ public class SettingsFragment extends Fragment {
     private TextView copyUid;
     private LottieAnimationView lottieAnimationView;
     private ImageView userAvatar;
+    private SwitchCompat switchNightMode;
+    private SwitchCompat switchNotification;
+    private TextView textVersion;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -107,6 +114,9 @@ public class SettingsFragment extends Fragment {
         userEmail = rootView.findViewById(R.id.user_email);
         userUid = rootView.findViewById(R.id.user_uid);
         copyUid = rootView.findViewById(R.id.copy_uid);
+        switchNightMode = rootView.findViewById(R.id.switch_night_mode);
+        switchNotification = rootView.findViewById(R.id.switch_notification);
+        textVersion = rootView.findViewById(R.id.text_version);
 
         mAuth = FirebaseAuth.getInstance(); // 第一次寫少了這行, Debug1個半小時才找到, 所以我決定給他個註解; 附上錯誤訊息"java.lang.NullPointerException: Attempt to invoke virtual method 'com.google.firebase.auth.FirebaseUser com.google.firebase.auth.FirebaseAuth.getCurrentUser()' on a null object reference"
         user = mAuth.getCurrentUser();
@@ -115,7 +125,10 @@ public class SettingsFragment extends Fragment {
         initStatusBarColor();
         initPreferences();
         initAccountInfo(user);
+        initSwitchCompat();
+        initOtherInfo();
 
+        // Account info button
         copyUid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,7 +138,44 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-//        設定介面未完成, 登出按鈕僅供測試
+        // Settings Options
+        View optionNightMode = rootView.findViewById(R.id.option_night_mode);
+        View optionNotification = rootView.findViewById(R.id.option_notification);
+
+        optionNightMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchNightMode.toggle();
+                Log.d(TAG, "Set switchNightMode to " + switchNightMode.isChecked());
+
+                Boolean stateNightMode = switchNightMode.isChecked();
+                if (stateNightMode) {
+                    // 如果切換後開關狀態為 "開 / On"
+                    editor.putBoolean("switch_state_night_mode", true).commit();
+                } else {
+                    // 如果切換後開關狀態為 "關/ Off"
+                    editor.putBoolean("switch_state_night_mode", false).commit();
+                }
+            }
+        });
+
+        optionNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchNotification.toggle();
+                Log.d(TAG, "Set switchNotification to " + switchNotification.isChecked());
+
+                Boolean stateNotification = switchNotification.isChecked();
+                if (stateNotification) {
+                    // 如果切換後開關狀態為 "開 / On"
+                    editor.putBoolean("switch_state_notification", true).commit();
+                } else {
+                    // 如果切換後開關狀態為 "關/ Off"
+                    editor.putBoolean("switch_state_notification", false).commit();
+                }
+            }
+        });
+
 //        profileUpdates();
         btn_logout(rootView);
 
@@ -137,22 +187,6 @@ public class SettingsFragment extends Fragment {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(getActivity().getResources().getColor(R.color.background));
-    }
-
-    private void profileUpdates() {
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName("")
-                .setPhotoUri(Uri.parse(""))
-                .build();
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("SETTINGS", "User profile updated.");
-                        }
-                    }
-                });
     }
 
     private void initPreferences() {
@@ -182,6 +216,59 @@ public class SettingsFragment extends Fragment {
         userEmail.setText(user.getEmail());
         userUid.setText("UID: " + user.getUid().substring(0, 8));
 //            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
+    }
+
+    private void initSwitchCompat() {
+        // sp
+        boolean switchStateNightMode = sp.getBoolean("switch_state_night_mode", false); // default: false
+        boolean switchStateNotification = sp.getBoolean("switch_state_notification", false); // default: false
+
+        Log.d("Settings", "Loaded switchNightMode: " + switchStateNightMode);
+        Log.d("Settings", "Loaded switchNotification: " + switchStateNotification);
+
+        if (switchStateNightMode) {
+            // Do something for switch (Night Mode) is selected on
+            switchNightMode.setChecked(true);
+        } else {
+            // switch off
+        }
+
+        if (switchStateNotification) {
+            // Do something for switch (Notification) is selected on
+            switchNotification.setChecked(true);
+        } else {
+            // switch off
+        }
+    }
+
+    private void initOtherInfo() {
+        PackageManager manager = getActivity().getPackageManager();
+        PackageInfo info = null;
+        try {
+            info = manager.getPackageInfo(getActivity().getPackageName(), PackageManager.GET_ACTIVITIES);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "Error getPackageInfo: ", e);
+        }
+
+        String versionName = info.versionName;
+
+        textVersion.setText(versionName);
+    }
+
+    private void profileUpdates() {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName("")
+                .setPhotoUri(Uri.parse(""))
+                .build();
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile updated.");
+                        }
+                    }
+                });
     }
 
     private void btn_logout(View view) {
