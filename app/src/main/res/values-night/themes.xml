@@ -13,26 +13,38 @@
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/black_900</item>
+        <item name="android:statusBarColor">@color/background</item>
         <item name="android:navigationBarColor">@color/background</item>
         <!-- Customize theme -->
         <item name="colorOnBackground">@color/on_background</item>
         <item name="colorError">@color/error</item>
+
+        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
     </style>
 
-    <!--Theme Style for Night mode Switch-->
-    <style name="nightModeSwitch" parent="Theme.AppCompat.DayNight">
-        <item name="colorControlActivated">@color/night_mode</item>
-        <item name="colorSwitchThumbNormal">@color/white</item>
-        <item name="android:colorForeground">#99E5E9EC</item>
+    <!-- Custom Animation -->
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+
     </style>
 
-    <!--Theme Style for Notification Switch-->
-    <style name="notificationSwitch" parent="Theme.AppCompat.DayNight">
-        <item name="colorControlActivated">@color/notification</item>
-        <item name="colorSwitchThumbNormal">@color/white</item>
-        <item name="android:colorForeground">#99E5E9EC</item>
-    </style>
+    <!-- Settings Switch -->
+        <!-- Night mode Switch -->
+        <style name="nightModeSwitch" parent="Theme.AppCompat.DayNight">
+            <item name="colorControlActivated">@color/night_mode</item>
+            <item name="colorSwitchThumbNormal">@color/white</item>
+            <item name="android:colorForeground">#99E5E9EC</item>
+        </style>
+
+        <!-- Notification Switch -->
+        <style name="notificationSwitch" parent="Theme.AppCompat.DayNight">
+            <item name="colorControlActivated">@color/notification</item>
+            <item name="colorSwitchThumbNormal">@color/white</item>
+            <item name="android:colorForeground">#99E5E9EC</item>
+        </style>
 
     <style name="Theme.Swc" parent="Base.Theme.Swc" />
 </resources>

@@ -4,12 +4,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:layout_marginHorizontal="12dp" >
     <EditText
         android:id="@+id/edit_text"
         android:inputType="text"
-        android:background="@color/surface"
         android:hint="@string/input_wheelchair_name"
         android:textColor="@color/white"
         android:textColorHint="@color/white"

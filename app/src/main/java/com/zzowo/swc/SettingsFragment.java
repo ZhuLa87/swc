@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -110,6 +112,7 @@ public class SettingsFragment extends Fragment {
         user = mAuth.getCurrentUser();
 
 //        init
+        initStatusBarColor();
         initPreferences();
         initAccountInfo(user);
 
@@ -127,6 +130,13 @@ public class SettingsFragment extends Fragment {
         btn_logout(rootView);
 
         return rootView;
+    }
+
+    private void initStatusBarColor() {
+        Window window = getActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(getActivity().getResources().getColor(R.color.background));
     }
 
     private void profileUpdates() {
