@@ -52,4 +52,6 @@
     <string name="account_security">Account Security</string>
     <string name="edit_profiles">Edit profiles</string>
     <string name="night_mode">Night Mode</string>
+    <string name="login_cancel">Login Cancel</string>
+    <string name="login_failed">Login Failed</string>
 </resources>

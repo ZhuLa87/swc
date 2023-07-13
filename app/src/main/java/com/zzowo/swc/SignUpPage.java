@@ -167,14 +167,14 @@ public class SignUpPage extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        progressBar.setVisibility(View.GONE);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuth(account.getIdToken());
             } catch (ApiException e) {
-                throw new RuntimeException(e);
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(SignUpPage.this, getText(R.string.login_cancel), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -190,7 +190,7 @@ public class SignUpPage extends AppCompatActivity {
                             saveUserInfoPreferences(firebaseUser);
                             saveUserInfoDatabaseAndJumpPage(firebaseUser);
                         } else {
-                            Toast.makeText(SignUpPage.this, "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpPage.this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -212,6 +212,7 @@ public class SignUpPage extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        progressBar.setVisibility(View.GONE);
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                         welcomeToast();
 
@@ -224,7 +225,6 @@ public class SignUpPage extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
-                        Toast.makeText(SignUpPage.this, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
