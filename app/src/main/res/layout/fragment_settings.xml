@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/colorBackground"
     tools:context=".SettingsFragment"
     >
     <!-- 將下方往上推, 避免擋住下方導覽列 -->
@@ -69,7 +69,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="4"
                     android:text="user123"
-                    android:textColor="@color/on_surface"
+                    android:textColor="@color/colorOnSurface"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
@@ -80,7 +80,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="3"
                     android:text="user@zzowo.com"
-                    android:textColor="@color/on_surface"
+                    android:textColor="@color/colorOnSurface"
                     android:textSize="20sp"
                     android:textStyle="bold" />
                 <!-- 使用者ID -->
@@ -98,7 +98,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
                         android:text="UID"
-                        android:textColor="@color/on_surface"
+                        android:textColor="@color/colorOnSurface"
                         android:textSize="15sp" />
                     <!-- 複製使用者ID -->
                     <TextView
@@ -111,7 +111,7 @@
                         android:background="@drawable/copy_uid_background_settings_fragment"
                         android:paddingHorizontal="3dp"
                         android:text="COPY"
-                        android:textColor="@color/link"
+                        android:textColor="@color/colorLink"
                         android:textSize="13sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
@@ -170,7 +170,7 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_toEndOf="@id/night_mode_icon"
                                 android:text="@string/night_mode"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/colorOnSurface"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
                             <!-- 開關 -->
@@ -211,7 +211,7 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_toEndOf="@id/notification_icon"
                                 android:text="@string/notification"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/colorOnSurface"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
                             <!-- 開關 -->
@@ -262,7 +262,7 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_toEndOf="@id/edit_profile_icon"
                                 android:text="@string/edit_profiles"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/colorOnSurface"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
                             <!-- 指示圖標 -->
@@ -300,7 +300,7 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_toEndOf="@id/account_security_icon"
                                 android:text="@string/account_security"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/colorOnSurface"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
                             <!-- 指示圖標 -->
@@ -347,7 +347,7 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_toEndOf="@id/version_info_icon"
                                 android:text="@string/settings_version_info"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/colorOnSurface"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
                             <!-- 功能內容 -->
@@ -359,7 +359,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginEnd="10dp"
                                 android:text="0.0.0"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/colorOnSurface"
                                 android:textSize="20sp" />
                         </RelativeLayout>
                     </LinearLayout>
@@ -397,7 +397,7 @@
                                 android:layout_marginStart="20dp"
                                 android:layout_toEndOf="@id/logout_icon"
                                 android:text="@string/settings_logout"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/colorOnSurface"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
                         </RelativeLayout>

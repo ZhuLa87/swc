@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/colorBackground"
     tools:context=".HomeFragment"
     >
     <androidx.appcompat.widget.Toolbar
@@ -112,7 +112,7 @@
         <RelativeLayout
             android:id="@+id/func_03"
             android:background="@drawable/function_button_home_fragment"
-            android:backgroundTint="@color/warning"
+            android:backgroundTint="@color/colorWarning"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"

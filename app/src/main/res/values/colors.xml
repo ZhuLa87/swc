@@ -23,20 +23,20 @@
     <color name="black_800">#121212</color>
     <color name="black_900">#000000</color>
 
-    <color name="background">@color/black_800</color>
-    <color name="on_background">@color/white</color>
-    <color name="surface">@color/gray_800</color>
-    <color name="on_surface">@color/white</color>
-    <color name="primary">@color/purple_300</color>
-    <color name="primary_variant">@color/purple_500</color>
-    <color name="on_primary">@color/black_800</color>
-    <color name="secondary">@color/blue_green</color>
-    <color name="secondary_variant">@color/blue_green_dark</color>
-    <color name="on_secondary">@color/black_900</color>
+    <color name="colorBackground">@color/black_800</color>
+    <color name="colorOnBackground">@color/white</color>
+    <color name="colorSurface">@color/gray_800</color>
+    <color name="colorOnSurface">@color/white</color>
+    <color name="colorPrimary">@color/purple_300</color>
+    <color name="colorPrimaryVariant">@color/purple_500</color>
+    <color name="colorOnPrimary">@color/black_800</color>
+    <color name="colorSecondary">@color/blue_green</color>
+    <color name="colorSecondaryVariant">@color/blue_green_dark</color>
+    <color name="colorOnSecondary">@color/black_900</color>
 
-    <color name="link">#03A9F4</color>
-    <color name="error">#B00020</color>
-    <color name="warning">#C5565F</color>
+    <color name="colorLink">#03A9F4</color>
+    <color name="colorError">#B00020</color>
+    <color name="colorWarning">#C5565F</color>
 
     <!--Settings Page-->
     <color name="night_mode">#6124B1</color>

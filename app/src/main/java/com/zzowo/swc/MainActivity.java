@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.bottom_home) {
                 replaceFragment(new HomeFragment());
             } else if (itemId == R.id.bottom_map) {
+                Toast.makeText(this, "地圖頁面存在Bug, 待重製", Toast.LENGTH_SHORT).show();
                 replaceFragment(new MapFragment());
             } else if (itemId == R.id.bottom_notifications) {
                 replaceFragment(new NotificationsFragment());
@@ -94,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
         NotificationChannel notificationChannel = new NotificationChannel("alert", "通知LaGan", NotificationManager.IMPORTANCE_HIGH);
         notificationManager.createNotificationChannel(notificationChannel);
 
-        Intent intent = new  Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginPage.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        int color = ContextCompat.getColor(this, R.color.green_300);
+        int color = ContextCompat.getColor(this, R.color.colorBackground);
         notification = new NotificationCompat.Builder(this, "alert")
                 .setContentTitle("早安!")
                 .setContentText("世界那麼大, 想去走走嗎")

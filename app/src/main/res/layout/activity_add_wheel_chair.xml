@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/colorBackground"
     tools:context=".AddWheelChairActivity"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="2dp"
-        android:background="@color/surface"
+        android:background="@color/colorSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +33,7 @@
             android:gravity="center"
             android:paddingVertical="5dp"
             android:text="@string/title_connect_to_swc"
-            android:textColor="@color/on_surface"
+            android:textColor="@color/colorOnSurface"
             android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -66,7 +66,7 @@
         <TextView
             android:id="@+id/bluetooth_status"
             android:text="Loading..."
-            android:textColor="@color/on_background"
+            android:textColor="@color/colorOnBackground"
             android:textSize="20sp"
             android:gravity="center"
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
         <TextView
             android:id="@+id/my_device"
             android:text="My Device"
-            android:textColor="@color/on_background"
+            android:textColor="@color/colorOnBackground"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         <TextView
             android:id="@+id/other_devices"
             android:text="Other devices"
-            android:textColor="@color/on_background"
+            android:textColor="@color/colorOnBackground"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

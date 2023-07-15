@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="ProgressBarStyle">
-        <item name="colorAccent">@color/primary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 </resources>
