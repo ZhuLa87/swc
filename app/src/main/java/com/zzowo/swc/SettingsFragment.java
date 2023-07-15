@@ -1,5 +1,6 @@
 package com.zzowo.swc;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -32,6 +34,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
 
 //在 Firebase 中管理用户
@@ -165,7 +173,28 @@ public class SettingsFragment extends Fragment {
                 Boolean stateNotification = switchNotification.isChecked();
                 if (stateNotification) {
                     // 如果切換後開關狀態為 "開 / On"
-                    editor.putBoolean("switch_state_notification", true).commit();
+                    Log.d(TAG, "onClick: Switch Notification set to: " + switchNotification.isChecked());
+
+                    // Grant notification permission
+                    Dexter.withContext(getActivity().getApplicationContext()).withPermission(Manifest.permission.POST_NOTIFICATIONS)
+                            .withListener(new PermissionListener() {
+                                @Override
+                                public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                                    editor.putBoolean("switch_state_notification", true).commit();
+                                    Log.d(TAG, "Saved switch_state_notification: true");
+                                }
+
+                                @Override
+                                public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                                    switchNotification.setChecked(false);
+                                }
+
+                                @Override
+                                public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                                    permissionToken.continuePermissionRequest();
+                                }
+                            }).check();
+
                 } else {
                     // 如果切換後開關狀態為 "關/ Off"
                     editor.putBoolean("switch_state_notification", false).commit();
@@ -220,21 +249,29 @@ public class SettingsFragment extends Fragment {
         boolean switchStateNightMode = sp.getBoolean("switch_state_night_mode", false); // default: false
         boolean switchStateNotification = sp.getBoolean("switch_state_notification", false); // default: false
 
-        Log.d("Settings", "Loaded switchNightMode: " + switchStateNightMode);
-        Log.d("Settings", "Loaded switchNotification: " + switchStateNotification);
+        Log.d(TAG, "Get switchNightMode: " + switchStateNightMode);
+        Log.d(TAG, "Get switchNotification: " + switchStateNotification);
 
         if (switchStateNightMode) {
             // Do something for switch (Night Mode) is selected on
             switchNightMode.setChecked(true);
+            Log.d(TAG, "Loaded switchNightMode: " + true);
         } else {
             // switch off
+            Log.d(TAG, "Loaded switchNightMode: " + false);
         }
 
         if (switchStateNotification) {
-            // Do something for switch (Notification) is selected on
-            switchNotification.setChecked(true);
+            // Check permission first
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                switchNotification.setChecked(true);
+                Log.d(TAG, "Loaded switchNotification: " + true);
+            } else {
+                switchNotification.setChecked(false);
+            }
         } else {
             // switch off
+            Log.d(TAG, "Loaded switchNotification: " + false);
         }
     }
 

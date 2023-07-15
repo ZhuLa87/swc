@@ -54,4 +54,5 @@
     <string name="night_mode">深色模式</string>
     <string name="login_cancel">登入取消</string>
     <string name="login_failed">登入失敗</string>
+    <string name="user_binding">使用者綁定</string>
 </resources>

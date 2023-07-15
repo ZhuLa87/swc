@@ -30,7 +30,7 @@
                 android:id="@+id/animation_avatar"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -55,10 +55,9 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="@id/animation_avatar"
-                app:layout_constraintEnd_toEndOf="@+id/user_info"
                 app:layout_constraintStart_toEndOf="@id/animation_avatar"
                 app:layout_constraintTop_toTopOf="@id/animation_avatar"
                 >
@@ -69,7 +68,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="4"
                     android:text="user123"
-                    android:textColor="@color/colorOnSurface"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:visibility="gone" />

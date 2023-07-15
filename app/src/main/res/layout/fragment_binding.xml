@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".NotificationsFragment"
+    tools:context=".BindingFragment"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/title_bar"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:paddingVertical="5dp"
-            android:text="@string/notification"
+            android:text="@string/user_binding"
             android:textColor="@color/colorOnSurface"
             android:textSize="36sp"
             android:textStyle="bold"
@@ -47,30 +47,4 @@
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/title_bar"/>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView_notifications"
-        android:onClick="sendNotification"
-        app:lottie_rawRes="@raw/notifications"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_colorFilter="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView_cancel"
-        android:onClick="cancelNotification"
-        app:lottie_rawRes="@raw/cancel"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/animationView_notifications"
-        app:layout_constraintTop_toBottomOf="@id/animationView_notifications"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        android:layout_marginHorizontal="100dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

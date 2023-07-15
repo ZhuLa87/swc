@@ -20,10 +20,10 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NotificationsFragment#newInstance} factory method to
+ * Use the {@link BindingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NotificationsFragment extends Fragment {
+public class BindingFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +34,7 @@ public class NotificationsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public NotificationsFragment() {
+    public BindingFragment() {
         // Required empty public constructor
     }
 
@@ -47,8 +47,8 @@ public class NotificationsFragment extends Fragment {
      * @return A new instance of fragment NotificationsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NotificationsFragment newInstance(String param1, String param2) {
-        NotificationsFragment fragment = new NotificationsFragment();
+    public static BindingFragment newInstance(String param1, String param2) {
+        BindingFragment fragment = new BindingFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,7 +68,7 @@ public class NotificationsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_notifications, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_binding, container, false);
 
         //init
         initStatusBarColor();
@@ -85,21 +85,6 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void grantPermission() {
-        // grant permission
-        Dexter.withContext(getActivity().getApplicationContext()).withPermission(Manifest.permission.POST_NOTIFICATIONS)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                    }
 
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
-                        permissionToken.continuePermissionRequest();
-                    }
-                }).check();
     }
 }

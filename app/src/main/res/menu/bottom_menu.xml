@@ -9,9 +9,9 @@
         android:icon="@drawable/baseline_map_24"
         android:title="@string/bottom_menu_map"/>
     <item
-        android:id="@+id/bottom_notifications"
-        android:icon="@drawable/baseline_notifications_24"
-        android:title="@string/bottom_menu_notifications"/>
+        android:id="@+id/bottom_binding"
+        android:icon="@drawable/baseline_link_24"
+        android:title="@string/user_binding"/>
     <item
         android:id="@+id/bottom_settings"
         android:icon="@drawable/baseline_settings_24"
