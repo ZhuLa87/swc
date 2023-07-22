@@ -160,9 +160,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void toolbarAdd() {
-//        TODO: toolbar_add操作待編輯.
-        Toast.makeText(getContext(), "連接設備界面待製作", Toast.LENGTH_SHORT).show();
-
         // switch to new activity
         Intent intent = new Intent(getContext(), AddWheelChairActivity.class);
         startActivity(intent);
@@ -170,6 +167,6 @@ public class HomeFragment extends Fragment {
 
     private void toolbarDisconnect() {
 //        TODO: toolbar_remove操作待編輯.
-        Toast.makeText(getContext(), "斷連設備界面待製作", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "此操作待製作", Toast.LENGTH_SHORT).show();
     }
 }

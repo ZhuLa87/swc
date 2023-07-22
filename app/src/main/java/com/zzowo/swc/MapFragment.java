@@ -2,12 +2,16 @@ package com.zzowo.swc;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,6 +158,7 @@ public class MapFragment extends Fragment {
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                        showSettingsDialog();
                         Toast.makeText(getActivity(), R.string.location_perm_denied_msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -162,6 +167,33 @@ public class MapFragment extends Fragment {
                         permissionToken.continuePermissionRequest();
                     }
                 }).check();
+    }
+
+    private void showSettingsDialog() {
+        // we are displaying an alert dialog for permissions
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // below line is the title for our alert dialog.
+        builder.setTitle("Need Permissions");
+
+        // below line is our message for our dialog
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", (dialog, which) -> {
+            // this method is called on click on positive button and on clicking shit button
+            // we are redirecting our user from our app to the settings page of our app.
+            dialog.cancel();
+            // below is the intent from which we are redirecting our user.
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+            intent.setData(uri);
+            startActivityForResult(intent, 101);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            // this method is called when user click on negative button.
+            dialog.cancel();
+        });
+        // below line is used to display our dialog
+        builder.show();
     }
 
     // 取得當前位置並將地圖移動至當前所在位置

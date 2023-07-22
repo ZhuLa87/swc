@@ -139,12 +139,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="20dp"
                         android:background="@drawable/round_back_white"
                         android:orientation="vertical"
                         >
                         <!-- Night Mode -->
                         <RelativeLayout
+                            android:visibility="gone"
                             android:id="@+id/option_night_mode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -189,7 +190,7 @@
                             android:id="@+id/option_notification"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="5dp"
+                            android:paddingTop="15dp"
                             android:paddingHorizontal="15dp"
                             android:paddingBottom="15dp"
                             >

@@ -76,34 +76,49 @@
             android:id="@+id/bluetooth_img"
             android:src="@drawable/baseline_bluetooth_searching_100"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="150dp"
             android:layout_below="@id/bluetooth_status" />
         <TextView
-            android:id="@+id/my_device"
+            android:id="@+id/my_device_text"
             android:text="My Device"
             android:textColor="@color/colorOnBackground"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/bluetooth_img"
-            android:layout_marginStart="25dp"
+            android:layout_marginHorizontal="25dp"
             android:layout_marginTop="20dp" />
-        <!--    View-->
+
         <TextView
-            android:id="@+id/other_devices"
+            android:id="@+id/my_device"
+            android:text="123"
+            android:textColor="@color/colorOnBackground"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_device_text"
+            android:layout_marginHorizontal="25dp" />
+
+        <TextView
+            android:id="@+id/other_devices_text"
             android:text="Other devices"
             android:textColor="@color/colorOnBackground"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/my_device"
-            android:layout_marginStart="25dp"
+            android:layout_marginHorizontal="25dp"
             android:layout_marginTop="20dp" />
-        <androidx.recyclerview.widget.RecyclerView
+
+        <TextView
+            android:id="@+id/other_devices"
+            android:text="123"
+            android:textColor="@color/colorOnBackground"
+            android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/other_devices"
-            >
-        </androidx.recyclerview.widget.RecyclerView>
+            android:layout_below="@id/other_devices_text"
+            android:layout_marginHorizontal="25dp" />
+
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
