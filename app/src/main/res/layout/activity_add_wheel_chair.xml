@@ -79,45 +79,66 @@
             android:layout_height="150dp"
             android:layout_below="@id/bluetooth_status" />
         <TextView
-            android:id="@+id/my_device_text"
+            android:id="@+id/btReadings"
+            android:text=""
+            android:textColor="@color/colorPrimary"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bluetooth_img"
+            android:layout_marginHorizontal="25dp"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/my_devices_title"
             android:text="My Device"
             android:textColor="@color/colorOnBackground"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/bluetooth_img"
+            android:layout_below="@id/btReadings"
             android:layout_marginHorizontal="25dp"
             android:layout_marginTop="20dp" />
 
         <TextView
-            android:id="@+id/my_device"
+            android:id="@+id/my_devices"
             android:text="123"
             android:textColor="@color/colorOnBackground"
             android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/my_device_text"
+            android:layout_below="@id/my_devices_title"
             android:layout_marginHorizontal="25dp" />
 
+        <Button
+            android:enabled="false"
+            android:id="@+id/connect_to_device"
+            android:text="Connect to HC-05"
+            android:textSize="16sp"
+            android:textColor="@color/colorOnPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_devices" />
+
         <TextView
-            android:id="@+id/other_devices_text"
+            android:id="@+id/other_devices_title"
             android:text="Other devices"
             android:textColor="@color/colorOnBackground"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/my_device"
+            android:layout_below="@id/connect_to_device"
             android:layout_marginHorizontal="25dp"
             android:layout_marginTop="20dp" />
 
         <TextView
             android:id="@+id/other_devices"
-            android:text="123"
+            android:text=""
             android:textColor="@color/colorOnBackground"
             android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/other_devices_text"
+            android:layout_below="@id/other_devices_title"
             android:layout_marginHorizontal="25dp" />
 
     </RelativeLayout>
