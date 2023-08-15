@@ -44,7 +44,6 @@ public class AddWheelChairActivity extends AppCompatActivity {
     private static final String TAG = "ADD_SWC";
     private static String deviceNameStart = "SWC";
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
-    private static final int REQUEST_ENABLE_BT = 500;
     private BluetoothManager bluetoothManager;
     private BluetoothAdapter bluetoothAdapter;
     BluetoothDevice arduinoBTModule = null;
@@ -79,54 +78,54 @@ public class AddWheelChairActivity extends AppCompatActivity {
         showHandler();
 
         // Create an Observable from RxAndroid
-        //The code will be executed when an Observer subscribes to the the Observable
+        // The code will be executed when an Observer subscribes to the the Observable
         final Observable<String> connectToBTObservable = Observable.create(emitter -> {
             Log.d(TAG, "Calling connectThread class");
-            //Call the constructor of the ConnectThread class
-            //Passing the Arguments: an Object that represents the BT device,
+            // Call the constructor of the ConnectThread class
+            // Passing the Arguments: an Object that represents the BT device,
             // the UUID and then the handler to update the UI
-            ConnectThread connectThread = new ConnectThread(arduinoBTModule, arduinoUUID, handler);
+            ConnectThread connectThread = new ConnectThread(arduinoBTModule, arduinoUUID, handler, progressBar);
             connectThread.run();
-            //Check if Socket connected
+            // Check if Socket connected
             if (connectThread.getMmSocket().isConnected()) {
                 Log.d(TAG, "Calling ConnectedThread class");
-                //The pass the Open socket as arguments to call the constructor of ConnectedThread
+                // The pass the Open socket as arguments to call the constructor of ConnectedThread
                 ConnectedThread connectedThread = new ConnectedThread(connectThread.getMmSocket());
                 connectedThread.run();
                 if(connectedThread.getValueRead()!=null)
                 {
                     // If we have read a value from the Arduino
                     // we call the onNext() function
-                    //This value will be observed by the observer
+                    // This value will be observed by the observer
                     emitter.onNext(connectedThread.getValueRead());
                 }
-                //We just want to stream 1 value, so we close the BT stream
+                // We just want to stream 1 value, so we close the BT stream
                 connectedThread.cancel();
             }
             // SystemClock.sleep(5000); // simulate delay
-            //Then we close the socket connection
+            // Then we close the socket connection
             connectThread.cancel();
-            //We could Override the onComplete function
+            // We could Override the onComplete function
             emitter.onComplete();
         });
 
         connectToDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 btReadings.setText("");
                 if (arduinoBTModule != null) {
-                    //We subscribe to the observable until the onComplete() is called
-                    //We also define control the thread management with
+                    // We subscribe to the observable until the onComplete() is called
+                    // We also define control the thread management with
                     // subscribeOn:  the thread in which you want to execute the action
                     // observeOn: the thread in which you want to get the response
                     connectToBTObservable.
                             observeOn(AndroidSchedulers.mainThread()).
                             subscribeOn(Schedulers.io()).
                             subscribe(valueRead -> {
-                                //valueRead returned by the onNext() from the Observable
+                                // valueRead returned by the onNext() from the Observable
                                 btReadings.setText(valueRead);
-                                //We just scratched the surface with RxAndroid
+                                // We just scratched the surface with RxAndroid
                             });
                 }
             }
@@ -135,13 +134,13 @@ public class AddWheelChairActivity extends AppCompatActivity {
         bluetoothImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Check if the phone supports BT
+                // Check if the phone supports BT
                 if (bluetoothAdapter == null) {
                     // Device doesn't support Bluetooth
                     Log.d(TAG, "Device doesn't support Bluetooth");
                 } else {
                     Log.d(TAG, "Device support Bluetooth");
-                    //Check BT enabled. If disabled, we ask the user to enable BT
+                    // Check BT enabled. If disabled, we ask the user to enable BT
                     if (!bluetoothAdapter.isEnabled()) {
                         Log.d(TAG, "Bluetooth is disabled");
                         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -153,7 +152,7 @@ public class AddWheelChairActivity extends AppCompatActivity {
                             //                                          int[] grantResults)
                             // to handle the case where the user grants the permission. See the documentation
                             // for ActivityCompat#requestPermissions for more details.
-                            Log.d(TAG, "We don't BT Permissions");
+                            Log.d(TAG, "We don't have BT Permissions");
                             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
                             Log.d(TAG, "Bluetooth is enabled now");
                         } else {
@@ -173,27 +172,20 @@ public class AddWheelChairActivity extends AppCompatActivity {
                         for (BluetoothDevice device: pairedDevices) {
                             String deviceName = device.getName();
                             String deviceHardwareAddress = device.getAddress(); // MAC address
-                            Log.d(TAG, "deviceName:" + deviceName);
-                            Log.d(TAG, "deviceHardwareAddress:" + deviceHardwareAddress);
-                            //We append all devices to a String that we will display in the UI
-                            btDevicesString=btDevicesString+deviceName+" || "+deviceHardwareAddress+"\n";
-                            //If we find the HC 05 device (the Arduino BT module)
-                            //We assign the device value to the Global variable BluetoothDevice
-                            //We enable the button "Connect to HC 05 device"
+                            Log.d(TAG, "deviceName: " + deviceName + " || " + deviceHardwareAddress);
+                            // We append all devices to a String that we will display in the UI
+                            btDevicesString = btDevicesString + deviceName + " || " + deviceHardwareAddress + "\n";
+                            // If we find the HC 05 device (the Arduino BT module)
+                            // We assign the device value to the Global variable BluetoothDevice
+                            // We enable the button "Connect to HC 05 device"
                             if (deviceName.startsWith(deviceNameStart)) {
                                 Log.d(TAG, deviceName + " found");
                                 arduinoUUID = device.getUuids()[0].getUuid();
+                                Log.d(TAG, "UUID: " + arduinoUUID);
                                 arduinoBTModule = device;
-                                //HC -05 Found, enabling the button to read results
+                                // BT Found, enabling the button to read results
                                 connectToDevice.setEnabled(true);
                             }
-//                            if (deviceName.equals(swcDeviceName)) {
-//                                Log.d(TAG, swcDeviceName + " found");
-//                                arduinoUUID = device.getUuids()[0].getUuid();
-//                                arduinoBTModule = device;
-//                                //HC -05 Found, enabling the button to read results
-//                                connectToDevice.setEnabled(true);
-//                            }
                             myDevices.setText(btDevicesString);
                         }
                     }

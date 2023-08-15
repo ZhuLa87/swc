@@ -5,25 +5,29 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.io.IOException;
 import java.util.UUID;
 
 
-//Class that will open the BT Socket to the Arduino BT Module
-//Given a BT device, the UUID and a Handler to set the results
+// Class that will open the BT Socket to the Arduino BT Module
+// Given a BT device, the UUID and a Handler to set the results
 public class ConnectThread extends Thread {
     private final BluetoothSocket mmSocket;
     private static final String TAG = "CONNECT_THREAD";
     public static Handler handler;
+    public static ProgressBar progressBar;
     private final static int ERROR_READ = 0;
 
     @SuppressLint("MissingPermission")
-    public ConnectThread(BluetoothDevice device, UUID MY_UUID, Handler handler) {
+    public ConnectThread(BluetoothDevice device, UUID MY_UUID, Handler handler, ProgressBar progressBar) {
         // Use a temporary object that is later assigned to mmSocket
         // because mmSocket is final.
         BluetoothSocket tmp = null;
         this.handler = handler;
+        this.progressBar = progressBar;
 
         try {
             // Get a BluetoothSocket to connect with the given BluetoothDevice.
@@ -39,11 +43,11 @@ public class ConnectThread extends Thread {
     public void run() {
 
         try {
-            // Connect to the remote device through the socket. This call blocks
-            // until it succeeds or throws an exception.
+            // Connect to the remote device through the socket. This call blocks until it succeeds or throws an exception.
             mmSocket.connect();
         } catch (IOException connectException) {
             // Unable to connect; close the socket and return.
+            this.progressBar.setVisibility(View.GONE);
             handler.obtainMessage(ERROR_READ, "Unable to connect to the BT device").sendToTarget();
             Log.e(TAG, "connectException: " + connectException);
             try {
@@ -56,7 +60,7 @@ public class ConnectThread extends Thread {
 
         // The connection attempt succeeded. Perform work associated with
         // the connection in a separate thread.
-        //manageMyConnectedSocket(mmSocket);
+        // manageMyConnectedSocket(mmSocket);
     }
 
     // Closes the client socket and causes the thread to finish.

@@ -102,7 +102,7 @@
 
         <TextView
             android:id="@+id/my_devices"
-            android:text="123"
+            android:text=""
             android:textColor="@color/colorOnBackground"
             android:textSize="16sp"
             android:layout_width="match_parent"
@@ -113,33 +113,13 @@
         <Button
             android:enabled="false"
             android:id="@+id/connect_to_device"
-            android:text="Connect to HC-05"
+            android:text="Connect to Wheel Chair"
             android:textSize="16sp"
             android:textColor="@color/colorOnPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/my_devices" />
 
-        <TextView
-            android:id="@+id/other_devices_title"
-            android:text="Other devices"
-            android:textColor="@color/colorOnBackground"
-            android:textSize="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/connect_to_device"
-            android:layout_marginHorizontal="25dp"
-            android:layout_marginTop="20dp" />
-
-        <TextView
-            android:id="@+id/other_devices"
-            android:text=""
-            android:textColor="@color/colorOnBackground"
-            android:textSize="16sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/other_devices_title"
-            android:layout_marginHorizontal="25dp" />
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
