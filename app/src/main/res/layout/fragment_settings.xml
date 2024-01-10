@@ -190,9 +190,9 @@
                             android:id="@+id/option_notification"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="15dp"
+                            android:paddingTop="12dp"
                             android:paddingHorizontal="15dp"
-                            android:paddingBottom="15dp"
+                            android:paddingBottom="12dp"
                             >
                             <!-- 圖標 -->
                             <ImageView
@@ -241,9 +241,9 @@
                             android:id="@+id/option_profile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="15dp"
+                            android:paddingTop="12dp"
                             android:paddingHorizontal="15dp"
-                            android:paddingBottom="5dp"
+                            android:paddingBottom="12dp"
                             >
                             <!-- 圖標 -->
                             <ImageView
@@ -279,9 +279,9 @@
                             android:id="@+id/option_security"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="5dp"
+                            android:paddingTop="10dp"
                             android:paddingHorizontal="15dp"
-                            android:paddingBottom="15dp"
+                            android:paddingBottom="10dp"
                             >
                             <!-- 圖標 -->
                             <ImageView
@@ -311,6 +311,44 @@
                                 android:layout_centerVertical="true"
                                 android:src="@drawable/baseline_chevron_right_24" />
                         </RelativeLayout>
+
+                        <!-- Binding User -->
+                        <RelativeLayout
+                            android:id="@+id/option_binding_user"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="12dp"
+                            android:paddingHorizontal="15dp"
+                            android:paddingBottom="12dp"
+                            >
+                            <!-- 圖標 -->
+                            <ImageView
+                                android:id="@+id/binding_user_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/round_back_settings_icon"
+                                android:backgroundTint="@color/binding"
+                                android:padding="12dp"
+                                android:src="@drawable/baseline_link_24" />
+                            <!-- 功能文字 -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="20dp"
+                                android:layout_toEndOf="@id/binding_user_icon"
+                                android:text="@string/binding_user"
+                                android:textColor="@color/colorOnSurface"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+                            <!-- 指示圖標 -->
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/baseline_chevron_right_24" />
+                        </RelativeLayout>
                     </LinearLayout>
 
                     <!-- 其他資訊 -->
@@ -326,9 +364,9 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="15dp"
+                            android:paddingTop="12dp"
                             android:paddingHorizontal="15dp"
-                            android:paddingBottom="15dp"
+                            android:paddingBottom="12dp"
                             >
                             <!-- 圖標 -->
                             <ImageView

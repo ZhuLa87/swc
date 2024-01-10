@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.bottom_home) {
                 replaceFragment(new HomeFragment());
             } else if (itemId == R.id.bottom_map) {
-                Toast.makeText(this, "地圖頁面存在Bug, 待重製", Toast.LENGTH_SHORT).show();
                 replaceFragment(new MapFragment());
             } else if (itemId == R.id.bottom_binding) {
                 replaceFragment(new BindingFragment());

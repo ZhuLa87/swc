@@ -197,6 +197,7 @@ public class LoginPage extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
+                // 從Google登入取得結果, "task" 為非同步的結果, 當錯誤發生時會拋出 ApiException
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuth(account.getIdToken());
             } catch (ApiException e) {
@@ -234,6 +235,7 @@ public class LoginPage extends AppCompatActivity {
         usersData.setEmail(firebaseUser.getEmail());
         usersData.setFullName(firebaseUser.getDisplayName());
 
+        // 取得 Firestore 數據庫的引用, 指定集合為 "users", 文件 ID 為使用者的 UID
         db.collection("users").document(firebaseUser.getUid())
                 .set(usersData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -251,6 +253,7 @@ public class LoginPage extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        // TODO: 添加資料庫錯誤時的處裡邏輯
                         Log.w(TAG, "Error writing document", e);
                     }
                 });

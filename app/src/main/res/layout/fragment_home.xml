@@ -31,10 +31,22 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         >
+        <TextView
+            android:id="@+id/connectStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:text="輪椅未連線"
+            android:textAlignment="center"
+            android:textColor="@color/colorWarning"
+            android:textSize="30sp"
+            android:textStyle="bold" />
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_avatar"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:layout_below="@id/connectStatus"
             app:lottie_rawRes="@raw/wheelchair"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
@@ -60,14 +72,18 @@
             android:layout_margin="10dp"
             android:elevation="3dp"
             >
+
             <ImageView
                 android:id="@+id/func_img_01"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_alignParentTop="true"
                 android:layout_above="@id/func_text_01"
-                android:src="@drawable/ic_add" />
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/baseline_volume_up_24" />
             <TextView
                 android:id="@+id/func_text_01"
                 android:text="@string/func_text_01"
@@ -89,19 +105,23 @@
             android:layout_margin="10dp"
             android:elevation="3dp"
             >
+
             <ImageView
                 android:id="@+id/func_img_02"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_alignParentTop="true"
                 android:layout_above="@id/func_text_02"
-                android:src="@drawable/ic_add" />
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/baseline_location_on_24" />
             <TextView
                 android:id="@+id/func_text_02"
                 android:text="@string/func_text_02"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:textAlignment="center"
                 android:layout_width="match_parent"

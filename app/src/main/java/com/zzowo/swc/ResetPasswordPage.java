@@ -53,6 +53,8 @@ public class ResetPasswordPage extends AppCompatActivity {
                     return;
                 }
 
+                // TODO: 檢查email格式
+
                 mAuth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override

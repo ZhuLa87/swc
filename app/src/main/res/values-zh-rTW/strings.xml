@@ -10,8 +10,8 @@
     <string name="toolbar_menu_disconnect">移除輪椅</string>
     <string name="mySWC_name_default">我的物聯網輪椅</string>
     <string name="settings">設定</string>
-    <string name="func_text_01">功能一</string>
-    <string name="func_text_02">功能二</string>
+    <string name="func_text_01">"蜂鳴器 "</string>
+    <string name="func_text_02">位置</string>
     <string name="func_text_03">一鍵告警</string>
     <string name="title_login">登入</string>
     <string name="title_welcome_back">歡迎回來</string>
@@ -55,4 +55,5 @@
     <string name="login_cancel">登入取消</string>
     <string name="login_failed">登入失敗</string>
     <string name="user_binding">使用者綁定</string>
+    <string name="binding_user">綁定使用者</string>
 </resources>
