@@ -56,4 +56,14 @@
     <string name="login_failed">登入失敗</string>
     <string name="user_binding">使用者綁定</string>
     <string name="binding_user">綁定使用者</string>
+    <string name="cya">再見!</string>
+    <string name="noPairedSWC">找不到您的設備，請先至藍芽頁面配對您的SWC裝置</string>
+    <string name="check_bluetooth_support">檢查藍芽支援性...</string>
+    <string name="checking_permission">檢查權限...</string>
+    <string name="bluetooth_permission_granted">已取得藍芽權限</string>
+    <string name="check_bluetooth_enable">檢查藍牙狀態</string>
+    <string name="check_bluetooth_paired">檢查已配對的藍芽裝置</string>
+    <string name="connecting_to_swc">嘗試連接到 SWC</string>
+    <string name="auto_connect_failed">自動連接失敗，請檢查您的裝置後重試</string>
+    <string name="successfully_connected_to_swc">成功連接至SWC</string>
 </resources>

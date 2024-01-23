@@ -1,17 +1,15 @@
 package com.zzowo.swc;
 
+import static com.zzowo.swc.BtThread.ConnectThread.bluetoothSocket;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -23,42 +21,42 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.zzowo.swc.BtThread.ConnectThread;
+import com.zzowo.swc.BtThread.ConnectedThread;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
-public class AddWheelChairActivity extends AppCompatActivity {
+public class AddWheelChairActivity extends AppCompatActivity implements ConnectThread.ConnectionListener {
     private static final String TAG = "ADD_SWC";
     private static String deviceNameStart = "SWC";
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     private BluetoothManager bluetoothManager;
-    private BluetoothAdapter bluetoothAdapter;
+    public BluetoothAdapter bluetoothAdapter;
     BluetoothDevice arduinoBTModule = null;
-    // We will use a Handler to get the BT Connection status
-    public static Handler handler;
     private final static int ERROR_READ = 0; // used in bluetooth handler to identify message update
 
-    // Android的SSP（協議棧默認）的UUID：00001101-0000-1000-8000-00805F9B34FB，只有使用該UUID才能正常和外部的，也是SSP串口的藍牙設備去連接。
-    UUID arduinoUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // We declare a default UUID to create the global variable
+    // Android的SSP（協議棧默認）的UUID：00001101-0000-1000-8000-00805F9B34FB，只有使用該UUID才能正常和外部的SSP串口的藍牙設備去連接。
+    public static UUID arduinoUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // We declare a default UUID to create the global variable
+
+    ProgressBar progressBar;
     Button connectToDevice;
     ImageView bluetoothImg;
-    TextView myDevices;
-    TextView btReadings;
-    ProgressBar progressBar;
+    TextView bluetoothStatus;
 
+    // 自訂藍芽線程的初始化
+    public static ConnectThread connectThread = null;
+    public static ConnectedThread connectedThread = null;
+
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,151 +65,40 @@ public class AddWheelChairActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         connectToDevice = findViewById(R.id.connect_to_device);
         bluetoothImg = findViewById(R.id.bluetooth_img);
-        myDevices = findViewById(R.id.my_devices);
-        btReadings = findViewById(R.id.btReadings);
+        bluetoothStatus = findViewById(R.id.bluetooth_status);
 
         // init
         initStatusBarColor();
         initBluetooth();
         initPermission();
 
-        showHandler();
-
-        // Create an Observable from RxAndroid
-        // The code will be executed when an Observer subscribes to the the Observable
-        final Observable<String> connectToBTObservable = Observable.create(emitter -> {
-            Log.d(TAG, "Calling connectThread class");
-            // Call the constructor of the ConnectThread class
-            // Passing the Arguments: an Object that represents the BT device,
-            // the UUID and then the handler to update the UI
-            ConnectThread connectThread = new ConnectThread(arduinoBTModule, arduinoUUID, handler, progressBar);
-            connectThread.run();
-            // Check if Socket connected
-            if (connectThread.getMmSocket().isConnected()) {
-                Log.d(TAG, "Calling ConnectedThread class");
-                // The pass the Open socket as arguments to call the constructor of ConnectedThread
-                ConnectedThread connectedThread = new ConnectedThread(connectThread.getMmSocket());
-                connectedThread.run();
-                if(connectedThread.getValueRead()!=null)
-                {
-                    // If we have read a value from the Arduino
-                    // we call the onNext() function
-                    // This value will be observed by the observer
-                    emitter.onNext(connectedThread.getValueRead());
-                }
-                // We just want to stream 1 value, so we close the BT stream
-                connectedThread.cancel();
-            }
-            // SystemClock.sleep(5000); // simulate delay
-            // Then we close the socket connection
-            connectThread.cancel();
-            // We could Override the onComplete function
-            emitter.onComplete();
-        });
+        // 返回上一頁
+        View backBtn = findViewById(R.id.btn_back);
+        backBtn.setOnClickListener((view -> {
+            // TODO: 返回操作
+//            if (bluetoothSocket != null && bluetoothSocket.isConnected()) {
+//                startConnectedThread();
+//            }
+            finish();
+        }));
 
         connectToDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                btReadings.setText("");
+                bluetoothStatus.setTextColor(getResources().getColor(R.color.colorOnBackground));
+
+                checkBluetooth();
+                arduinoBTModule = getPairedDevice();
                 if (arduinoBTModule != null) {
-                    // We subscribe to the observable until the onComplete() is called
-                    // We also define control the thread management with
-                    // subscribeOn:  the thread in which you want to execute the action
-                    // observeOn: the thread in which you want to get the response
-                    connectToBTObservable.
-                            observeOn(AndroidSchedulers.mainThread()).
-                            subscribeOn(Schedulers.io()).
-                            subscribe(valueRead -> {
-                                // valueRead returned by the onNext() from the Observable
-                                btReadings.setText(valueRead);
-                                // We just scratched the surface with RxAndroid
-                            });
+                    Log.d(TAG, "BT device found");
+                    // BT Found, enabling the button to read results
+
+                    // 連接藍芽設備
+                    connectToSWC();
                 }
             }
         });
 
-        bluetoothImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Check if the phone supports BT
-                if (bluetoothAdapter == null) {
-                    // Device doesn't support Bluetooth
-                    Log.d(TAG, "Device doesn't support Bluetooth");
-                } else {
-                    Log.d(TAG, "Device support Bluetooth");
-                    // Check BT enabled. If disabled, we ask the user to enable BT
-                    if (!bluetoothAdapter.isEnabled()) {
-                        Log.d(TAG, "Bluetooth is disabled");
-                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            Log.d(TAG, "We don't have BT Permissions");
-                            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
-                            Log.d(TAG, "Bluetooth is enabled now");
-                        } else {
-                            Log.d(TAG, "We have BT Permissions");
-                            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
-                            Log.d(TAG, "Bluetooth is enabled now");
-                        }
-
-                    } else {
-                        Log.d(TAG, "Bluetooth is enabled");
-                    }
-                    String btDevicesString="";
-                    Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-
-                    if (pairedDevices.size() > 0) {
-                        // There are paired devices. Get the name and address of each paired device.
-                        for (BluetoothDevice device: pairedDevices) {
-                            String deviceName = device.getName();
-                            String deviceHardwareAddress = device.getAddress(); // MAC address
-                            Log.d(TAG, "deviceName: " + deviceName + " || " + deviceHardwareAddress);
-                            // We append all devices to a String that we will display in the UI
-                            btDevicesString = btDevicesString + deviceName + " || " + deviceHardwareAddress + "\n";
-                            // If we find the HC 05 device (the Arduino BT module)
-                            // We assign the device value to the Global variable BluetoothDevice
-                            // We enable the button "Connect to HC 05 device"
-                            if (deviceName.startsWith(deviceNameStart)) {
-                                Log.d(TAG, deviceName + " found");
-                                arduinoUUID = device.getUuids()[0].getUuid();
-                                Log.d(TAG, "UUID: " + arduinoUUID);
-                                arduinoBTModule = device;
-                                // BT Found, enabling the button to read results
-                                connectToDevice.setEnabled(true);
-                            }
-                            myDevices.setText(btDevicesString);
-                        }
-                    }
-                }
-            }
-        });
-
-        View backBtn = findViewById(R.id.btn_back);
-        backBtn.setOnClickListener((view -> {
-            finish();
-        }));
-    }
-
-    private void showHandler() {
-        handler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case ERROR_READ:
-//                        progressBar.setVisibility(View.GONE);
-                        String arduinoMsg = msg.obj.toString(); // Read message from Arduino
-                        btReadings.setText(arduinoMsg);
-                        break;
-                }
-            }
-        };
     }
 
     private void initStatusBarColor() {
@@ -223,9 +110,15 @@ public class AddWheelChairActivity extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     private void initBluetooth() {
-        bluetoothManager = getSystemService(BluetoothManager.class);
-        bluetoothAdapter = bluetoothManager.getAdapter();
-//        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        Log.d(TAG, "Check Bluetooth support...");
+        bluetoothStatus.setText(R.string.check_bluetooth_support);
+        //  Bluetooth LE
+//        bluetoothManager = getSystemService(BluetoothManager.class);
+//        bluetoothAdapter = bluetoothManager.getAdapter();
+        // Bluetooth Classic
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // 檢查裝置是否支援藍芽
         if (bluetoothAdapter == null) {
             Toast.makeText(this, "Your device does not support Bluetooth", Toast.LENGTH_SHORT).show();
             finish();
@@ -233,11 +126,16 @@ public class AddWheelChairActivity extends AppCompatActivity {
     }
 
     private void initPermission() {
+        Log.d(TAG, "Checking permissions...");
+        bluetoothStatus.setText(R.string.checking_permission);
+        // 權限列表
         List<String> neededPermission = new ArrayList<>();
+
         // Check the Bluetooth version to decide which permissions to request
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        // > https://developer.android.com/develop/connectivity/bluetooth/bt-permissions?hl=zh-tw
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             neededPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
-            // Android 10 (API 29)及以上版本，需要請求掃描、廣播、連接權限
+            // Android 12 (API 31)及以上版本，需要請求掃描、廣播、連接權限
             neededPermission.add(Manifest.permission.BLUETOOTH_SCAN);
             neededPermission.add(Manifest.permission.BLUETOOTH_ADVERTISE);
             neededPermission.add(Manifest.permission.BLUETOOTH_CONNECT);
@@ -255,8 +153,21 @@ public class AddWheelChairActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                         if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                            // 取得所有權限
                             Log.d(TAG, "Bluetooth permission granted");
+                            bluetoothStatus.setText(R.string.bluetooth_permission_granted);
+
+                            checkBluetooth();
+                            arduinoBTModule = getPairedDevice();
+                            if (arduinoBTModule != null) {
+                                Log.d(TAG, "BT device found");
+                                // BT Found, enabling the button to read results
+
+                                // 連接藍芽設備
+                                connectToSWC();
+                            }
                         } else if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
+                            // 僅取得部分權限
                             Log.d(TAG, multiplePermissionsReport.getDeniedPermissionResponses().get(0).getPermissionName());
                             Toast.makeText(AddWheelChairActivity.this, "Missing permission", Toast.LENGTH_SHORT).show();
                             finish();
@@ -265,9 +176,108 @@ public class AddWheelChairActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                        // 拒絕權限
                         Toast.makeText(AddWheelChairActivity.this, "Missing permission", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }).check();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void checkBluetooth() {
+        Log.d(TAG, "Check bluetooth status");
+        bluetoothStatus.setText(R.string.check_bluetooth_enable);
+
+        // 開啟藍芽
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
+        }
+        Log.d(TAG, "Bluetooth check passed");
+    }
+
+    @SuppressLint("MissingPermission")
+    private BluetoothDevice getPairedDevice() {
+        Log.d(TAG, "Check paired Bluetooth devices");
+        bluetoothStatus.setText(R.string.check_bluetooth_paired);
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+        if (pairedDevices != null && pairedDevices.size() > 0) {
+            for (BluetoothDevice device: pairedDevices) {
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+                Log.d(TAG, "deviceName: " + deviceName + " || " + deviceHardwareAddress); // 列出所有配對過的藍芽裝置
+                if (deviceName.startsWith(deviceNameStart)) {
+                    // 自動比對裝置名稱
+                    Log.d(TAG, deviceName + " found");
+                    arduinoUUID = device.getUuids()[0].getUuid();
+                    Log.d(TAG, "UUID: " + arduinoUUID);
+                    return device;
+                }
+            }
+        } else {
+            bluetoothStatus.setText(R.string.noPairedSWC);
+//            Toast.makeText(this, R.string.noPairedSWC, Toast.LENGTH_SHORT).show();
+        }
+        return null;
+    }
+
+    public void connectToSWC() {
+        Log.d(TAG, "Try to connect to SWC...");
+        bluetoothStatus.setText(R.string.connecting_to_swc);
+        // 判斷是否已經有連接，只能存在一個連接
+        if (connectThread != null) {
+            // 如果已經有連接，則段開該連接
+            connectThread.cancel();
+            connectThread = null;
+        }
+
+        // 開始新的連接
+        connectThread = new ConnectThread(arduinoBTModule, this);
+        connectThread.start();
+    }
+
+    public void onConnectionSuccess() {
+        Toast.makeText(this, R.string.successfully_connected_to_swc, Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "ConnectionSuccess");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+//                bluetoothImg.setImageResource(R.drawable.ic_baseline_bluetooth_connected_24);
+            }
+        });
+
+        // 連接成功，開始藍芽數據線程
+        startConnectedThread();
+    }
+
+    public void onConnectionError(String errorMessage) {
+        Log.d(TAG, "ConnectionError: " + errorMessage);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                bluetoothStatus.setText(R.string.auto_connect_failed);
+                bluetoothStatus.setTextColor(getResources().getColor(R.color.colorError));
+                progressBar.setVisibility(View.GONE);
+//                bluetoothImg.setImageResource(R.drawable.ic_baseline_bluetooth_disabled_24);
+                connectToDevice.setEnabled(true);
+            }
+        });
+    }
+
+    private void startConnectedThread() {
+        // 判斷是否已經有連接，只能存在一個連接
+        if (connectedThread != null) {
+            connectedThread.cancel();
+            connectedThread = null;
+        }
+
+        // 開始新的連接
+        connectedThread = new ConnectedThread(bluetoothSocket);
+        connectedThread.start();
+        Log.d(TAG, "ConnectedThread started");
+
+        // 退出藍芽連接頁面
+        finish();
     }
 }

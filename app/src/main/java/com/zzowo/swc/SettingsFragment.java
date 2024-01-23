@@ -24,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -140,6 +141,7 @@ public class SettingsFragment extends Fragment {
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("uid", user.getUid().substring(0, 8)); // label為系統可見標籤, 非使用者可見標籤
                 clipboard.setPrimaryClip(clipData);
+                Toast.makeText(getContext(), "UID 已複製", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -322,7 +324,7 @@ public class SettingsFragment extends Fragment {
         editor.remove("userUid")
                 .remove("mySWC_name")
                 .apply();
-
+        Toast.makeText(getContext(), R.string.cya, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getContext(), LoginPage.class);
         startActivity(intent);
         getActivity().finish();

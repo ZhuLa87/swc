@@ -56,4 +56,14 @@
     <string name="login_failed">Login Failed</string>
     <string name="user_binding">User binding</string>
     <string name="binding_user">Binding user</string>
+    <string name="cya">cya~</string>
+    <string name="noPairedSWC">Cannot find your device, please go to the Bluetooth page to pair your SWC device.</string>
+    <string name="check_bluetooth_support">Check Bluetooth support...</string>
+    <string name="checking_permission">Checking permissions...</string>
+    <string name="bluetooth_permission_granted">Bluetooth permission granted</string>
+    <string name="check_bluetooth_enable">Check bluetooth status</string>
+    <string name="check_bluetooth_paired">Check paired Bluetooth devices</string>
+    <string name="connecting_to_swc">Try to connect to SWC.</string>
+    <string name="auto_connect_failed">Automatic connection failed, please check your device and try again</string>
+    <string name="successfully_connected_to_swc">Successfully connected to SWC</string>
 </resources>
