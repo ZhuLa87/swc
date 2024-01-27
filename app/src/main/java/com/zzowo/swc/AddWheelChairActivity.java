@@ -76,9 +76,7 @@ public class AddWheelChairActivity extends AppCompatActivity implements ConnectT
         View backBtn = findViewById(R.id.btn_back);
         backBtn.setOnClickListener((view -> {
             // TODO: 返回操作
-//            if (bluetoothSocket != null && bluetoothSocket.isConnected()) {
-//                startConnectedThread();
-//            }
+
             finish();
         }));
 
