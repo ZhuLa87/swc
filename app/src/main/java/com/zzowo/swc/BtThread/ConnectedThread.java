@@ -1,5 +1,6 @@
 package com.zzowo.swc.BtThread;
 
+import static com.zzowo.swc.MainActivity.BThandler;
 
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
@@ -12,7 +13,6 @@ import androidx.annotation.NonNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.logging.Logger;
 
 public class ConnectedThread extends Thread {
 
@@ -76,11 +76,11 @@ public class ConnectedThread extends Thread {
             String controlCode = parts[1];
             String content = parts[2];
 
-            // Process the message based on the label, control code, and content
-            // Add your logic here
-            Log.d(TAG, "Received - Label: " + label + ", Control Code: " + controlCode + ", Content: " + content);
+            // TODO: 根據標籤、控制代碼和內容處理訊息
+//            Log.d(TAG, "BT Received - Label: " + label + ", Control Code: " + controlCode + ", Content: " + content);
 
-            handler.obtainMessage(0, message.length(), -1, message.getBytes()).sendToTarget();
+            // 通知主執行續的Handler，可將接收的字串用於UI更新
+            BThandler.obtainMessage(0, message.length(), -1, message.getBytes()).sendToTarget();
         }
     }
 
@@ -108,14 +108,5 @@ public class ConnectedThread extends Thread {
         }
     }
 
-    private final Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message message) {
-            byte[] buffer = (byte[]) message.obj;
-            int bytes = message.arg1;
-            String receiveMessage = new String(buffer, 0, bytes);
-            Log.d(TAG, "Received: " + receiveMessage);
-            return false;
-        }
-    });
+
 }
