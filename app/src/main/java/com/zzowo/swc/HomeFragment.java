@@ -1,5 +1,7 @@
 package com.zzowo.swc;
 
+import static com.zzowo.swc.AddWheelChairActivity.connectedThread;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,11 +32,13 @@ import androidx.appcompat.widget.Toolbar;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
+    private static final String TAG = "HomeFragment";
     private Toolbar toolbar;
     private AppCompatActivity activity;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private TextView toolBarTextView;
+    private View btnBeep, btnLocation, btnAlarm;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -92,6 +96,31 @@ public class HomeFragment extends Fragment {
         // init
         initStatusBarColor();
         initToolBar(rootView);
+
+        // 指定對應按鈕
+        btnBeep = rootView.findViewById(R.id.func_01);
+        btnLocation = rootView.findViewById(R.id.func_02);
+        btnAlarm = rootView.findViewById(R.id.func_03);
+
+        // 按鈕監聽
+        btnBeep.setOnClickListener(view -> {
+            if (connectedThread != null) {
+                connectedThread.btWriteString("beep", "1", "1");
+            } else {
+                Toast.makeText(getContext(), R.string.swc, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnAlarm.setOnClickListener(view -> {
+            // TODO: 添加警報延遲檢查
+
+            if (connectedThread != null) {
+                connectedThread.btWriteString("alarm", "99", "Alert");
+            } else {
+                // TODO: 未連線，發送警報至伺服器
+
+            }
+        });
 
         return rootView;
     }

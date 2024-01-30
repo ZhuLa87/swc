@@ -11,7 +11,7 @@
     <string name="settings">Settings</string>
     <string name="func_text_01">Beep</string>
     <string name="func_text_02">Location</string>
-    <string name="func_text_03">Alarm</string>
+    <string name="func_text_03">Alert</string>
     <string name="title_welcome_back">Welcome Back</string>
     <string name="title_login">Login!</string>
     <string name="hint_email">EMAIL</string>
@@ -65,4 +65,5 @@
     <string name="connecting_to_swc">Try to connect to SWC.</string>
     <string name="auto_connect_failed">Automatic connection failed, please check your device and try again</string>
     <string name="successfully_connected_to_swc">Successfully connected to SWC</string>
+    <string name="swc">Please connect to SWC first</string>
 </resources>

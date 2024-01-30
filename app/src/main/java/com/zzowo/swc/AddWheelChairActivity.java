@@ -40,7 +40,7 @@ public class AddWheelChairActivity extends AppCompatActivity implements ConnectT
     private static String deviceNameStart = "SWC";
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     private BluetoothManager bluetoothManager;
-    public BluetoothAdapter bluetoothAdapter;
+    private BluetoothAdapter bluetoothAdapter;
     BluetoothDevice arduinoBTModule = null;
     private final static int ERROR_READ = 0; // used in bluetooth handler to identify message update
 

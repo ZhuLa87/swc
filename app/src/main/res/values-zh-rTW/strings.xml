@@ -66,4 +66,5 @@
     <string name="connecting_to_swc">嘗試連接到 SWC</string>
     <string name="auto_connect_failed">自動連接失敗，請檢查您的裝置後重試</string>
     <string name="successfully_connected_to_swc">成功連接至SWC</string>
+    <string name="swc">請先連接至SWC</string>
 </resources>

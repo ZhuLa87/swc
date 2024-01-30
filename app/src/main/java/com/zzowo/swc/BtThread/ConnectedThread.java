@@ -84,9 +84,11 @@ public class ConnectedThread extends Thread {
         }
     }
 
-    public void btWriteString(String stringData) {
+    public void btWriteString(String label, String controlCode, String content) {
+        String stringData = label + ":" + controlCode + ":" + content; //  + "\n"
         try {
             outputStream.write(stringData.getBytes());
+            Log.d(TAG, "btWriteString: " + stringData);
         } catch (IOException e) {
             Log.e(TAG, "Error writing to OutputStream", e);
         }
