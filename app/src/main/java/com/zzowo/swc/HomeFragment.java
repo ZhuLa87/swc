@@ -167,13 +167,13 @@ public class HomeFragment extends Fragment {
 
     // 重新命名按鍵
     private void toolbarRename() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), com.airbnb.lottie.R.style.AlertDialog_AppCompat);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         final View edit_text_dialog = inflater.inflate(R.layout.edit_text_dialog, null);
         builder.setView(edit_text_dialog);
         builder.setIcon(R.drawable.baseline_edit_24);
         builder.setTitle(R.string.toolbar_menu_rename);
-        builder.setPositiveButton("Save", (dialogInterface, i) -> {
+        builder.setPositiveButton("Save", (dialog, i) -> {
             EditText editText = edit_text_dialog.findViewById(R.id.edit_text);
             if (editText.length() > 0) {
                 String newTitle = editText.getText().toString().trim();
@@ -184,7 +184,11 @@ public class HomeFragment extends Fragment {
                 toolBarTextView.setText(newTitle);
             }
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            // this method is called when user click on negative button.
+            dialog.cancel();
+        });
+
         builder.show();
     }
 

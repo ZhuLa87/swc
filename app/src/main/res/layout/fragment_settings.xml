@@ -108,7 +108,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="5dp"
                         android:background="@drawable/copy_uid_background_settings_fragment"
-                        android:paddingHorizontal="3dp"
+                        android:paddingHorizontal="5dp"
                         android:text="COPY"
                         android:textColor="@color/colorLink"
                         android:textSize="13sp"

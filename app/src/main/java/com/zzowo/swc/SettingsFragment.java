@@ -139,7 +139,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clipData = ClipData.newPlainText("uid", user.getUid().substring(0, 8)); // label為系統可見標籤, 非使用者可見標籤
+                ClipData clipData = ClipData.newPlainText("uid", user.getUid()); // label為系統可見標籤, 非使用者可見標籤
                 clipboard.setPrimaryClip(clipData);
                 Toast.makeText(getContext(), "UID 已複製", Toast.LENGTH_SHORT).show();
             }
@@ -242,7 +242,7 @@ public class SettingsFragment extends Fragment {
         }
 
         userEmail.setText(user.getEmail());
-        userUid.setText("UID: " + user.getUid().substring(0, 8));
+        userUid.setText("UID: " + user.getUid().substring(0, 6) + "...");
 //            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
     }
 
