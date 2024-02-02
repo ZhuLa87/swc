@@ -46,7 +46,6 @@ public class ConnectThread extends Thread {
                     connectionListener.onConnectionSuccess();
                 }
             });
-//            connectionListener.onConnectionSuccess();
         } catch (IOException e) {
             // 錯誤，通知回掉
             Log.d(TAG, "Could not connect to client socket", e);
@@ -56,7 +55,6 @@ public class ConnectThread extends Thread {
                     connectionListener.onConnectionError(e.getMessage());
                 }
             });
-//            connectionListener.onConnectionError(e.getMessage());
 
             // 嘗試段開連結
             try {

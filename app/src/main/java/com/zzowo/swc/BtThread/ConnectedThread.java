@@ -1,9 +1,11 @@
 package com.zzowo.swc.BtThread;
 
 import static com.zzowo.swc.MainActivity.BThandler;
+import static com.zzowo.swc.AddWheelChairActivity.connectedThread;
 
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
@@ -53,16 +55,18 @@ public class ConnectedThread extends Thread {
         // 持續監聽InputStream
         while (true) {
             try {
-                // 從輸入串流讀取數據
-                bytes = inputStream.read(buffer);
+                // 檢查若連線存在則處裡數據
+                if (bluetoothSocket.isConnected()) {
+                    // 從輸入串流讀取數據
+                    bytes = inputStream.read(buffer);
 
-                String receivedMessage = new String(buffer, 0, bytes);
-                handleMessages(receivedMessage);
-
+                    String receivedMessage = new String(buffer, 0, bytes);
+                    handleMessages(receivedMessage);
+                }
             } catch (IOException e) {
                 // 發生錯誤或斷線，結束監聽
                 Log.e(TAG, "Input stream was disconnected", e);
-                Toast.makeText(null, "Input stream was disconnected", Toast.LENGTH_SHORT).show();
+                cancel();
                 break;
             }
         }
@@ -85,30 +89,27 @@ public class ConnectedThread extends Thread {
     }
 
     public void btWriteString(String label, String controlCode, String content) {
-        String stringData = label + ":" + controlCode + ":" + content; //  + "\n"
-        try {
-            outputStream.write(stringData.getBytes());
-            Log.d(TAG, "btWriteString: " + stringData);
-        } catch (IOException e) {
-            Log.e(TAG, "Error writing to OutputStream", e);
+        if (bluetoothSocket != null && bluetoothSocket.isConnected()) {
+            String stringData = label + ":" + controlCode + ":" + content; //  + "\n"
+            try {
+                outputStream.write(stringData.getBytes());
+                Log.d(TAG, "btWriteString: " + stringData);
+            } catch (IOException e) {
+                Log.e(TAG, "Error writing to OutputStream", e);
+            }
         }
-
-//        for (byte sendData : stringData.getBytes()) {
-//            try {
-//                outputStream.write(sendData);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
 
     public void cancel() {
         try {
-            bluetoothSocket.close();
+            if (bluetoothSocket != null) {
+                bluetoothSocket.close();
+            }
         } catch (IOException e) {
-            Log.e(TAG, "Could not close the client socket", e);
+            Log.e(TAG, "Error closing sockets", e);
+        } finally {
+            // 將數據傳輸執行緒設為空
+            connectedThread = null;
         }
     }
-
-
 }

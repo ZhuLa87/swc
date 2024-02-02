@@ -267,7 +267,6 @@ public class AddWheelChairActivity extends AppCompatActivity implements ConnectT
         // 判斷是否已經有連接，只能存在一個連接
         if (connectedThread != null) {
             connectedThread.cancel();
-            connectedThread = null;
         }
 
         // 開始新的連接
