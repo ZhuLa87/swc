@@ -8,8 +8,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -20,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.karumi.dexter.Dexter;
@@ -167,18 +170,49 @@ public class AddWheelChairActivity extends AppCompatActivity implements ConnectT
                         } else if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
                             // 僅取得部分權限
                             Log.d(TAG, multiplePermissionsReport.getDeniedPermissionResponses().get(0).getPermissionName());
-                            Toast.makeText(AddWheelChairActivity.this, "Missing permission", Toast.LENGTH_SHORT).show();
-                            finish();
+                            showSettingsDialog();
+//                            Toast.makeText(AddWheelChairActivity.this, "Missing permission", Toast.LENGTH_SHORT).show();
+//                            finish();
                         }
                     }
 
                     @Override
                     public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
                         // 拒絕權限
-                        Toast.makeText(AddWheelChairActivity.this, "Missing permission", Toast.LENGTH_SHORT).show();
-                        finish();
+                        Log.d(TAG, "Permission denied");
+                        showSettingsDialog();
+//                        Toast.makeText(AddWheelChairActivity.this, "Missing permission", Toast.LENGTH_SHORT).show();
+//                        finish();
                     }
                 }).check();
+    }
+
+    private void showSettingsDialog() {
+        // we are displaying an alert dialog for permissions
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // below line is the title for our alert dialog.
+        builder.setTitle("Need Permissions");
+
+        // below line is our message for our dialog
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", (dialog, which) -> {
+            // this method is called on click on positive button and on clicking shit button
+            // we are redirecting our user from our app to the settings page of our app.
+            dialog.cancel();
+            // below is the intent from which we are redirecting our user.
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", this.getPackageName(), null);
+            intent.setData(uri);
+            startActivityForResult(intent, 101);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            // this method is called when user click on negative button.
+            dialog.cancel();
+            finish();
+        });
+        // below line is used to display our dialog
+        builder.show();
     }
 
     @SuppressLint("MissingPermission")
