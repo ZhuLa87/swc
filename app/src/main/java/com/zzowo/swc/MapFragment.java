@@ -19,7 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -215,7 +217,7 @@ public class MapFragment extends Fragment {
                 Log.d(TAG, "Showing my location UI on map...");
                 // 在地圖上啟用「我的位置」圖層和相關控制項
                 map.setMyLocationEnabled(true); // 顯示藍色的圓形圖標，表示使用者的位置
-                map.getUiSettings().setMyLocationButtonEnabled(true); // 顯示「我的位置」按鈕
+                locationButtonInit(); // 顯示「我的位置」按鈕, 並調整位置
             } else {
                 // 停用並將目前位置設為空值
                 map.setMyLocationEnabled(false);
@@ -225,6 +227,27 @@ public class MapFragment extends Fragment {
             }
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    private void locationButtonInit() {
+        View mapView = supportMapFragment.getView();
+        if (mapView != null && mapView.findViewById(Integer.parseInt("1")) != null) { // 檢查 mapView 是否為非空，以及是否有一個具有 ID 為 1 的子視圖存在。
+            // 找到 ID 為 1 的子視圖，然後找到它的父視圖，再找到 ID 為 2 的子視圖，將該子視圖設定為 ImageView
+            ImageView btn = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+
+            int pixels = (int)(40 * getResources().getDisplayMetrics().density);
+            btn.setLayoutParams(new RelativeLayout.LayoutParams(pixels, pixels));
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) btn.getLayoutParams();
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+
+            // 向左邊移動 40dp
+            int marginRightInDp = (int) (15 * getResources().getDisplayMetrics().density);
+            // 向上移動 60dp
+            int marginTopInDp = (int) (75 * getResources().getDisplayMetrics().density);
+            layoutParams.setMargins(0, marginTopInDp, marginRightInDp, 0);
         }
     }
 
