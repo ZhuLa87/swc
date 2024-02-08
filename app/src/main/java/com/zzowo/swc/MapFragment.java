@@ -244,14 +244,13 @@ public class MapFragment extends Fragment {
                             if (lastKnownLocation != null) {
                                 Log.d(TAG, "Last known location: " + lastKnownLocation.getLatitude() + ", " + lastKnownLocation.getLongitude());
                                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(lastKnownLocation.getLatitude(),
-                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                        new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()),
+                                        DEFAULT_ZOOM));
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
-                            map.animateCamera(CameraUpdateFactory
-                                    .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
                             map.getUiSettings().setMyLocationButtonEnabled(false);
                         }
                     }

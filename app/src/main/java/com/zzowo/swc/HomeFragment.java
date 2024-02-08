@@ -1,6 +1,6 @@
 package com.zzowo.swc;
 
-import static com.zzowo.swc.AddWheelChairActivity.connectedThread;
+import static com.zzowo.swc.ConnectWheelChairActivity.connectedThread;
 
 import android.content.Context;
 import android.content.Intent;
@@ -194,7 +194,7 @@ public class HomeFragment extends Fragment {
 
     private void toolbarAdd() {
         // switch to new activity
-        Intent intent = new Intent(getContext(), AddWheelChairActivity.class);
+        Intent intent = new Intent(getContext(), ConnectWheelChairActivity.class);
         startActivity(intent);
     }
 

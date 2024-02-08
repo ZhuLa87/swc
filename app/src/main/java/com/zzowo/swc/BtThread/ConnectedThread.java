@@ -1,16 +1,10 @@
 package com.zzowo.swc.BtThread;
 
 import static com.zzowo.swc.MainActivity.BThandler;
-import static com.zzowo.swc.AddWheelChairActivity.connectedThread;
+import static com.zzowo.swc.ConnectWheelChairActivity.connectedThread;
 
 import android.bluetooth.BluetoothSocket;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,6 +1,6 @@
 package com.zzowo.swc.BtThread;
 
-import static com.zzowo.swc.AddWheelChairActivity.arduinoUUID;
+import static com.zzowo.swc.ConnectWheelChairActivity.arduinoUUID;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;

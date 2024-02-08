@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class AddWheelChairActivity extends AppCompatActivity implements ConnectThread.ConnectionListener {
+public class ConnectWheelChairActivity extends AppCompatActivity implements ConnectThread.ConnectionListener {
     private static final String TAG = "ADD_SWC";
     private static String deviceNameStart = "SWC";
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
