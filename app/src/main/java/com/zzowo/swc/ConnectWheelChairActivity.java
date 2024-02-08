@@ -56,8 +56,8 @@ public class ConnectWheelChairActivity extends AppCompatActivity implements Conn
     TextView bluetoothStatus;
 
     // 自訂藍芽線程的初始化
-    public static ConnectThread connectThread = null;
-    public static ConnectedThread connectedThread = null;
+    public static ConnectThread connectThread;
+    public static ConnectedThread connectedThread;
 
     @SuppressLint("MissingPermission")
     @Override

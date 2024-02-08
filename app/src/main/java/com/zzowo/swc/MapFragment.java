@@ -59,8 +59,8 @@ public class MapFragment extends Fragment {
     private Location lastKnownLocation;
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
-    private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
-    private static final float DEFAULT_ZOOM = 17.5F;
+    private final LatLng defaultLocation = new LatLng(24.998639, 121.5547245);
+    private static final float DEFAULT_ZOOM = 17F;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

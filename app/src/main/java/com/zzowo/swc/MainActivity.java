@@ -24,15 +24,15 @@ import com.zzowo.swc.databinding.ActivityMainBinding;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LocationThread.LocationListener{
     private static final String TAG = "MainActivity";
     public static Handler BThandler;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
-
     private ActivityMainBinding binding;
+    public static LocationThread locationThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
 //        init
         initAuth();
         bottomNavSetup();
+
+        // 開始位置線程
+        startLocationThread();
 
         BThandler = new Handler(new Handler.Callback() {
             @Override
@@ -111,6 +114,17 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    private void startLocationThread() {
+        if (locationThread == null) {
+            locationThread = new LocationThread(this, this);
+            locationThread.start();
+        }
+    }
+
+    public void onLocationSuccess(Double latitude, Double longitude) {
+        Log.d(TAG, "Latitude: " + latitude + ", Longitude: " + longitude);
+    }
+
     // 取消Handler註冊
     protected void onDestroy() {
         super.onDestroy();
@@ -126,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
         BThandler.removeCallbacksAndMessages(null);
 
         // 清理其他資源
+        if (locationThread != null) {
+            locationThread.stopThread();
+        }
 
     }
 }
