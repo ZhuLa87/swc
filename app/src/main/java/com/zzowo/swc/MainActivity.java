@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private ActivityMainBinding binding;
-    public static LocationThread locationThread;
+    private static LocationThread locationThread;
+    private Double lastLatitude = null;
+    private Double lastLongitude = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +124,20 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     }
 
     public void onLocationSuccess(Double latitude, Double longitude) {
-        Log.d(TAG, "Latitude: " + latitude + ", Longitude: " + longitude);
+        lastLatitude = latitude;
+        lastLongitude = longitude;
+
+        Log.d(TAG, "Set lastLatitude: " + latitude + ", lastLongitude: " + longitude);
     }
+
+    public Double getLastLatitude() {
+        return lastLatitude;
+    }
+
+    public Double getLastLongitude() {
+        return lastLongitude;
+    }
+
 
     // 取消Handler註冊
     protected void onDestroy() {
