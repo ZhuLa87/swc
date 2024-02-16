@@ -39,7 +39,7 @@ public class MapFragment extends Fragment {
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
     private final LatLng defaultLocation = new LatLng(24.998639, 121.5547245);
-    private static final float DEFAULT_ZOOM = 17F;
+    private static final float DEFAULT_ZOOM = 19F;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -169,7 +169,7 @@ public class MapFragment extends Fragment {
             if (lastLatitude != null && lastLongitude != null) {
                 Log.d(TAG, "Set Camera to Last latitude: " + lastLatitude + ", Last longitude: " + lastLongitude);
 
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                         new LatLng(lastLatitude, lastLongitude),
                         DEFAULT_ZOOM));
                 progressBar.setVisibility(View.GONE);

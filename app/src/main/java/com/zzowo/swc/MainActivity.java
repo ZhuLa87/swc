@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     private void bottomNavSetup() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // 預設首頁
         replaceFragment(new HomeFragment());
 
 //        底部導覽列
@@ -157,6 +159,5 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         if (locationThread != null) {
             locationThread.stopThread();
         }
-
     }
 }
