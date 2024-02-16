@@ -47,7 +47,7 @@
     <string name="account_not_found">Account not found</string>
     <string name="email_pattern_wrong">Enter a valid email address</string>
     <string name="title_connect_to_swc">Connect to SWC</string>
-    <string name="settings_version_info">Version Info</string>
+    <string name="settings_app_version">App Version</string>
     <string name="account_security">Account Security</string>
     <string name="edit_profiles">Edit profiles</string>
     <string name="night_mode">Night Mode</string>
@@ -66,4 +66,8 @@
     <string name="auto_connect_failed">Automatic connection failed, please check your device and try again</string>
     <string name="successfully_connected_to_swc">Successfully connected to SWC</string>
     <string name="swc">Please connect to SWC first</string>
+    <string name="request_permission_location_description">We need to access your location to provide you with the best experience.</string>
+    <string name="request_permission_nearby_device_description">We need nearby device permission to connect to wheelchair.</string>
+    <string name="request_permission_title">Allow this app to access</string>
+    <string name="request_permission_notification_description">We need to send you a notification so you can receive emergency notifications.</string>
 </resources>

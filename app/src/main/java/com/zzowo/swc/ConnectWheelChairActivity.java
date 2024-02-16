@@ -77,11 +77,11 @@ public class ConnectWheelChairActivity extends AppCompatActivity implements Conn
 
         // 返回上一頁
         View backBtn = findViewById(R.id.btn_back);
-        backBtn.setOnClickListener((view -> {
+        backBtn.setOnClickListener(view -> {
             // TODO: 返回操作
 
             finish();
-        }));
+        });
 
         connectToDevice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,13 +135,11 @@ public class ConnectWheelChairActivity extends AppCompatActivity implements Conn
         // Check the Bluetooth version to decide which permissions to request
         // > https://developer.android.com/develop/connectivity/bluetooth/bt-permissions?hl=zh-tw
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            neededPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
             // Android 12 (API 31)及以上版本，需要請求掃描、廣播、連接權限
             neededPermission.add(Manifest.permission.BLUETOOTH_SCAN);
             neededPermission.add(Manifest.permission.BLUETOOTH_ADVERTISE);
             neededPermission.add(Manifest.permission.BLUETOOTH_CONNECT);
         } else {
-            neededPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
             // 其他版本需要請求藍芽、管理藍芽權限
             neededPermission.add(Manifest.permission.BLUETOOTH);
             neededPermission.add(Manifest.permission.BLUETOOTH_ADMIN);

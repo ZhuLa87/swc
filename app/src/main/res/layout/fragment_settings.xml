@@ -370,7 +370,7 @@
                             >
                             <!-- 圖標 -->
                             <ImageView
-                                android:id="@+id/version_info_icon"
+                                android:id="@+id/location_icon"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:background="@drawable/round_back_settings_icon"
@@ -383,8 +383,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="20dp"
-                                android:layout_toEndOf="@id/version_info_icon"
-                                android:text="@string/settings_version_info"
+                                android:layout_toEndOf="@id/location_icon"
+                                android:text="@string/settings_app_version"
                                 android:textColor="@color/colorOnSurface"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />

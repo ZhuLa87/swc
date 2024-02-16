@@ -48,7 +48,7 @@
     <string name="account_not_found">無此帳號</string>
     <string name="email_pattern_wrong">請輸入一個有效的電子郵件地址</string>
     <string name="title_connect_to_swc">連接到SWC</string>
-    <string name="settings_version_info">版本資訊</string>
+    <string name="settings_app_version">應用版本</string>
     <string name="account_security">帳號安全</string>
     <string name="edit_profiles">個人資料</string>
     <string name="night_mode">深色模式</string>
@@ -67,4 +67,8 @@
     <string name="auto_connect_failed">自動連接失敗，請檢查您的裝置後重試</string>
     <string name="successfully_connected_to_swc">成功連接至SWC</string>
     <string name="swc">請先連接至SWC</string>
+    <string name="request_permission_location_description">我們需要訪問您的位置以便為您提供最佳體驗。</string>
+    <string name="request_permission_nearby_device_description">我們需要附近設備的許可才能連接到輪椅。</string>
+    <string name="request_permission_title">允許我們訪問</string>
+    <string name="request_permission_notification_description">我們需要向您發送通知，以便您可以收到緊急通知。</string>
 </resources>

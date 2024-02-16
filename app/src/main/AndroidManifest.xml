@@ -8,36 +8,43 @@
     <uses-feature
         android:name="android.hardware.location"
         android:required="false" />
+
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 防止處理器休眠或螢幕變暗 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 允許應用程序訪問有關網絡的信息 -->
-    <uses-permission android:name="android.permission.VIBRATE" /><!-- 震動 -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震動 -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- 允許應用發送通知 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 允許應用訪問大概位置 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 允許應用程序訪問精確位置 -->
-    <!-- Required only when requesting background location access on
-       Android 10 (API level 29) and higher. -->
+    <!--
+ Required only when requesting background location access on
+       Android 10 (API level 29) and higher.
+    -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- 允許應用程序於背景訪問位置 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 允許應用程序訪問有關 Wi-Fi 網絡的信息 -->
-
     <!-- Request legacy Bluetooth permissions on older devices. -->
-    <uses-permission android:name="android.permission.BLUETOOTH"
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
         android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
         android:maxSdkVersion="30" />
-
-    <!-- Needed only if your app looks for Bluetooth devices.
+    <!--
+ Needed only if your app looks for Bluetooth devices.
          If your app doesn't use Bluetooth scan results to derive physical
          location information, you can strongly assert that your app
-         doesn't derive physical location. -->
+         doesn't derive physical location.
+    -->
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-
-    <!-- Needed only if your app makes the device discoverable to Bluetooth
-         devices. -->
+    <!--
+ Needed only if your app makes the device discoverable to Bluetooth
+         devices.
+    -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-
-    <!-- Needed only if your app communicates with already-paired Bluetooth
-         devices. -->
+    <!--
+ Needed only if your app communicates with already-paired Bluetooth
+         devices.
+    -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
     <application
@@ -51,6 +58,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Swc"
         tools:targetApi="31">
+        <activity
+            android:name=".requestPermissionActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ConnectWheelChairActivity"
             android:exported="false" />
@@ -67,13 +83,7 @@
             android:exported="false" />
         <activity
             android:name=".LoginPage"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
