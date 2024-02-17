@@ -71,4 +71,9 @@
     <string name="request_permission_nearby_device_description">We need nearby device permission to connect to wheelchair.</string>
     <string name="request_permission_title">Allow this app to access</string>
     <string name="request_permission_notification_description">We need to send you a notification so you can receive emergency notifications.</string>
+    <string name="select_identity">Select Identity</string>
+    <string name="option_caregiver">I am a caregiver.</string>
+    <string name="option_wheelchair_user">I am a wheelchair user.</string>
+    <string name="wheelchair_user">" wheelchair user"</string>
+    <string name="caregiver">caregiver</string>
 </resources>

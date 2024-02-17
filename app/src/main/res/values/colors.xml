@@ -43,7 +43,7 @@
     <color name="notification">#13B2C3</color>
     <color name="profile">#E6A326</color>
     <color name="security">#D95F69</color>
-    <color name="binding">#215DC4</color>
+    <color name="select_identity">#215DC4</color>
     <color name="version">@color/gray_800</color>
     <color name="logout">@color/gray_800</color>
 

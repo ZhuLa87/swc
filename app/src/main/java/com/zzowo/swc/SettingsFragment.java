@@ -1,9 +1,11 @@
 package com.zzowo.swc;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -58,13 +60,13 @@ public class SettingsFragment extends Fragment {
     private GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
-    private TextView userName; // userName 未製作
+    private TextView userIdentity;
+    private TextView userName;
     private TextView userEmail;
     private TextView userUid;
     private TextView copyUid;
     private LottieAnimationView lottieAnimationView;
     private ImageView userAvatar;
-    private SwitchCompat switchNightMode;
     private SwitchCompat switchNotification;
     private TextView textVersion;
 
@@ -116,11 +118,11 @@ public class SettingsFragment extends Fragment {
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), GoogleSignInOptions.DEFAULT_SIGN_IN);
         lottieAnimationView = rootView.findViewById(R.id.animation_avatar);
         userAvatar = rootView.findViewById(R.id.user_avatar);
+        userIdentity = rootView.findViewById(R.id.user_identity);
         userName = rootView.findViewById(R.id.user_name);
         userEmail = rootView.findViewById(R.id.user_email);
         userUid = rootView.findViewById(R.id.user_uid);
         copyUid = rootView.findViewById(R.id.copy_uid);
-        switchNightMode = rootView.findViewById(R.id.switch_night_mode);
         switchNotification = rootView.findViewById(R.id.switch_notification);
         textVersion = rootView.findViewById(R.id.text_version);
 
@@ -146,25 +148,7 @@ public class SettingsFragment extends Fragment {
         });
 
         // Settings Options
-        View optionNightMode = rootView.findViewById(R.id.option_night_mode);
         View optionNotification = rootView.findViewById(R.id.option_notification);
-
-        optionNightMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchNightMode.toggle();
-                Log.d(TAG, "Set switchNightMode to " + switchNightMode.isChecked());
-
-                Boolean stateNightMode = switchNightMode.isChecked();
-                if (stateNightMode) {
-                    // 如果切換後開關狀態為 "開 / On"
-                    editor.putBoolean("switch_state_night_mode", true).commit();
-                } else {
-                    // 如果切換後開關狀態為 "關/ Off"
-                    editor.putBoolean("switch_state_night_mode", false).commit();
-                }
-            }
-        });
 
         optionNotification.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,10 +189,13 @@ public class SettingsFragment extends Fragment {
         });
 
 //        profileUpdates();
+        selectIdentity(rootView);
         btn_logout(rootView);
 
         return rootView;
     }
+
+
 
     private void initStatusBarColor() {
         Window window = getActivity().getWindow();
@@ -248,20 +235,9 @@ public class SettingsFragment extends Fragment {
 
     private void initSwitchCompat() {
         // sp
-        boolean switchStateNightMode = sp.getBoolean("switch_state_night_mode", false); // default: false
         boolean switchStateNotification = sp.getBoolean("switch_state_notification", false); // default: false
 
-        Log.d(TAG, "Get switchNightMode: " + switchStateNightMode);
         Log.d(TAG, "Get switchNotification: " + switchStateNotification);
-
-        if (switchStateNightMode) {
-            // Do something for switch (Night Mode) is selected on
-            switchNightMode.setChecked(true);
-            Log.d(TAG, "Loaded switchNightMode: " + true);
-        } else {
-            // switch off
-            Log.d(TAG, "Loaded switchNightMode: " + false);
-        }
 
         if (switchStateNotification) {
             // Check permission first
@@ -305,6 +281,45 @@ public class SettingsFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private void selectIdentity(View view) {
+        View selectIdentity = view.findViewById(R.id.option_select_identity);
+        selectIdentity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showIdentitySelectionDialog();
+            }
+        });
+    }
+
+    private void showIdentitySelectionDialog() {
+        // 建立一個AlertDialog.Builder物件
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setTitle(R.string.select_identity);
+
+        final CharSequence[] options = {getString(R.string.option_wheelchair_user), getString(R.string.option_caregiver)};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selectedOption = options[which].toString();
+
+                handleUserSelection(selectedOption);
+            }
+        });
+        builder.show();
+    }
+
+    private void handleUserSelection(String selectedOption) {
+        Log.d(TAG, "Selected: " + selectedOption);
+        if (selectedOption.equals(getString(R.string.option_wheelchair_user))) {
+            editor.putBoolean("primary_user", true).commit();
+            userIdentity.setText(R.string.wheelchair_user);
+        } else if (selectedOption.equals(getString(R.string.option_caregiver))) {
+            editor.putBoolean("primary_user", false).commit();
+            userIdentity.setText(R.string.caregiver);
+        }
     }
 
     private void btn_logout(View view) {

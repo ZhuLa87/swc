@@ -71,4 +71,9 @@
     <string name="request_permission_nearby_device_description">我們需要附近設備的許可才能連接到輪椅。</string>
     <string name="request_permission_title">允許我們訪問</string>
     <string name="request_permission_notification_description">我們需要向您發送通知，以便您可以收到緊急通知。</string>
+    <string name="select_identity">選擇身分</string>
+    <string name="option_caregiver">我是照護者</string>
+    <string name="option_wheelchair_user">我是輪椅使用者</string>
+    <string name="wheelchair_user">輪椅使用者</string>
+    <string name="caregiver">照護者</string>
 </resources>

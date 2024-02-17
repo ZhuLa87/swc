@@ -63,13 +63,23 @@
                 >
                 <!-- 使用者名稱 (若存在才顯示) -->
                 <TextView
+                    android:id="@+id/user_identity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:text="輪椅使用者"
+                    android:textColor="@color/colorPrimaryVariant"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+                <!-- 使用者名稱 (若存在才顯示) -->
+                <TextView
                     android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="4"
                     android:text="user123"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="32sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
                 <!-- 使用者郵件 -->
@@ -201,7 +211,7 @@
                                 android:layout_height="40dp"
                                 android:background="@drawable/round_back_settings_icon"
                                 android:backgroundTint="@color/notification"
-                                android:padding="12dp"
+                                android:padding="10dp"
                                 android:src="@drawable/baseline_notifications_24" />
                             <!-- 功能文字 -->
                             <TextView
@@ -252,7 +262,7 @@
                                 android:layout_height="40dp"
                                 android:background="@drawable/round_back_settings_icon"
                                 android:backgroundTint="@color/profile"
-                                android:padding="12dp"
+                                android:padding="10dp"
                                 android:src="@drawable/baseline_person_24" />
                             <!-- 功能文字 -->
                             <TextView
@@ -290,7 +300,7 @@
                                 android:layout_height="40dp"
                                 android:background="@drawable/round_back_settings_icon"
                                 android:backgroundTint="@color/security"
-                                android:padding="12dp"
+                                android:padding="10dp"
                                 android:src="@drawable/baseline_lock_24" />
                             <!-- 功能文字 -->
                             <TextView
@@ -314,7 +324,7 @@
 
                         <!-- Binding User -->
                         <RelativeLayout
-                            android:id="@+id/option_binding_user"
+                            android:id="@+id/option_select_identity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="12dp"
@@ -323,21 +333,21 @@
                             >
                             <!-- 圖標 -->
                             <ImageView
-                                android:id="@+id/binding_user_icon"
+                                android:id="@+id/select_identity_icon"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:background="@drawable/round_back_settings_icon"
-                                android:backgroundTint="@color/binding"
-                                android:padding="12dp"
-                                android:src="@drawable/baseline_link_24" />
+                                android:backgroundTint="@color/select_identity"
+                                android:padding="10dp"
+                                android:src="@drawable/sharp_switch_account_24" />
                             <!-- 功能文字 -->
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="20dp"
-                                android:layout_toEndOf="@id/binding_user_icon"
-                                android:text="@string/binding_user"
+                                android:layout_toEndOf="@id/select_identity_icon"
+                                android:text="@string/select_identity"
                                 android:textColor="@color/colorOnSurface"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
@@ -375,7 +385,7 @@
                                 android:layout_height="40dp"
                                 android:background="@drawable/round_back_settings_icon"
                                 android:backgroundTint="@color/version"
-                                android:padding="12dp"
+                                android:padding="10dp"
                                 android:src="@drawable/icons8_version_100" />
                             <!-- 功能文字 -->
                             <TextView
@@ -425,7 +435,7 @@
                                 android:layout_height="40dp"
                                 android:background="@drawable/round_back_settings_icon"
                                 android:backgroundTint="@color/logout"
-                                android:padding="12dp"
+                                android:padding="10dp"
                                 android:src="@drawable/baseline_logout_24" />
                             <!-- 功能文字 -->
                             <TextView

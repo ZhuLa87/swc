@@ -27,7 +27,6 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity implements LocationThread.LocationListener{
     private static final String TAG = "MainActivity";
     public static Handler BThandler;
-    private FirebaseAuth mAuth;
     private FirebaseUser user;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;

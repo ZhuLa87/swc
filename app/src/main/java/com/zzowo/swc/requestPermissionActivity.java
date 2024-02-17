@@ -54,7 +54,7 @@ public class requestPermissionActivity extends AppCompatActivity {
         neededPermission.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
         // 請求通知權限
-        neededPermission.add(android.Manifest.permission.POST_NOTIFICATIONS);
+//        neededPermission.add(android.Manifest.permission.POST_NOTIFICATIONS);
 
         checkPermission();
 
