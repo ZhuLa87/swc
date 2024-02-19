@@ -134,14 +134,14 @@ public class HomeFragment extends Fragment {
 
     private void initToolBar(View view) {
         // 讀取資料
-        String mySWC_name_default = getString(R.string.mySWC_name_default);
-        String mySWC_name = sp.getString("mySWC_name", mySWC_name_default);
+        String mySWCNameDefault = getString(R.string.mySWC_name_default);
+        String mySWCName = sp.getString("mySWCName", mySWCNameDefault);
 
         toolbar = view.findViewById(R.id.toolbar);
         activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         toolBarTextView = view.findViewById(R.id.toolbar_text);
-        toolBarTextView.setText(mySWC_name);
+        toolBarTextView.setText(mySWCName);
         activity.getSupportActionBar().setTitle("");
     }
 
@@ -178,7 +178,7 @@ public class HomeFragment extends Fragment {
             if (editText.length() > 0) {
                 String newTitle = editText.getText().toString().trim();
                 // 儲存新名稱
-                editor.putString("mySWC_name", newTitle);
+                editor.putString("mySWCName", newTitle);
                 editor.commit();
                 // 更新介面
                 toolBarTextView.setText(newTitle);

@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,8 +43,12 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         super.onCreate(savedInstanceState);
 
 //        init
+        initPreferences();
         initAuth();
         bottomNavSetup();
+
+        // check is first time login
+        checkFirstTimeLogin();
 
         // 開始位置線程
         startLocationThread();
@@ -68,6 +74,11 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                 return true;
             }
         });
+    }
+
+    private void initPreferences() {
+        sp = this.getSharedPreferences("data", MODE_PRIVATE);
+        editor = sp.edit();
     }
 
     private void initAuth() {
@@ -108,6 +119,49 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
             }
             return true;
         });
+    }
+
+    private void checkFirstTimeLogin() {
+        boolean isFirstTimeLogin = sp.getBoolean("isFirstTimeLogin", true);
+        if (isFirstTimeLogin) {
+            // DO SOMETHING WHEN FIRST TIME LOGIN
+            showIdentitySelectionDialog();
+
+        }
+    }
+
+    private void showIdentitySelectionDialog() {
+        // 建立一個AlertDialog.Builder物件
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(R.string.select_identity);
+        builder.setIcon(R.drawable.baseline_person_24);
+
+        final CharSequence[] options = {getString(R.string.option_wheelchair_user), getString(R.string.option_caregiver)};
+
+        builder.setSingleChoiceItems(options, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selectedOption = options[which].toString();
+
+                handleUserSelection(selectedOption);
+                editor.putBoolean("isFirstTimeLogin", false).apply();
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.setCancelable(false); // 不可取消對話框
+        builder.show();
+    }
+
+    private void handleUserSelection(String selectedOption) {
+        Log.d(TAG, "Selected: " + selectedOption);
+        if (selectedOption.equals(getString(R.string.option_wheelchair_user))) {
+            editor.putBoolean("primaryUser", true).commit();
+        } else if (selectedOption.equals(getString(R.string.option_caregiver))) {
+            editor.putBoolean("primaryUser", false).commit();
+        }
     }
 
     private void replaceFragment(Fragment fragment) {

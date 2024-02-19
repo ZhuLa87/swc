@@ -133,6 +133,7 @@ public class SettingsFragment extends Fragment {
         initStatusBarColor();
         initPreferences();
         initAccountInfo(user);
+        initUserIdentity();
         initSwitchCompat();
         initOtherInfo();
 
@@ -233,6 +234,16 @@ public class SettingsFragment extends Fragment {
 //            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
     }
 
+    private void initUserIdentity() {
+        boolean primaryUser = sp.getBoolean("primaryUser", true); // default: true
+
+        if (primaryUser) {
+            userIdentity.setText(R.string.wheelchair_user);
+        } else {
+            userIdentity.setText(R.string.caregiver);
+        }
+    }
+
     private void initSwitchCompat() {
         // sp
         boolean switchStateNotification = sp.getBoolean("switch_state_notification", false); // default: false
@@ -298,26 +309,31 @@ public class SettingsFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         builder.setTitle(R.string.select_identity);
+        builder.setIcon(R.drawable.baseline_person_24);
 
         final CharSequence[] options = {getString(R.string.option_wheelchair_user), getString(R.string.option_caregiver)};
-        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+        builder.setSingleChoiceItems(options, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String selectedOption = options[which].toString();
 
                 handleUserSelection(selectedOption);
+
+                dialog.dismiss();
             }
         });
+
         builder.show();
     }
 
     private void handleUserSelection(String selectedOption) {
         Log.d(TAG, "Selected: " + selectedOption);
         if (selectedOption.equals(getString(R.string.option_wheelchair_user))) {
-            editor.putBoolean("primary_user", true).commit();
+            editor.putBoolean("primaryUser", true).commit();
             userIdentity.setText(R.string.wheelchair_user);
         } else if (selectedOption.equals(getString(R.string.option_caregiver))) {
-            editor.putBoolean("primary_user", false).commit();
+            editor.putBoolean("primaryUser", false).commit();
             userIdentity.setText(R.string.caregiver);
         }
     }
@@ -337,7 +353,8 @@ public class SettingsFragment extends Fragment {
     private void logout() {
 //        Delete Saved preferences.
         editor.remove("userUid")
-                .remove("mySWC_name")
+                .remove("mySWCName")
+                .remove("primaryUser")
                 .apply();
         Toast.makeText(getContext(), R.string.cya, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getContext(), LoginPage.class);
