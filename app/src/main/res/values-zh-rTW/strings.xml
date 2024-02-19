@@ -76,4 +76,6 @@
     <string name="option_wheelchair_user">我是輪椅使用者</string>
     <string name="wheelchair_user">輪椅使用者</string>
     <string name="caregiver">照護者</string>
+    <string name="operation_failed_please_try_again">操作失敗，請重試</string>
+    <string name="operation_successful">操作成功</string>
 </resources>

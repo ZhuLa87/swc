@@ -56,6 +56,7 @@ public class LocationThread extends Thread{
             public void onComplete(@NonNull Task<Location> task) {
                 if (task.isSuccessful()) {
                     lastKnownLocation = task.getResult();
+                    if (lastKnownLocation == null) return;
                     double latitude = lastKnownLocation.getLatitude();
                     double longitude = lastKnownLocation.getLongitude();
                     Log.d(TAG, "Latitude: " + latitude + ", Longitude: " + longitude);

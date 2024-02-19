@@ -73,6 +73,8 @@
     <string name="select_identity">Select Identity</string>
     <string name="option_caregiver">I am a caregiver.</string>
     <string name="option_wheelchair_user">I am a wheelchair user.</string>
-    <string name="wheelchair_user">" wheelchair user"</string>
+    <string name="wheelchair_user">wheelchair user</string>
     <string name="caregiver">caregiver</string>
+    <string name="operation_failed_please_try_again">Operation failed, please try again</string>
+    <string name="operation_successful">Operation successful</string>
 </resources>

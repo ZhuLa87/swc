@@ -33,10 +33,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -44,6 +47,9 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 //在 Firebase 中管理用户
 //> https://firebase.google.com/docs/auth/android/manage-users?hl=zh-cn
@@ -58,6 +64,7 @@ public class SettingsFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private GoogleSignInClient mGoogleSignInClient;
+    FirebaseFirestore db;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private TextView userIdentity;
@@ -128,6 +135,8 @@ public class SettingsFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance(); // 第一次寫少了這行, Debug1個半小時才找到, 所以我決定給他個註解; 附上錯誤訊息"java.lang.NullPointerException: Attempt to invoke virtual method 'com.google.firebase.auth.FirebaseUser com.google.firebase.auth.FirebaseAuth.getCurrentUser()' on a null object reference"
         user = mAuth.getCurrentUser();
+
+        db = FirebaseFirestore.getInstance();
 
 //        init
         initStatusBarColor();
@@ -328,12 +337,49 @@ public class SettingsFragment extends Fragment {
     }
 
     private void handleUserSelection(String selectedOption) {
+        Boolean primaryUser = null;
+
         Log.d(TAG, "Selected: " + selectedOption);
         if (selectedOption.equals(getString(R.string.option_wheelchair_user))) {
             editor.putBoolean("primaryUser", true).commit();
-            userIdentity.setText(R.string.wheelchair_user);
+            primaryUser = true;
         } else if (selectedOption.equals(getString(R.string.option_caregiver))) {
             editor.putBoolean("primaryUser", false).commit();
+            primaryUser = false;
+        }
+        storeUserIdentityInFirestore(primaryUser);
+    }
+
+    private void storeUserIdentityInFirestore(Boolean primaryUser) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("primaryUser", primaryUser);
+        db.collection("users").document(user.getUid())
+                .set(data, SetOptions.merge())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "primaryUser added with ID: " + user.getUid());
+                            updateUserIdentityUI(primaryUser);
+                            Toast.makeText(getContext(), R.string.operation_successful, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.w(TAG, "Error adding document to Firestore", task.getException());
+
+                            Toast.makeText(getContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                        }
+                    }})
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void updateUserIdentityUI(Boolean primaryUser) {
+        if (primaryUser) {
+            userIdentity.setText(R.string.wheelchair_user);
+        } else {
             userIdentity.setText(R.string.caregiver);
         }
     }
@@ -343,14 +389,16 @@ public class SettingsFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAuth.signOut();
-                mGoogleSignInClient.signOut();
                 logout();
             }
         });
     }
 
-    private void logout() {
+    public void logout() {
+        try {
+            mAuth.signOut();
+            mGoogleSignInClient.signOut();
+        } catch (Exception e) { }
 //        Delete Saved preferences.
         editor.remove("userUid")
                 .remove("mySWCName")

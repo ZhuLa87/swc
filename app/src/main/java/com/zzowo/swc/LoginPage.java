@@ -216,7 +216,7 @@ public class LoginPage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             saveUserInfoPreferences(firebaseUser);
-                            saveUserInfoDatabaseAndJumpPage(firebaseUser);
+                            storeUserInfoInFirestoreAndRedirect(firebaseUser);
                         } else {
                             Toast.makeText(LoginPage.this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
                         }
@@ -226,11 +226,17 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "Google auth error: " + e);
+                        try {
+                            mAuth.signOut();
+                            mGoogleSignInClient.signOut();
+                        } catch (Exception ex) {
+                            Log.d(TAG, "Google auth logout error: " + ex);
+                        }
                     }
                 });
     }
 
-    private void saveUserInfoDatabaseAndJumpPage(FirebaseUser firebaseUser) {
+    private void storeUserInfoInFirestoreAndRedirect(FirebaseUser firebaseUser) {
         UsersData usersData = new UsersData();
         usersData.setEmail(firebaseUser.getEmail());
         usersData.setFullName(firebaseUser.getDisplayName());
@@ -254,7 +260,9 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // TODO: 添加資料庫錯誤時的處裡邏輯
-                        Log.w(TAG, "Error writing document", e);
+                        Log.w(TAG, "An error occurred while writing to the database", e);
+                        Toast.makeText(getApplicationContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                        logout();
                     }
                 });
     }
@@ -280,4 +288,13 @@ public class LoginPage extends AppCompatActivity {
         Toast.makeText(this, welcomeMsg, Toast.LENGTH_SHORT).show();
     }
 
+    private void logout() {
+        try {
+            mAuth.signOut();
+            mGoogleSignInClient.signOut();
+        } catch (Exception e) {
+            Log.d(TAG, "Logout error: " + e);
+        }
+        progressBar.setVisibility(View.GONE);
+    }
 }

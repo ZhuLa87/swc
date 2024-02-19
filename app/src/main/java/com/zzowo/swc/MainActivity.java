@@ -17,19 +17,27 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.zzowo.swc.databinding.ActivityMainBinding;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements LocationThread.LocationListener{
     private static final String TAG = "MainActivity";
     public static Handler BThandler;
     private FirebaseUser user;
+    private FirebaseFirestore db;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private ActivityMainBinding binding;
@@ -46,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         initPreferences();
         initAuth();
         bottomNavSetup();
+
+        // Initialize Firebase Firestore
+        db = FirebaseFirestore.getInstance();
 
         // check is first time login
         checkFirstTimeLogin();
@@ -145,8 +156,8 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                 String selectedOption = options[which].toString();
 
                 handleUserSelection(selectedOption);
-                editor.putBoolean("isFirstTimeLogin", false).apply();
 
+                // 成功判斷位於 storeUserIdentityInFirestore() 中
                 dialog.dismiss();
             }
         });
@@ -156,12 +167,45 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     }
 
     private void handleUserSelection(String selectedOption) {
+        Boolean primaryUser = null;
+
         Log.d(TAG, "Selected: " + selectedOption);
         if (selectedOption.equals(getString(R.string.option_wheelchair_user))) {
             editor.putBoolean("primaryUser", true).commit();
+            primaryUser = true;
         } else if (selectedOption.equals(getString(R.string.option_caregiver))) {
             editor.putBoolean("primaryUser", false).commit();
+            primaryUser = false;
         }
+        storeUserIdentityInFirestore(primaryUser);
+    }
+
+    private void storeUserIdentityInFirestore(Boolean primaryUser) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("primaryUser", primaryUser);
+        db.collection("users").document(user.getUid())
+                .set(data, SetOptions.merge())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "primaryUser added with ID: " + user.getUid());
+
+                            editor.putBoolean("isFirstTimeLogin", false).apply(); // 設定為非首次登入
+                        } else {
+                            Log.w(TAG, "Error adding document to Firestore", task.getException());
+
+                            Toast.makeText(getApplicationContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                            showIdentitySelectionDialog();
+                    }
+                }})
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                        showIdentitySelectionDialog();
+                    }
+                });
     }
 
     private void replaceFragment(Fragment fragment) {
