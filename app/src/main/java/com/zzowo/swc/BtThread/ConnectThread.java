@@ -21,7 +21,7 @@ public class ConnectThread extends Thread {
     private ConnectionListener connectionListener;
 
     public interface ConnectionListener  {
-        void onConnectionSuccess();
+        void onConnectionSuccess(String deviceHardwareAddress);
         void onConnectionError(String errorMessage);
     }
 
@@ -43,7 +43,7 @@ public class ConnectThread extends Thread {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    connectionListener.onConnectionSuccess();
+                    connectionListener.onConnectionSuccess(bluetoothDevice.getAddress());
                 }
             });
         } catch (IOException e) {
