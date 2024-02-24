@@ -65,8 +65,10 @@ public class SettingsFragment extends Fragment {
     private FirebaseUser user;
     private GoogleSignInClient mGoogleSignInClient;
     FirebaseFirestore db;
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences sp1;
+    private SharedPreferences.Editor editor1;
+    private SharedPreferences sp2;
+    private SharedPreferences.Editor editor2;
     private TextView userIdentity;
     private TextView userName;
     private TextView userEmail;
@@ -176,7 +178,7 @@ public class SettingsFragment extends Fragment {
                             .withListener(new PermissionListener() {
                                 @Override
                                 public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                                    editor.putBoolean("switch_state_notification", true).commit();
+                                    editor1.putBoolean("switch_state_notification", true).commit();
                                     Log.d(TAG, "Saved switch_state_notification: true");
                                 }
 
@@ -193,7 +195,7 @@ public class SettingsFragment extends Fragment {
 
                 } else {
                     // 如果切換後開關狀態為 "關/ Off"
-                    editor.putBoolean("switch_state_notification", false).commit();
+                    editor1.putBoolean("switch_state_notification", false).commit();
                 }
             }
         });
@@ -215,8 +217,11 @@ public class SettingsFragment extends Fragment {
     }
 
     private void initPreferences() {
-        sp = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
-        editor = sp.edit();
+        sp1 = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
+        editor1 = sp1.edit();
+
+        sp2 = getActivity().getSharedPreferences("wheelchair", Context.MODE_PRIVATE);
+        editor2 = sp2.edit();
     }
 
     private void initAccountInfo(FirebaseUser user) {
@@ -244,7 +249,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void initUserIdentity() {
-        boolean primaryUser = sp.getBoolean("primaryUser", true); // default: true
+        boolean primaryUser = sp1.getBoolean("primaryUser", true); // default: true
 
         if (primaryUser) {
             userIdentity.setText(R.string.wheelchair_user);
@@ -255,7 +260,7 @@ public class SettingsFragment extends Fragment {
 
     private void initSwitchCompat() {
         // sp
-        boolean switchStateNotification = sp.getBoolean("switch_state_notification", false); // default: false
+        boolean switchStateNotification = sp1.getBoolean("switch_state_notification", false); // default: false
 
         Log.d(TAG, "Get switchNotification: " + switchStateNotification);
 
@@ -341,10 +346,10 @@ public class SettingsFragment extends Fragment {
 
         Log.d(TAG, "Selected: " + selectedOption);
         if (selectedOption.equals(getString(R.string.option_wheelchair_user))) {
-            editor.putBoolean("primaryUser", true).commit();
+            editor1.putBoolean("primaryUser", true).commit();
             primaryUser = true;
         } else if (selectedOption.equals(getString(R.string.option_caregiver))) {
-            editor.putBoolean("primaryUser", false).commit();
+            editor1.putBoolean("primaryUser", false).commit();
             primaryUser = false;
         }
         storeUserIdentityInFirestore(primaryUser);
@@ -399,11 +404,11 @@ public class SettingsFragment extends Fragment {
             mAuth.signOut();
             mGoogleSignInClient.signOut();
         } catch (Exception e) { }
+
 //        Delete Saved preferences.
-        editor.remove("userUid")
-                .remove("mySWCName")
-                .remove("primaryUser")
-                .apply();
+        editor1.clear().apply();
+        editor2.clear().apply();
+
         Toast.makeText(getContext(), R.string.cya, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getContext(), LoginPage.class);
         startActivity(intent);
