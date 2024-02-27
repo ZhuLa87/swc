@@ -31,7 +31,6 @@ import com.zzowo.swc.databinding.ActivityMainBinding;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements LocationThread.LocationListener{
     private static final String TAG = "MainActivity";
@@ -58,8 +57,15 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         // Initialize Firebase Firestore
         db = FirebaseFirestore.getInstance();
 
+        // check is selected identity
+        Boolean isSharedPreferencesContainPrimaryUser = getUserIdentityFromSharedPreferences();
+        if (!isSharedPreferencesContainPrimaryUser) {
+            getUserIdentityFromFirestore();
+        }
+
+
         // check is first time login
-        checkFirstTimeLogin();
+//        checkFirstTimeLogin();
 
         // 開始位置線程
         startLocationThread();
@@ -85,6 +91,31 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                 return true;
             }
         });
+    }
+
+    private Boolean getUserIdentityFromSharedPreferences() {
+        Log.d(TAG, "Getting primaryUser from SharedPreferences");
+        Boolean isContainPrimaryUser = sp.contains("primaryUser");
+        return isContainPrimaryUser;
+    }
+
+    private void getUserIdentityFromFirestore() {
+        Log.d(TAG, "Getting primaryUser from Firestore");
+        db.collection("users").document(user.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Boolean primaryUser = task.getResult().getBoolean("primaryUser");
+                        if (primaryUser != null) {
+                            Log.d(TAG, "Successfully obtained primaryUser from Firestore: " + primaryUser);
+                            // 如果已經選擇過身份，則將primaryUser寫入SharedPreferences
+                            editor.putBoolean("primaryUser", primaryUser).commit();
+                            return;
+                        }
+                    }
+                    // 如果沒有選擇過身份，則會在首次登入時選擇
+                    showIdentitySelectionDialog();
+                });
     }
 
     private void initPreferences() {
@@ -142,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     }
 
     private void showIdentitySelectionDialog() {
+        Log.d(TAG, "showIdentitySelectionDialog");
         // 建立一個AlertDialog.Builder物件
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 

@@ -37,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 public class LoginPage extends AppCompatActivity {
     private static final String TAG = "LOGIN";
@@ -243,7 +244,7 @@ public class LoginPage extends AppCompatActivity {
 
         // 取得 Firestore 數據庫的引用, 指定集合為 "users", 文件 ID 為使用者的 UID
         db.collection("users").document(firebaseUser.getUid())
-                .set(usersData)
+                .set(usersData, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
