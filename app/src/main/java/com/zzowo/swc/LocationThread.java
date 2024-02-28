@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 
 public class LocationThread extends Thread{
     private static final String TAG = "LOCATION_THREAD";
+    private static final int LOCATION_UPDATE_INTERVAL = 30000; // 10秒
     private LocationListener locationListener;
     private Handler handler;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -42,7 +43,7 @@ public class LocationThread extends Thread{
             public void run() {
                 if (isAllowLocationUpdates) {
                     getLocation();
-                    handler.postDelayed(this, 10000); // 10秒重複
+                    handler.postDelayed(this, LOCATION_UPDATE_INTERVAL); // 10秒重複
                 }
             }
         }, 0);

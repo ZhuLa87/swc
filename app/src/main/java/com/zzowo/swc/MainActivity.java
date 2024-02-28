@@ -22,13 +22,16 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.GeoPoint;
 import com.zzowo.swc.databinding.ActivityMainBinding;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -257,9 +260,30 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     public void onLocationSuccess(Double latitude, Double longitude) {
         lastLatitude = latitude;
         lastLongitude = longitude;
+//        Log.d(TAG, "Set lastLatitude: " + latitude + ", lastLongitude: " + longitude);
 
-        Log.d(TAG, "Set lastLatitude: " + latitude + ", lastLongitude: " + longitude);
+        GeoPoint geoPoint = new GeoPoint(latitude, longitude); // Double latitude, Double longitude
+        storeLastLocationInFirestore(geoPoint);
     }
+
+    private void storeLastLocationInFirestore(GeoPoint geoPoint) {
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> lastLocation = new HashMap<>();
+        lastLocation.put("point", geoPoint);
+        lastLocation.put("timestamp", new Timestamp(new Date()));
+        data.put("lastLocation", lastLocation);
+
+        db.collection("users").document(user.getUid())
+                .set(data, SetOptions.merge())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Successfully updated lastLocation in Firestore: " + geoPoint.toString());
+                    } else {
+                        Log.w(TAG, "Error updating lastLocation in Firestore", task.getException());
+                    }
+                });
+    }
+
 
     public Double getLastLatitude() {
         return lastLatitude;
