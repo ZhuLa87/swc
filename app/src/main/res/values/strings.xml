@@ -77,4 +77,6 @@
     <string name="caregiver">caregiver</string>
     <string name="operation_failed_please_try_again">Operation failed, please try again</string>
     <string name="operation_successful">Operation successful</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

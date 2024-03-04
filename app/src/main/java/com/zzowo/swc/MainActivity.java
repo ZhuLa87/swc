@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     private static LocationThread locationThread;
     private Double lastLatitude = null;
     private Double lastLongitude = null;
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,20 +149,35 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         setContentView(binding.getRoot());
 
         // 預設首頁
-        replaceFragment(new HomeFragment());
+        currentFragment = new HomeFragment();
+        replaceFragment(currentFragment);
 
-//        底部導覽列
+        // 底部導覽列
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
             int itemId = item.getItemId();
+            Boolean primaryUser = sp.getBoolean("primaryUser", true);
+
             if (itemId == R.id.bottom_home) {
-                replaceFragment(new HomeFragment());
+                selectedFragment = new HomeFragment();
             } else if (itemId == R.id.bottom_map) {
-                replaceFragment(new MapFragment());
+                if (primaryUser) {
+                    selectedFragment = new MapFragment();
+                } else {
+                    selectedFragment = new MonitorMapFragment();
+                }
             } else if (itemId == R.id.bottom_binding) {
-                replaceFragment(new BindingFragment());
+                selectedFragment = new BindingFragment();
             } else if (itemId == R.id.bottom_settings) {
-                replaceFragment(new SettingsFragment());
+                selectedFragment = new SettingsFragment();
             }
+
+            // 如果選擇的頁面與當前頁面不同，則進行切換
+            if (selectedFragment != null && !selectedFragment.getClass().equals(currentFragment.getClass())) {
+                currentFragment = selectedFragment;
+                replaceFragment(selectedFragment);
+            }
+
             return true;
         });
     }
