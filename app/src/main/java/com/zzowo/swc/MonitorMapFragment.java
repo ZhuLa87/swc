@@ -67,9 +67,15 @@ public class MonitorMapFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_monitor_map, container, false);
 
         progressBar = rootView.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         // init
         initStatusBarColor();
+
+
+        // TODO: 添加使用者綁定的判斷
+
+
 
         return rootView;
     }

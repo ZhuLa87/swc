@@ -155,6 +155,12 @@ public class HomeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        Boolean primeUser = sp.getBoolean("primeUser", false);
+        if (!primeUser) {
+            Toast.makeText(getContext(), "You are not a prime user", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         if (id == R.id.toolbar_rename) {
             toolbarRename();
         } else if (id == R.id.toolbar_add) {
