@@ -67,10 +67,6 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
             getUserIdentityFromFirestore();
         }
 
-
-        // check is first time login
-//        checkFirstTimeLogin();
-
         // 開始位置線程
         startLocationThread();
 
@@ -182,15 +178,6 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         });
     }
 
-    private void checkFirstTimeLogin() {
-        boolean isFirstTimeLogin = sp.getBoolean("isFirstTimeLogin", true);
-        if (isFirstTimeLogin) {
-            // DO SOMETHING WHEN FIRST TIME LOGIN
-            showIdentitySelectionDialog();
-
-        }
-    }
-
     private void showIdentitySelectionDialog() {
         Log.d(TAG, "showIdentitySelectionDialog");
         // 建立一個AlertDialog.Builder物件
@@ -276,7 +263,6 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     public void onLocationSuccess(Double latitude, Double longitude) {
         lastLatitude = latitude;
         lastLongitude = longitude;
-//        Log.d(TAG, "Set lastLatitude: " + latitude + ", lastLongitude: " + longitude);
 
         GeoPoint geoPoint = new GeoPoint(latitude, longitude); // Double latitude, Double longitude
         storeLastLocationInFirestore(geoPoint);

@@ -245,7 +245,6 @@ public class SettingsFragment extends Fragment {
 
         userEmail.setText(user.getEmail());
         userUid.setText("UID: " + user.getUid().substring(0, 6) + "...");
-//            userEmailVerified.setText(user.isEmailVerified()?"True":"False");
     }
 
     private void initUserIdentity() {

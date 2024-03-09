@@ -106,7 +106,6 @@ public class requestPermissionActivity extends AppCompatActivity {
                     } else if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
                         // 僅取得部分權限
                         progressBar.setVisibility(View.GONE);
-//                        Log.d(TAG, multiplePermissionsReport.getDeniedPermissionResponses().get(0).getPermissionName());
                         showSettingsDialog();
                     }
                 }
