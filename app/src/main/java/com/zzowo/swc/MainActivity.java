@@ -261,6 +261,12 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     }
 
     public void onLocationSuccess(Double latitude, Double longitude) {
+
+        // 如果經緯度與上次相同，則不更新
+        if (latitude == lastLatitude && longitude == lastLongitude) {
+            return;
+        }
+
         lastLatitude = latitude;
         lastLongitude = longitude;
 
