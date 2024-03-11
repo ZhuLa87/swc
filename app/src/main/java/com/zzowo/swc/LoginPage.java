@@ -117,17 +117,17 @@ public class LoginPage extends AppCompatActivity {
                 if (TextUtils.isEmpty(email)) {
                     progressBar.setVisibility(View.GONE);
                     editTextEmail.setError(getString(R.string.input_empty_error));
-                    Toast.makeText(LoginPage.this, R.string.toast_enter_email, Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (TextUtils.isEmpty(password)) {
-                    progressBar.setVisibility(View.GONE);
-                    editTextPassword.setError(getString(R.string.input_empty_error));
-                    Toast.makeText(LoginPage.this, R.string.toast_enter_password, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginPage.this, R.string.email_empty_error, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (!email.matches(emailPattern)) {
                     progressBar.setVisibility(View.GONE);
                     editTextPassword.setError(getString(R.string.email_pattern_wrong));
                     Toast.makeText(LoginPage.this, R.string.email_pattern_wrong, Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (TextUtils.isEmpty(password)) {
+                    progressBar.setVisibility(View.GONE);
+                    editTextPassword.setError(getString(R.string.input_empty_error));
+                    Toast.makeText(LoginPage.this, R.string.toast_enter_password, Toast.LENGTH_SHORT).show();
                     return;
                 }
 

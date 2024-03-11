@@ -18,12 +18,15 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -64,7 +69,7 @@ public class SettingsFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private GoogleSignInClient mGoogleSignInClient;
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
     private SharedPreferences sp1;
     private SharedPreferences.Editor editor1;
     private SharedPreferences sp2;
@@ -201,6 +206,7 @@ public class SettingsFragment extends Fragment {
         });
 
 //        profileUpdates();
+        selectUpdatePassword(rootView);
         selectIdentity(rootView);
         btn_logout(rootView);
 
@@ -305,6 +311,127 @@ public class SettingsFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private void selectUpdatePassword(View view) {
+        View selectUpdatePassword = view.findViewById(R.id.option_update_pwd);
+        selectUpdatePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 若使用Google登入, 則無法更改密碼
+                String provider = user.getProviderData().get(1).getProviderId();
+                if (provider.contains("google.com")) {
+                    Toast.makeText(getContext(), R.string.google_account_cannot_change_password, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                showChangePasswordDialog();
+            }
+        });
+    }
+
+    private void showChangePasswordDialog() {
+        // 使用自訂對話框
+        AlertDialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        // 取得自訂的彈出介面布局
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View dialogView = inflater.inflate(R.layout.dialog_change_password, null);
+        builder.setView(dialogView);
+        dialog = builder.create();
+
+        // 取得介面元件
+        final EditText editTextOldPassword = dialogView.findViewById(R.id.editTextOldPassword);
+        final EditText editTextNewPassword = dialogView.findViewById(R.id.editTextNewPassword);
+        Button btnConfirm = dialogView.findViewById(R.id.btnConfirm);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+
+        // 設定EditText的輸入類型
+        editTextOldPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editTextNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 取得輸入的密碼
+                String oldPassword = editTextOldPassword.getText().toString();
+                String newPassword = editTextNewPassword.getText().toString();
+
+                // 檢查輸入之密碼格式
+                if (oldPassword.isEmpty() || newPassword.isEmpty()) {
+                    Toast.makeText(getContext(), R.string.password_empty_error, Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (newPassword.length() < 6) {
+                    Toast.makeText(getContext(), R.string.password_length_error, Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (oldPassword.equals(newPassword)) {
+                    Toast.makeText(getContext(), R.string.password_same_error, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                updatePassword(oldPassword, newPassword);
+
+                // 關閉對話視窗
+                dialog.dismiss();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 關閉對話視窗
+                dialog.dismiss();
+            }
+        });
+
+        // 顯示對話視窗
+
+        dialog.show();
+    }
+
+    private void updatePassword(String oldPassword, String newPassword) {
+
+        // re-authenticate
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String accountEmail = user.getEmail();
+        AuthCredential credential = EmailAuthProvider.getCredential(accountEmail, oldPassword);
+
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d(TAG, "User re-authenticated.");
+
+                        user.updatePassword(newPassword)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "User password updated.");
+                                            Toast.makeText(getContext(), R.string.operation_successful, Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Log.w(TAG, "Error updating password", task.getException());
+                                            Toast.makeText(getContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating password", e);
+                                        Toast.makeText(getContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error re-authenticating user", e);
+                        Toast.makeText(getContext(), "Old password wrong!", Toast.LENGTH_SHORT).show();
+                    }});
     }
 
     private void selectIdentity(View view) {

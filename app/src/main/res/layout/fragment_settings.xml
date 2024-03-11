@@ -286,7 +286,7 @@
 
                         <!-- Account Security -->
                         <RelativeLayout
-                            android:id="@+id/option_security"
+                            android:id="@+id/option_update_pwd"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="10dp"
@@ -309,7 +309,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="20dp"
                                 android:layout_toEndOf="@id/account_security_icon"
-                                android:text="@string/account_security"
+                                android:text="@string/change_password"
                                 android:textColor="@color/colorOnSurface"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />

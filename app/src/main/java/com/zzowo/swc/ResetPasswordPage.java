@@ -49,7 +49,7 @@ public class ResetPasswordPage extends AppCompatActivity {
                 if (TextUtils.isEmpty(email)) {
                     progressBar.setVisibility(View.GONE);
                     editTextEmail.setError(getString(R.string.input_empty_error));
-                    Toast.makeText(ResetPasswordPage.this, R.string.toast_enter_email, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPasswordPage.this, R.string.email_empty_error, Toast.LENGTH_SHORT).show();
                     return;
                 }
 

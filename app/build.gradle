@@ -76,6 +76,8 @@ dependencies {
     // google maps
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
+
+    // Dexter is an Android library that simplifies the process of requesting permissions at runtime.
     implementation 'com.karumi:dexter:6.2.1'
 
 }

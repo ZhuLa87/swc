@@ -91,17 +91,22 @@ public class SignUpPage extends AppCompatActivity {
                 if (TextUtils.isEmpty(email)) {
                     progressBar.setVisibility(View.GONE);
                     editTextEmail.setError(getString(R.string.input_empty_error));
-                    Toast.makeText(SignUpPage.this, R.string.toast_enter_email, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpPage.this, R.string.email_empty_error, Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (!email.matches(emailPattern)) {
+                    progressBar.setVisibility(View.GONE);
+                    editTextPassword.setError(getString(R.string.email_pattern_wrong));
+                    Toast.makeText(SignUpPage.this, R.string.email_pattern_wrong, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (TextUtils.isEmpty(password)) {
                     progressBar.setVisibility(View.GONE);
                     editTextPassword.setError(getString(R.string.input_empty_error));
                     Toast.makeText(SignUpPage.this, R.string.toast_enter_password, Toast.LENGTH_SHORT).show();
                     return;
-                } else if (!email.matches(emailPattern)) {
+                } else if (password.length() < 6) {
                     progressBar.setVisibility(View.GONE);
-                    editTextPassword.setError(getString(R.string.email_pattern_wrong));
-                    Toast.makeText(SignUpPage.this, R.string.email_pattern_wrong, Toast.LENGTH_SHORT).show();
+                    editTextPassword.setError(getString(R.string.password_length_error));
+                    Toast.makeText(SignUpPage.this, R.string.password_length_error, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -123,6 +128,7 @@ public class SignUpPage extends AppCompatActivity {
                                     saveUserInfoPreferences(mAuth.getCurrentUser());
                                     saveUserInfoDatabaseAndJumpPage(mAuth.getCurrentUser());
                                 } else {
+
                                     Toast.makeText(SignUpPage.this, R.string.toast_registration_failed,
                                             Toast.LENGTH_SHORT).show();
                                 }

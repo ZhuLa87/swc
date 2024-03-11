@@ -25,7 +25,7 @@
     <string name="sign_up_btn">註冊</string>
     <string name="sign_up_bottom_hint">已經有帳號了?</string>
     <string name="login_link">點我登入</string>
-    <string name="toast_enter_email">請輸入帳號</string>
+    <string name="email_empty_error">請輸入帳號</string>
     <string name="toast_enter_password">請輸入密碼</string>
     <string name="settings_logout">登出</string>
     <string name="toast_welcome_back">"歡迎回來, "</string>
@@ -49,7 +49,7 @@
     <string name="email_pattern_wrong">請輸入一個有效的電子郵件地址</string>
     <string name="title_connect_to_swc">連接到SWC</string>
     <string name="settings_app_version">應用版本</string>
-    <string name="account_security">帳號安全</string>
+    <string name="change_password">變更密碼</string>
     <string name="edit_profiles">個人資料</string>
     <string name="night_mode">深色模式</string>
     <string name="login_cancel">登入取消</string>
@@ -78,4 +78,12 @@
     <string name="caregiver">照護者</string>
     <string name="operation_failed_please_try_again">操作失敗，請重試</string>
     <string name="operation_successful">操作成功</string>
+    <string name="password_length_error">密碼應至少為 6 個字符</string>
+    <string name="password_empty_error">密碼不能為空</string>
+    <string name="password_same_error">新密碼與舊密碼相同</string>
+    <string name="old_password">舊密碼</string>
+    <string name="new_password">新密碼</string>
+    <string name="confirm">確認</string>
+    <string name="cancel">取消</string>
+    <string name="google_account_cannot_change_password">Google帳號不能透過此應用程式更改密碼</string>
 </resources>
