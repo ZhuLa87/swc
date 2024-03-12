@@ -61,7 +61,7 @@
                 app:layout_constraintStart_toEndOf="@id/animation_avatar"
                 app:layout_constraintTop_toTopOf="@id/animation_avatar"
                 >
-                <!-- 使用者名稱 (若存在才顯示) -->
+                <!-- 使用者身分 -->
                 <TextView
                     android:id="@+id/user_identity"
                     android:layout_width="wrap_content"

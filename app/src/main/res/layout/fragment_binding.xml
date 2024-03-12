@@ -7,44 +7,101 @@
     android:background="@color/colorBackground"
     tools:context=".BindingFragment"
     >
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/title_bar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorSurface"
-        android:elevation="2dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingBottom="6dp"
         >
-        <TextView
-            android:id="@+id/title"
+        <!-- 使用者資訊顯示 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/primary_user_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:paddingVertical="5dp"
-            android:text="@string/user_binding"
-            android:textColor="@color/colorOnSurface"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="120dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:background="@drawable/primary_user_background_binding_fragment"
+            >
+            <!-- 預設圖片 -->
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation_avatar"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/people"
+                app:lottie_speed="0.5" />
+            <!-- 導入使用者圖片 (與預設圖片不同時顯示) -->
+            <ImageView
+                android:id="@+id/user_avatar"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/avatar_settings_fragment"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <!-- 使用者資訊 (文字) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@id/animation_avatar"
+                app:layout_constraintStart_toEndOf="@id/animation_avatar"
+                app:layout_constraintTop_toTopOf="@id/animation_avatar"
+                >
+                <!-- 使用者名稱 (若存在才顯示) -->
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:text="user123"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--    Progress Bar-->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:visibility="gone"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:elevation="3dp"
-        android:indeterminate="true"
-        android:theme="@style/ProgressBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:layout_constraintBottom_toBottomOf="@+id/title_bar"/>
+        <!-- 使用者資訊顯示 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_uid"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:layout_below="@id/primary_user_info"
+            android:background="@drawable/copy_uid_background_binding_fragment">
+
+            <!-- 複製使用者ID -->
+            <TextView
+                android:id="@+id/copy_uid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/user_uid"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingHorizontal="35dp"
+                android:paddingVertical="15dp"
+                android:text="COPY"
+                android:textColor="@color/colorLink"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
