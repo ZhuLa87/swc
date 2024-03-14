@@ -1,15 +1,41 @@
 package com.zzowo.swc;
 
+import static com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom;
+
+import android.app.AlertDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +44,11 @@ import android.widget.ProgressBar;
  */
 public class MonitorMapFragment extends Fragment {
     private static final String TAG = "MonitorMapFragment";
-    ProgressBar progressBar;
+    private ProgressBar progressBar;
+    private FirebaseUser user;
+    private FirebaseFirestore db;
+    private SupportMapFragment supportMapFragment;
+    private static final float DEFAULT_ZOOM = 19F;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,14 +97,15 @@ public class MonitorMapFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_monitor_map, container, false);
 
         progressBar = rootView.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
+        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
         // init
         initStatusBarColor();
+        initFirebase();
 
 
         // TODO: 添加使用者綁定的判斷
-
+        getBoundUser();
 
 
         return rootView;
@@ -87,4 +118,106 @@ public class MonitorMapFragment extends Fragment {
         window.setStatusBarColor(getActivity().getResources().getColor(R.color.colorSurface));
     }
 
+    private void initFirebase() {
+        Log.d(TAG, "initFirebase");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+    }
+
+    private void getBoundUser() {
+        Log.d(TAG, "getting bound user");
+        // 取得綁定的使用者
+        db.collection("users").document(user.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                            // 取得綁定的使用者
+                        String boundUser = task.getResult().getString("boundUser");
+                        if (boundUser != null) {
+                            // 找到綁定的使用者
+                            Log.d(TAG, boundUser);
+                            getBoundUserLocation(boundUser);
+                            return;
+                        }
+                    }
+                    showNotBoundDialog();
+                });
+    }
+
+    private void showNotBoundDialog() {
+        // 顯示未綁定的 Dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle(R.string.unboundUserTitle);
+        builder.setMessage(R.string.unBoundUserMsg);
+
+        builder.setPositiveButton(R.string.confirm, (dialog, which) -> {
+            // 關閉畫面
+            getActivity().finish();
+        });
+
+        builder.show();
+    }
+
+    private void getBoundUserLocation(String boundUser) {
+        DocumentReference docRef = db.collection("users").document(boundUser);
+
+        // 取得綁定使用者的位置
+        docRef.get()
+        .addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // 取得綁定使用者的位置
+                Map<String, Object> lastLocation = (Map<String, Object>) task.getResult().get("lastLocation");
+
+                GeoPoint geoPoint = (GeoPoint) lastLocation.get("point");
+
+                // 時間戳
+                Timestamp timestamp = (Timestamp) lastLocation.get("timestamp");
+
+                showBoundUserLocation(geoPoint, timestamp);
+            }
+        });
+
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
+                }
+
+                if (value != null && value.exists()) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    Map<String, Object> lastLocation = (Map<String, Object>) value.get("lastLocation");
+
+                    GeoPoint geoPoint = (GeoPoint) lastLocation.get("point");
+
+                    // 時間戳
+                    Timestamp timestamp = (Timestamp) lastLocation.get("timestamp");
+
+                    showBoundUserLocation(geoPoint, timestamp);
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
+    }
+
+    private void showBoundUserLocation(GeoPoint geoPoint, Timestamp timestamp) {
+
+        Date date = timestamp.toDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm:ss");
+        String time = sdf.format(date);
+        supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull GoogleMap googleMap) {
+                googleMap.clear();
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()))
+                                .title(time));
+                googleMap.animateCamera(newLatLngZoom(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()), DEFAULT_ZOOM));
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
 }

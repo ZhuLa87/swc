@@ -275,6 +275,9 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     }
 
     private void storeLastLocationInFirestore(GeoPoint geoPoint) {
+        Boolean primaryUser = sp.getBoolean("primaryUser", true);
+        if (!primaryUser) return;
+
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> lastLocation = new HashMap<>();
         lastLocation.put("point", geoPoint);
@@ -285,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                 .set(data, SetOptions.merge())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "Successfully updated lastLocation in Firestore: " + geoPoint.toString());
+                        // Successfully updated lastLocation in Firestore
                     } else {
                         Log.w(TAG, "Error updating lastLocation in Firestore", task.getException());
                     }
