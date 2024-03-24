@@ -79,5 +79,5 @@ dependencies {
 
     // Dexter is an Android library that simplifies the process of requesting permissions at runtime.
     implementation 'com.karumi:dexter:6.2.1'
-
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
 }

@@ -83,13 +83,24 @@
             android:layout_marginVertical="16dp"
             android:layout_below="@id/primary_user_info"
             android:background="@drawable/copy_uid_background_binding_fragment">
-
+            <!-- 輸入空格  -->
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/copy_uid"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="15dp"
+                android:textSize="20sp"
+                android:textStyle="bold" />
             <!-- 複製使用者ID -->
             <TextView
                 android:id="@+id/copy_uid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@id/user_uid"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:paddingHorizontal="35dp"
@@ -100,6 +111,12 @@
                 android:textStyle="bold" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_below="@+id/user_uid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true" />
 
 
     </RelativeLayout>

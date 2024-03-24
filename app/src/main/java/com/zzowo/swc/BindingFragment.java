@@ -10,13 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.List;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +35,8 @@ import com.karumi.dexter.listener.single.PermissionListener;
  */
 public class BindingFragment extends Fragment {
 
+    private RecyclerView mRecyclerView;
+    private List<String> mData;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,15 +67,30 @@ public class BindingFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Nullable
+    public void onCreate(LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setContentView(R.layout.fragment_binding);
+        View view = inflater.inflate(R.layout.fragment_binding, container, false);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        //
+
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        // recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        List<String> data = new ArrayList<>();
+        data.add("user1");
+        data.add("user2");
+        data.add("user3");
+        // 添加更多項目...
+
+        ItemAdapter adapter = new ItemAdapter(data);
+        recyclerView.setAdapter(adapter);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,4 +114,5 @@ public class BindingFragment extends Fragment {
     private void grantPermission() {
 
     }
+
 }

@@ -195,6 +195,8 @@ public class MonitorMapFragment extends Fragment {
                     // 時間戳
                     Timestamp timestamp = (Timestamp) lastLocation.get("timestamp");
 
+                    Log.d(TAG, "Firestore data update" + geoPoint.getLongitude() + ", " + geoPoint.getLatitude());
+
                     showBoundUserLocation(geoPoint, timestamp);
                 } else {
                     Log.d(TAG, "Current data: null");
