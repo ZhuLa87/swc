@@ -289,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // Successfully updated lastLocation in Firestore
+                        Log.d(TAG, "Successfully updated lastLocation in Firestore");
                     } else {
                         Log.w(TAG, "Error updating lastLocation in Firestore", task.getException());
                     }

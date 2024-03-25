@@ -70,25 +70,10 @@ public class BindingFragment extends Fragment {
     @Nullable
     public void onCreate(LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.fragment_binding);
-        View view = inflater.inflate(R.layout.fragment_binding, container, false);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //
-
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        // recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        List<String> data = new ArrayList<>();
-        data.add("user1");
-        data.add("user2");
-        data.add("user3");
-        // 添加更多項目...
-
-        ItemAdapter adapter = new ItemAdapter(data);
-        recyclerView.setAdapter(adapter);
     }
 
 
@@ -100,6 +85,18 @@ public class BindingFragment extends Fragment {
         //init
         initStatusBarColor();
         grantPermission();
+
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
+        // recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        List<String> data = new ArrayList<>();
+        data.add("user1");
+        data.add("user2");
+        data.add("user3");
+        // 添加更多項目...
+
+        ItemAdapter adapter = new ItemAdapter(data);
+        recyclerView.setAdapter(adapter);
 
         return rootView;
     }
