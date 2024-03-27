@@ -2,10 +2,12 @@ package com.zzowo.swc;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.annotation.Nullable;
@@ -35,7 +39,9 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class BindingFragment extends Fragment {
-
+    private static final String TAG = "BindingFragment";
+    private SharedPreferences sp;
+    private boolean primaryUser;
 
     private RecyclerView mRecyclerView;
     private List<String> mData;
@@ -78,15 +84,15 @@ public class BindingFragment extends Fragment {
         }
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_binding, container, false);
 
         //init
+        initPreferences();
         initStatusBarColor();
-        grantPermission();
+        initOperationView(rootView);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
         // recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -105,6 +111,25 @@ public class BindingFragment extends Fragment {
         return rootView;
     }
 
+    private void initPreferences() {
+        sp = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
+
+        primaryUser = sp.getBoolean("primaryUser", true);
+    }
+
+    private void initOperationView(View rootView) {
+        View operationViewPrimary = rootView.findViewById(R.id.op_prime_user);
+        View operationViewSecondary = rootView.findViewById(R.id.op_secondary_user);
+
+        if (primaryUser) {
+            operationViewPrimary.setVisibility(View.VISIBLE);
+            operationViewSecondary.setVisibility(View.INVISIBLE);
+        } else {
+            operationViewPrimary.setVisibility(View.INVISIBLE);
+            operationViewSecondary.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void initStatusBarColor() {
         Window window = getActivity().getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -112,8 +137,10 @@ public class BindingFragment extends Fragment {
         window.setStatusBarColor(getActivity().getResources().getColor(R.color.colorSurface));
     }
 
-    private void grantPermission() {
 
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
     }
-
 }
