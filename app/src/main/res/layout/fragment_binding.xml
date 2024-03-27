@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="16dp"
+            android:layout_marginVertical="15dp"
             android:background="@drawable/primary_user_background_binding_fragment"
             >
             <!-- 預設圖片 -->
@@ -75,6 +75,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- 使用者資訊顯示 -->
+        <!-- 監管者頁面   -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/user_uid"
             android:layout_width="match_parent"
@@ -83,8 +84,8 @@
             android:layout_marginVertical="16dp"
             android:layout_below="@id/primary_user_info"
             android:background="@drawable/copy_uid_background_binding_fragment">
-            <!-- 輸入空格  -->
-            <EditText
+            <!-- 使用者id顯示  -->
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintEnd_toStartOf="@+id/copy_uid"
@@ -110,13 +111,52 @@
                 android:textSize="23sp"
                 android:textStyle="bold" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- 被監管者頁面       -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/select_uid"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:layout_below="@id/primary_user_info"
+            android:background="@drawable/copy_uid_background_binding_fragment">
+            <!-- 輸入格  -->
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/select_uid"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="15dp"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <!-- 搜尋使用者 -->
+            <TextView
+                android:id="@+id/select_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingHorizontal="35dp"
+                android:paddingVertical="15dp"
+                android:text="SELECT"
+                android:textColor="@color/colorLink"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_below="@+id/user_uid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true" />
+            android:layout_below="@+id/user_uid"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="0dp" />
 
 
     </RelativeLayout>

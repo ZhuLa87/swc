@@ -1,6 +1,7 @@
 package com.zzowo.swc;
 
 import android.Manifest;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class BindingFragment extends Fragment {
+
 
     private RecyclerView mRecyclerView;
     private List<String> mData;
@@ -90,9 +92,11 @@ public class BindingFragment extends Fragment {
         // recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         List<String> data = new ArrayList<>();
+        recyclerView.addItemDecoration(new ItemSpacingDecoration(getContext(), 10)); // 2dp 的間距
         data.add("user1");
         data.add("user2");
         data.add("user3");
+        data.add("user4");
         // 添加更多項目...
 
         ItemAdapter adapter = new ItemAdapter(data);

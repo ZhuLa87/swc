@@ -4,20 +4,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="90dp"
     tools:context=".BindingFragment"
     android:id="@+id/primary_user_info"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="16dp"
-    android:background="@drawable/recyclerbackground_binding_fragment"
+    android:layout_marginRight="9dp"
+    android:layout_marginLeft="9dp"
+    android:background="@drawable/recycler_background_binding_fragment"
     >
     <!-- 預設圖片 -->
     <!-- 導入使用者圖片 (與預設圖片不同時顯示) -->
 
    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_avatar"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,8 +56,8 @@
             android:layout_height="0dp"
             android:layout_weight="4"
             android:text="user123"
-            android:textColor="@color/colorOnPrimary"
-            android:textSize="26sp"
+            android:textColor="#FDFEFE "
+            android:textSize="27sp"
             android:textStyle="bold"
             android:visibility="visible" />
     </LinearLayout>
@@ -71,7 +71,7 @@
         android:layout_marginRight="25dp"
         android:text="online"
         android:textSize="26sp"
-        android:textColor="@color/blue_green"
+        android:textColor="@color/coloronline"
         android:visibility="visible"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
