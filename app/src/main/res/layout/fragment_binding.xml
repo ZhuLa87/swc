@@ -87,9 +87,10 @@
             android:background="@drawable/copy_uid_background_binding_fragment">
             <!-- 使用者id顯示  -->
             <TextView
+                android:id="@+id/prime_uid"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintEnd_toStartOf="@+id/copy_uid"
+                app:layout_constraintEnd_toStartOf="@+id/copy_prime_uid"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -98,7 +99,7 @@
                 android:textStyle="bold" />
             <!-- 複製使用者ID -->
             <TextView
-                android:id="@+id/copy_uid"
+                android:id="@+id/copy_prime_uid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -131,7 +132,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="15dp"
-                android:textSize="20sp"
+                android:textSize="26sp"
                 android:textStyle="bold" />
             <!-- 搜尋使用者 -->
             <TextView

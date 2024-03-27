@@ -88,4 +88,5 @@
     <string name="google_account_cannot_change_password">Google帳號不能透過此應用程式更改密碼</string>
     <string name="unboundUserTitle">您尚未綁定使用者</string>
     <string name="unBoundUserMsg">請先綁定使用者，再使用此功能</string>
+    <string name="uid_copied">UID 已複製</string>
 </resources>

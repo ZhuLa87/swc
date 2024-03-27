@@ -88,4 +88,5 @@
     <string name="google_account_cannot_change_password">Google account cannot change password via this app</string>
     <string name="unboundUserTitle">You haven\'t bound any user yet</string>
     <string name="unBoundUserMsg">Please bind a user before using this feature</string>
+    <string name="uid_copied">UID copied</string>
 </resources>

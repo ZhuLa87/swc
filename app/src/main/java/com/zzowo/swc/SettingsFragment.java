@@ -136,7 +136,7 @@ public class SettingsFragment extends Fragment {
         userName = rootView.findViewById(R.id.user_name);
         userEmail = rootView.findViewById(R.id.user_email);
         userUid = rootView.findViewById(R.id.user_uid);
-        copyUid = rootView.findViewById(R.id.copy_uid);
+        copyUid = rootView.findViewById(R.id.copy_prime_uid);
         switchNotification = rootView.findViewById(R.id.switch_notification);
         textVersion = rootView.findViewById(R.id.text_version);
 

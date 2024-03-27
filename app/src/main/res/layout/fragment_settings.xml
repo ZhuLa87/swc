@@ -111,7 +111,7 @@
                         android:textSize="15sp" />
                     <!-- 複製使用者ID -->
                     <TextView
-                        android:id="@+id/copy_uid"
+                        android:id="@+id/copy_prime_uid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@id/user_uid"

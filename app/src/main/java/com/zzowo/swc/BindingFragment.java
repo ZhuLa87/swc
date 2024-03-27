@@ -1,6 +1,8 @@
 package com.zzowo.swc;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,6 +44,7 @@ public class BindingFragment extends Fragment {
     private static final String TAG = "BindingFragment";
     private SharedPreferences sp;
     private boolean primaryUser;
+    private String userUid;
 
     private RecyclerView mRecyclerView;
     private List<String> mData;
@@ -115,6 +118,7 @@ public class BindingFragment extends Fragment {
         sp = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
 
         primaryUser = sp.getBoolean("primaryUser", true);
+        userUid = sp.getString("userUid", "");
     }
 
     private void initOperationView(View rootView) {
@@ -124,9 +128,29 @@ public class BindingFragment extends Fragment {
         if (primaryUser) {
             operationViewPrimary.setVisibility(View.VISIBLE);
             operationViewSecondary.setVisibility(View.INVISIBLE);
+
+            // 處理操作區內容
+            TextView primeUid = rootView.findViewById(R.id.prime_uid);
+            TextView copyPrimeUid = rootView.findViewById(R.id.copy_prime_uid);
+
+            primeUid.setText("UID: " + userUid.substring(0, 8) + "...");
+            copyPrimeUid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 複製 UID
+                    ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clipData = ClipData.newPlainText("uid", userUid); // label為系統可見標籤, 非使用者可見標籤
+                    clipboard.setPrimaryClip(clipData);
+                    Toast.makeText(getContext(), R.string.uid_copied, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
         } else {
             operationViewPrimary.setVisibility(View.INVISIBLE);
             operationViewSecondary.setVisibility(View.VISIBLE);
+
+            // TODO: 處理操作區內容
         }
     }
 
