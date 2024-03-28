@@ -133,7 +133,7 @@ public class BindingFragment extends Fragment {
             TextView primeUid = rootView.findViewById(R.id.prime_uid);
             TextView copyPrimeUid = rootView.findViewById(R.id.copy_prime_uid);
 
-            primeUid.setText("UID: " + userUid.substring(0, 8) + "...");
+            primeUid.setText("UID: " + userUid.substring(0, 15) + "...");
             copyPrimeUid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -164,7 +164,6 @@ public class BindingFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-
         super.onDestroy();
     }
 }

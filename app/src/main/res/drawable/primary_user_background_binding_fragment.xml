@@ -6,7 +6,7 @@
                 android:startColor="@color/colorPrimary"
                 android:endColor="@color/colorPrimaryVariant"
                 android:angle="-45"/>
-            <corners android:radius="45dp"/>
+            <corners android:radius="35dp"/>
         </shape>
     </item>
 </selector>
