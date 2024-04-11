@@ -88,4 +88,5 @@
     <string name="unboundUserTitle">You haven\'t bound any user yet</string>
     <string name="unBoundUserMsg">Please bind a user before using this feature</string>
     <string name="uid_copied">UID copied</string>
+    <string name="input_uid">Please input Uid here.</string>
 </resources>
