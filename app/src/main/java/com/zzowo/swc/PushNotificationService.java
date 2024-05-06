@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
@@ -18,7 +20,6 @@ import java.util.Map;
 
 public class PushNotificationService extends FirebaseMessagingService {
     private static final String TAG = "PushNotificationService";
-
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
@@ -37,11 +38,14 @@ public class PushNotificationService extends FirebaseMessagingService {
 
         // handle notification
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-        showNotification(remoteMessage.getNotification());
+
+        // 檢查是否允許通知
+        if (isNotificationEnabled()) {
+            showNotification(remoteMessage.getNotification());
+        }
     }
 
-    public void showNotification(RemoteMessage.Notification message) {
-
+    private void showNotification(RemoteMessage.Notification message) {
         // Show notification
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "com.zzowo.swc";
@@ -66,5 +70,11 @@ public class PushNotificationService extends FirebaseMessagingService {
                 .setContentInfo("Info");
 
         notificationManager.notify(1, notificationBuilder.build());
+    }
+
+    private boolean isNotificationEnabled() {
+        SharedPreferences sp = getSharedPreferences("data", MODE_PRIVATE);
+        boolean isNotificationEnabled = sp.getBoolean("switch_state_notification", true); // default: true
+        return isNotificationEnabled;
     }
 }

@@ -265,7 +265,7 @@ public class SettingsFragment extends Fragment {
 
     private void initSwitchCompat() {
         // sp
-        boolean switchStateNotification = sp1.getBoolean("switch_state_notification", false); // default: false
+        boolean switchStateNotification = sp1.getBoolean("switch_state_notification", true); // default: true
 
         Log.d(TAG, "Get switchNotification: " + switchStateNotification);
 
