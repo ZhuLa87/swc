@@ -26,6 +26,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
@@ -37,6 +46,8 @@ public class HomeFragment extends Fragment {
     private AppCompatActivity activity;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private FirebaseUser user;
+    private FirebaseFirestore db;
     private TextView toolBarTextView;
     private View btnBeep, btnLocation, btnAlarm;
 
@@ -93,9 +104,13 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Initialize Firebase Firestore
+        db = FirebaseFirestore.getInstance();
+
         // init
         initStatusBarColor();
         initToolBar(rootView);
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         // 指定對應按鈕
         btnBeep = rootView.findViewById(R.id.func_01);
@@ -117,8 +132,29 @@ public class HomeFragment extends Fragment {
             if (connectedThread != null) {
                 connectedThread.btWriteString("alarm", "99", "Alert");
             } else {
-                // TODO: 未連線，發送警報至伺服器
 
+                String provider = user.getProviderData().get(1).getProviderId();
+                String userDisplayName = "";
+                if (provider.contains("google.com")) {
+                    userDisplayName = user.getDisplayName();
+                }
+
+                Map<String, Object> notification = new HashMap<>();
+                notification.put("from", user.getUid());
+                notification.put("title", "緊急通知!");
+                notification.put("body", userDisplayName.isEmpty()?"輪椅使用者":userDisplayName + "發出警報訊號，請立即前往查看。");
+                notification.put("tag", "alert");
+                notification.put("timestamp", new Timestamp(new Date()));
+
+                db.collection("Notifications")
+                        .add(notification)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getContext(), "Alert sent to server", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Failed to send alert", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 
@@ -155,8 +191,8 @@ public class HomeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        Boolean primeUser = sp.getBoolean("primeUser", false);
-        if (!primeUser) {
+        Boolean primaryUser = sp.getBoolean("primaryUser", false);
+        if (!primaryUser) {
             Toast.makeText(getContext(), "You are not a prime user", Toast.LENGTH_SHORT).show();
             return false;
         }

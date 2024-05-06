@@ -234,7 +234,7 @@ public class SettingsFragment extends Fragment {
         // get provider
         String provider = user.getProviderData().get(1).getProviderId();
 
-        if (provider.contains("google.com")) { // Can't use provider == "google.com", but idk why
+        if (provider.contains("google.com")) {
             // 顯示使用者頭像
             Uri userAvatarUrl = user.getPhotoUrl();
             Picasso.get().load(userAvatarUrl).into(userAvatar);
@@ -492,11 +492,14 @@ public class SettingsFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "primaryUser added with ID: " + user.getUid());
                             updateUserIdentityUI(primaryUser);
-                            Toast.makeText(getContext(), R.string.operation_successful, Toast.LENGTH_SHORT).show();
+                            if (isAdded()) {
+                                Toast.makeText(getContext(), R.string.operation_successful, Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Log.w(TAG, "Error adding document to Firestore", task.getException());
-
-                            Toast.makeText(getContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                            if (isAdded()) {
+                                Toast.makeText(getContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }})
                 .addOnFailureListener(new OnFailureListener() {

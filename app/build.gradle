@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace 'com.zzowo.swc'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.zzowo.swc"
@@ -44,7 +44,7 @@ android {
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     testImplementation 'junit:junit:4.13.2'
@@ -61,7 +61,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:6.0.1"
 
     // Import the BoM for the Firebase platform
-    implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
 
     // firebase
     implementation 'com.google.firebase:firebase-analytics'
@@ -69,15 +69,16 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-appcheck-playintegrity'
+    implementation 'com.google.firebase:firebase-messaging'
 
     // google auth services
     implementation 'com.google.android.gms:play-services-auth:20.6.0'
 
     // google maps
-    implementation 'com.google.android.gms:play-services-maps:18.1.0'
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+    implementation 'com.google.android.gms:play-services-location:21.2.0'
 
     // Dexter is an Android library that simplifies the process of requesting permissions at runtime.
     implementation 'com.karumi:dexter:6.2.1'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
 }

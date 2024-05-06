@@ -32,6 +32,7 @@
         android:layout_below="@+id/toolbar"
         >
         <TextView
+            android:visibility="invisible"
             android:id="@+id/connectStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

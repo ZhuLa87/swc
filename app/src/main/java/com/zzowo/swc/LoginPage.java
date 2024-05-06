@@ -37,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.SetOptions;
 
 public class LoginPage extends AppCompatActivity {
@@ -58,6 +59,14 @@ public class LoginPage extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+//        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+//        firestore.useEmulator("localhost", 8080);
+//
+//        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+//                .setPersistenceEnabled(false)
+//                .build();
+//        firestore.setFirestoreSettings(settings);
+
         // 初始化 Firebase 應用程式的方法, 該方法用於建立與 Firebase 相關的基礎設定, 並設置應用程式與 Firebase 之間的連接
         FirebaseApp.initializeApp(this);
         // 初始化應用檢查

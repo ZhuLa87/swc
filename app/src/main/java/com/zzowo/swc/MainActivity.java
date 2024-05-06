@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.zzowo.swc.databinding.ActivityMainBinding;
 
 import java.io.IOException;
@@ -53,13 +54,14 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Night mode is enable by default
         super.onCreate(savedInstanceState);
 
-//        init
-        initPreferences();
-        initAuth();
-        bottomNavSetup();
-
         // Initialize Firebase Firestore
         db = FirebaseFirestore.getInstance();
+
+        initPreferences();
+        initAuth();
+        initFirebaseMessaging();
+        updateFCMToken();
+        bottomNavSetup();
 
         // check is selected identity
         Boolean isSharedPreferencesContainPrimaryUser = getUserIdentityFromSharedPreferences();
@@ -91,6 +93,41 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                 return true;
             }
         });
+    }
+
+    private void updateFCMToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Map<String, Object> tokenData = new HashMap<>();
+                        tokenData.put("fcmToken", token);
+
+                        db.collection("users").document(user.getUid())
+                                .set(tokenData, SetOptions.merge())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "Successfully updated FCM token in Firestore");
+                                        } else {
+                                            Log.w(TAG, "Error updating FCM token in Firestore", task.getException());
+                                        }
+                                    }
+                                });
+                    }
+                });
+    }
+
+    private void initFirebaseMessaging() {
+        FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
+        firebaseMessaging.subscribeToTopic("all_notifications");
     }
 
     private Boolean getUserIdentityFromSharedPreferences() {
@@ -263,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     public void onLocationSuccess(Double latitude, Double longitude) {
 
         // 如果經緯度與上次相同，則不更新
-        if (latitude == lastLatitude && longitude == lastLongitude) {
+        if (latitude.equals(lastLatitude) && longitude.equals(lastLongitude)) {
             return;
         }
 

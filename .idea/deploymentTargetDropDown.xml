@@ -2,8 +2,34 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="app">
+      <entry key="LoginPage">
         <State />
+      </entry>
+      <entry key="app">
+        <State>
+          <runningDeviceTargetsSelectedWithDialog>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\zhu\.android\avd\API_34_Android_14_.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetsSelectedWithDialog>
+          <targetsSelectedWithDialog>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\zhu\.android\avd\API_34_Android_14_.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetsSelectedWithDialog>
+        </State>
       </entry>
     </value>
   </component>
