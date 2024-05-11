@@ -1,6 +1,5 @@
 package com.zzowo.swc;
 
-import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -16,24 +15,20 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
-import android.os.Bundle;
+
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.List;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import java.util.ArrayList;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,8 +38,10 @@ import java.util.ArrayList;
 public class BindingFragment extends Fragment {
     private static final String TAG = "BindingFragment";
     private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+    private FirebaseFirestore db;
     private boolean primaryUser;
-    private String userUid;
+    private String selfUid;
 
     private RecyclerView mRecyclerView;
     private List<String> mData;
@@ -92,6 +89,9 @@ public class BindingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_binding, container, false);
 
+
+        db = FirebaseFirestore.getInstance();
+
         //init
         initPreferences();
         initStatusBarColor();
@@ -102,12 +102,11 @@ public class BindingFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         List<String> data = new ArrayList<>();
         recyclerView.addItemDecoration(new ItemSpacingDecoration(getContext(), 10)); // 2dp 的間距
-
-        // TODO: 添加更多項目...
         data.add("user1");
         data.add("user2");
         data.add("user3");
         data.add("user4");
+        // 添加更多項目...
 
         ItemAdapter adapter = new ItemAdapter(data);
         recyclerView.setAdapter(adapter);
@@ -117,9 +116,10 @@ public class BindingFragment extends Fragment {
 
     private void initPreferences() {
         sp = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
+        editor = sp.edit();
 
         primaryUser = sp.getBoolean("primaryUser", true);
-        userUid = sp.getString("userUid", "");
+        selfUid = sp.getString("userUid", "");
     }
 
     private void initOperationView(View rootView) {
@@ -127,30 +127,86 @@ public class BindingFragment extends Fragment {
         View operationViewSecondary = rootView.findViewById(R.id.op_secondary_user);
 
         if (primaryUser) {
+            // primaryUser
             operationViewPrimary.setVisibility(View.VISIBLE);
             operationViewSecondary.setVisibility(View.INVISIBLE);
+
+            // TODO: 處理操作區內容
+            EditText inputUid = rootView.findViewById(R.id.input_uid);
+            TextView selectBtn = rootView.findViewById(R.id.select_button);
+
+            inputUid.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        selectBtn.setText("Confirm");
+                    } else {
+                        inputUid.setHint(R.string.input_uid);
+                    }
+                }
+            });
+
+            selectBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "Confirm button clicked!");
+                    // 確認按鈕
+                    String input = inputUid.getText().toString();
+                    // 檢查 UID 是否合法
+                    if (input.length() != 28) {
+                        Toast.makeText(getContext(), "Uid invalid", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if (input.equals(selfUid)) {
+                        Toast.makeText(getContext(), "Uid is the same as you", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // 比對輸入之UID是否存在
+                    db.collection("users").document(input).get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    // 判斷該使用者是否為主使用者
+                                    Boolean isUidUserPrimary = task.getResult().getBoolean("primaryUser");
+                                    if (isUidUserPrimary) {
+                                        Toast.makeText(getContext(), "Primary user cannot be bound", Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, "Primary user cannot be bound!");
+                                        return;
+                                    }
+
+                                    Log.d(TAG, "Input UID found!" + task.getResult().getData());
+
+                                    // 上傳輸入之UID
+                                    storeBoundUidToFirestore(input);
+
+                                } else {
+                                    Toast.makeText(getContext(), "UID not found", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "Input UID not found!");
+
+                                }
+                            });
+                }
+            });
+        } else {
+            // SecondaryUser
+            operationViewPrimary.setVisibility(View.INVISIBLE);
+            operationViewSecondary.setVisibility(View.VISIBLE);
 
             // 處理操作區內容
             TextView primeUid = rootView.findViewById(R.id.prime_uid);
             TextView copyPrimeUid = rootView.findViewById(R.id.copy_prime_uid);
 
-            primeUid.setText("UID: " + userUid.substring(0, 15) + "...");
+            primeUid.setText("UID: " + selfUid.substring(0, 8) + "...");
             copyPrimeUid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d(TAG, "Copy UID button clicked!");
                     // 複製 UID
                     ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clipData = ClipData.newPlainText("uid", userUid); // label為系統可見標籤, 非使用者可見標籤
+                    ClipData clipData = ClipData.newPlainText("uid", selfUid); // label為系統可見標籤, 非使用者可見標籤
                     clipboard.setPrimaryClip(clipData);
                     Toast.makeText(getContext(), R.string.uid_copied, Toast.LENGTH_SHORT).show();
                 }
             });
-
-        } else {
-            operationViewPrimary.setVisibility(View.INVISIBLE);
-            operationViewSecondary.setVisibility(View.VISIBLE);
-
-            // TODO: 處理操作區內容
         }
     }
 
@@ -161,6 +217,57 @@ public class BindingFragment extends Fragment {
         window.setStatusBarColor(getActivity().getResources().getColor(R.color.colorSurface));
     }
 
+    private void storeBoundUidToFirestore(String targetUid) {
+        Log.d(TAG, "storeBoundUidToFirestore: " + targetUid);
+
+        AtomicInteger successCounter = new AtomicInteger();
+
+        // update "boundUsers" field to self database
+        db.collection("users").document(selfUid)
+                .update("boundUsers", FieldValue.arrayUnion(targetUid))
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Success save selfUid to Firestore");
+                        checkUpdateSuccess(successCounter.incrementAndGet(), targetUid);
+                    } else {
+                        Log.d(TAG, "Failed save selfUid to Firestore");
+                    }
+
+                });
+
+        // update "boundUsers" field to target database
+        db.collection("users").document(targetUid)
+                .update("boundUser", selfUid)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Success save targetUid to Firestore");
+                        checkUpdateSuccess(successCounter.incrementAndGet(), targetUid);
+                    } else {
+                        Log.d(TAG, "Failed save targetUid to Firestore");
+                        Toast.makeText(getContext(), "Bound failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void checkUpdateSuccess(int successCounter, String targetUid) {
+        Log.d(TAG, "checkUpdateSuccess: " + successCounter);
+        if (successCounter == 2) {
+            Toast.makeText(getContext(), "Bound successfully", Toast.LENGTH_SHORT).show();
+
+            // TODO: 更新本地資料
+            // 以targetUid取得使用者email
+            db.collection("users").document(targetUid).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            String targetEmail = task.getResult().getString("email");
+                            editor.putString("boundUserEmail", targetEmail); // TODO: save array list
+                            editor.apply();
+                        }
+                    });
+
+            // TODO: update UI
+        }
+    }
 
     @Override
     public void onDestroy() {

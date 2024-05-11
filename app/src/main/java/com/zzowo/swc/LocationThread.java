@@ -60,7 +60,6 @@ public class LocationThread extends Thread{
                     if (lastKnownLocation == null) return;
                     double latitude = lastKnownLocation.getLatitude();
                     double longitude = lastKnownLocation.getLongitude();
-                    Log.d(TAG, "Latitude: " + latitude + ", Longitude: " + longitude);
                     locationListener.onLocationSuccess(latitude, longitude);
                 } else {
                     Log.e(TAG, "Failed to get location.");

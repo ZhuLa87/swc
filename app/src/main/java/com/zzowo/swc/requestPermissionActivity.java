@@ -54,7 +54,9 @@ public class requestPermissionActivity extends AppCompatActivity {
         neededPermission.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
         // 請求通知權限
-        neededPermission.add(android.Manifest.permission.POST_NOTIFICATIONS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            neededPermission.add(android.Manifest.permission.POST_NOTIFICATIONS);
+        }
 
         checkPermission();
 
@@ -88,7 +90,7 @@ public class requestPermissionActivity extends AppCompatActivity {
     }
 
     private void grantPermission() {
-        Log.d(TAG, "grantPermission: " + neededPermission.toString());
+        Log.d(TAG, "granting Permission: " + neededPermission.toString());
         // 請求權限
         Dexter.withContext(this)
             .withPermissions(
@@ -100,12 +102,17 @@ public class requestPermissionActivity extends AppCompatActivity {
                         // 取得所有權限
                         progressBar.setVisibility(View.GONE);
 
+                        Log.d(TAG, "All permissions are granted!");
                         Intent intent = new Intent(requestPermissionActivity.this, LoginPage.class);
                         startActivity(intent);
                         finish();
                     } else if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
                         // 僅取得部分權限
                         progressBar.setVisibility(View.GONE);
+
+                        // 紀錄未取得的權限
+                        Log.d(TAG, "Some permissions are denied permanently: " + multiplePermissionsReport.getDeniedPermissionResponses().get(0).getPermissionName());
+
                         showSettingsDialog();
                     }
                 }
