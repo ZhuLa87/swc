@@ -18,7 +18,7 @@
         android:id="@+id/animation_avatar"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -55,10 +55,9 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="4"
-            android:text="user123"
+            android:text="userId"
             android:textColor="#FDFEFE "
-            android:layout_marginLeft="25dp"
-            android:textSize="27sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:visibility="visible" />
     </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +29,12 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,14 +43,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class BindingFragment extends Fragment {
     private static final String TAG = "BindingFragment";
+    private View rootView;
+    private RecyclerView recyclerView;
+    private List<String> recyclerViewData = new ArrayList<>();
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private FirebaseUser user;
     private FirebaseFirestore db;
     private boolean primaryUser;
     private String selfUid;
-
     private RecyclerView mRecyclerView;
-    private List<String> mData;
+    private TextView userIdentity;
+    private TextView userName;
+    private ImageView userAvatar;
+    private LottieAnimationView lottieAnimationView;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -87,29 +99,26 @@ public class BindingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_binding, container, false);
+        rootView = inflater.inflate(R.layout.fragment_binding, container, false);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userIdentity = rootView.findViewById(R.id.user_identity);
+        userName = rootView.findViewById(R.id.user_name);
+        userAvatar = rootView.findViewById(R.id.user_avatar);
+        lottieAnimationView = rootView.findViewById(R.id.animation_avatar);
+        recyclerView = rootView.findViewById(R.id.recyclerView);
 
         db = FirebaseFirestore.getInstance();
 
         //init
         initPreferences();
         initStatusBarColor();
+        initUserIdentity();
+        initAccountInfo(user);
         initOperationView(rootView);
+        initRecyclerView();
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
-        // recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        List<String> data = new ArrayList<>();
-        recyclerView.addItemDecoration(new ItemSpacingDecoration(getContext(), 10)); // 2dp 的間距
-        data.add("user1");
-        data.add("user2");
-        data.add("user3");
-        data.add("user4");
-        // 添加更多項目...
-
-        ItemAdapter adapter = new ItemAdapter(data);
-        recyclerView.setAdapter(adapter);
+        updateRecyclerViewData();
 
         return rootView;
     }
@@ -122,6 +131,43 @@ public class BindingFragment extends Fragment {
         selfUid = sp.getString("userUid", "");
     }
 
+    private void initStatusBarColor() {
+        Window window = getActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(getActivity().getResources().getColor(R.color.colorSurface));
+    }
+
+    private void initAccountInfo(FirebaseUser user) {
+        // get provider
+        String provider = user.getProviderData().get(1).getProviderId();
+
+        if (provider.contains("google.com")) {
+            // 顯示使用者頭像
+            Uri userAvatarUrl = user.getPhotoUrl();
+            Picasso.get().load(userAvatarUrl).into(userAvatar);
+            lottieAnimationView.setVisibility(View.INVISIBLE);
+            userAvatar.setVisibility(View.VISIBLE);
+
+            // 顯示使用者名稱
+            String userDisplayName = user.getDisplayName();
+            userName.setText(userDisplayName);
+            userName.setVisibility(View.VISIBLE);
+        } else if (provider.contains("password")) {
+            // sign in with password
+        }
+    }
+
+    private void initUserIdentity() {
+        boolean primaryUser = sp.getBoolean("primaryUser", true); // default: true
+
+        if (primaryUser) {
+            userIdentity.setText(R.string.wheelchair_user);
+        } else {
+            userIdentity.setText(R.string.caregiver);
+        }
+    }
+
     private void initOperationView(View rootView) {
         View operationViewPrimary = rootView.findViewById(R.id.op_prime_user);
         View operationViewSecondary = rootView.findViewById(R.id.op_secondary_user);
@@ -131,7 +177,7 @@ public class BindingFragment extends Fragment {
             operationViewPrimary.setVisibility(View.VISIBLE);
             operationViewSecondary.setVisibility(View.INVISIBLE);
 
-            // TODO: 處理操作區內容
+            final Boolean[] isUseClipboard = {true};
             EditText inputUid = rootView.findViewById(R.id.input_uid);
             TextView selectBtn = rootView.findViewById(R.id.select_button);
 
@@ -140,6 +186,7 @@ public class BindingFragment extends Fragment {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
                         selectBtn.setText("Confirm");
+                        isUseClipboard[0] = false;
                     } else {
                         inputUid.setHint(R.string.input_uid);
                     }
@@ -150,9 +197,21 @@ public class BindingFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "Confirm button clicked!");
+
+                    // 讀取剪貼簿內容
+                    ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clipData = clipboard.getPrimaryClip();
+                    if (clipData == null || !isUseClipboard[0]) {
+                        return;
+                    }
+                    ClipData.Item item = clipData.getItemAt(0);
+                    String text = item.getText().toString();
+                    inputUid.setText(text);
+
                     // 確認按鈕
                     String input = inputUid.getText().toString();
-                    // 檢查 UID 是否合法
+                    // 檢查 UID 是否合規
+                    Log.d(TAG, "Input length: " + input.length());
                     if (input.length() != 28) {
                         Toast.makeText(getContext(), "Uid invalid", Toast.LENGTH_SHORT).show();
                         return;
@@ -173,7 +232,7 @@ public class BindingFragment extends Fragment {
                                         return;
                                     }
 
-                                    Log.d(TAG, "Input UID found!" + task.getResult().getData());
+                                    Log.d(TAG, "Input UID found!");
 
                                     // 上傳輸入之UID
                                     storeBoundUidToFirestore(input);
@@ -190,6 +249,7 @@ public class BindingFragment extends Fragment {
             // SecondaryUser
             operationViewPrimary.setVisibility(View.INVISIBLE);
             operationViewSecondary.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
 
             // 處理操作區內容
             TextView primeUid = rootView.findViewById(R.id.prime_uid);
@@ -210,11 +270,29 @@ public class BindingFragment extends Fragment {
         }
     }
 
-    private void initStatusBarColor() {
-        Window window = getActivity().getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(getActivity().getResources().getColor(R.color.colorSurface));
+    private void initRecyclerView() {
+        mRecyclerView = rootView.findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.addItemDecoration(new ItemSpacingDecoration(getContext(), 10)); // 2dp 的間距
+    }
+
+    private void updateRecyclerViewData() {
+
+        db.collection("users").document(selfUid).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        // 將取得的資料放入 recyclerViewData()
+                        List<String> boundUsers = (List<String>) task.getResult().get("boundUsers");
+                        if (boundUsers != null) {
+                            for (String boundUser : boundUsers) {
+                                recyclerViewData.add(boundUser.substring(0, 15) + "...");
+                                ItemAdapter adapter = new ItemAdapter(recyclerViewData);
+                                mRecyclerView.setAdapter(adapter);
+                            }
+                        }
+                    }
+                });
     }
 
     private void storeBoundUidToFirestore(String targetUid) {
@@ -255,17 +333,17 @@ public class BindingFragment extends Fragment {
             Toast.makeText(getContext(), "Bound successfully", Toast.LENGTH_SHORT).show();
 
             // TODO: 更新本地資料
-            // 以targetUid取得使用者email
-            db.collection("users").document(targetUid).get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            String targetEmail = task.getResult().getString("email");
-                            editor.putString("boundUserEmail", targetEmail); // TODO: save array list
-                            editor.apply();
-                        }
-                    });
+//            Set<String> data = sp.getStringSet("boundUsers", new HashSet<>());
+//            data.add(targetUid);
+//
+//            editor.putStringSet("boundUsers", data);
+//            editor.commit();
 
             // TODO: update UI
+            EditText inputUid = rootView.findViewById(R.id.input_uid);
+            inputUid.setText("");
+            recyclerViewData.clear();
+            updateRecyclerViewData();
         }
     }
 

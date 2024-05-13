@@ -19,9 +19,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/primary_user_info"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="160dp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="15dp"
+            android:layout_marginVertical="16dp"
             android:background="@drawable/primary_user_background_binding_fragment">
             <!-- 預設圖片 -->
             <com.airbnb.lottie.LottieAnimationView
@@ -29,7 +29,7 @@
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
@@ -58,6 +58,16 @@
                 app:layout_constraintBottom_toBottomOf="@id/animation_avatar"
                 app:layout_constraintStart_toEndOf="@id/animation_avatar"
                 app:layout_constraintTop_toTopOf="@id/animation_avatar">
+                <!-- 使用者身分 -->
+                <TextView
+                    android:id="@+id/user_identity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:text="輪椅使用者"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
                 <!-- 使用者名稱 (若存在才顯示) -->
                 <TextView
                     android:id="@+id/user_name"
@@ -130,12 +140,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginStart="25dp"
                 android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:textSize="26sp"/>
             <!-- 複製使用者ID -->
             <TextView
                 android:id="@+id/copy_prime_uid"
