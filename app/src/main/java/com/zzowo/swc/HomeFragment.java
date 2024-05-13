@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.zzowo.swc.BtThread.ConnectedThread;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -48,6 +50,7 @@ public class HomeFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private FirebaseUser user;
     private FirebaseFirestore db;
+    public static ConnectedThread connectedThread;
     private TextView toolBarTextView;
     private View btnBeep, btnLocation, btnAlarm;
 
@@ -124,6 +127,14 @@ public class HomeFragment extends Fragment {
             } else {
                 Toast.makeText(getContext(), R.string.swc, Toast.LENGTH_SHORT).show();
             }
+        });
+
+        btnLocation.setOnClickListener(view -> {
+            Boolean allowStoreLocation = sp.getBoolean("allowStoreLocation", true);
+            allowStoreLocation = !allowStoreLocation;
+            editor.putBoolean("allowStoreLocation", allowStoreLocation);
+            editor.commit();
+            Toast.makeText(getContext(), allowStoreLocation ? "Location tracking enabled" : "Location tracking disabled", Toast.LENGTH_SHORT).show();
         });
 
         btnAlarm.setOnClickListener(view -> {
@@ -241,7 +252,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void toolbarDisconnect() {
-//        TODO: toolbar_remove操作待編輯.
-        Toast.makeText(getContext(), "此操作待製作", Toast.LENGTH_SHORT).show();
+        connectedThread.cancel();
     }
 }

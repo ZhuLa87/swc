@@ -307,6 +307,11 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         lastLatitude = latitude;
         lastLongitude = longitude;
 
+        Boolean allowStoreLocation = sp.getBoolean("allowStoreLocation", true);
+        if (!allowStoreLocation) {
+            return;
+        }
+
         GeoPoint geoPoint = new GeoPoint(latitude, longitude); // Double latitude, Double longitude
         storeLastLocationInFirestore(geoPoint);
     }
