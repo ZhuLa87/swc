@@ -264,7 +264,7 @@ public class BindingFragment extends Fragment {
                     ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clipData = ClipData.newPlainText("uid", selfUid); // label為系統可見標籤, 非使用者可見標籤
                     clipboard.setPrimaryClip(clipData);
-                    Toast.makeText(getContext(), R.string.uid_copied, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.uid_copied, Toast.LENGTH_LONG).show();
                 }
             });
         }

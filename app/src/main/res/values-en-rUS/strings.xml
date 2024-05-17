@@ -88,7 +88,7 @@
     <string name="google_account_cannot_change_password">Google account cannot change password via this app</string>
     <string name="unboundUserTitle">You haven\'t bound any user yet</string>
     <string name="unBoundUserMsg">Please bind a user before using this feature</string>
-    <string name="uid_copied">UID copied</string>
+    <string name="uid_copied">UID has been copied, please share it with the primary user</string>
     <string name="input_uid">Please input Uid here.</string>
     <string name="enter_new_nickname">Enter new nickname</string>
     <string name="change_nickname">Change nickname</string>
