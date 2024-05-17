@@ -1,18 +1,18 @@
 package com.zzowo.swc;
 
-import static com.zzowo.swc.ConnectWheelChairActivity.connectedThread;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -120,6 +120,8 @@ public class HomeFragment extends Fragment {
         btnLocation = rootView.findViewById(R.id.func_02);
         btnAlarm = rootView.findViewById(R.id.func_03);
 
+        intiButtonColor(btnLocation);
+
         // 按鈕監聽
         btnBeep.setOnClickListener(view -> {
             if (connectedThread != null) {
@@ -132,41 +134,40 @@ public class HomeFragment extends Fragment {
         btnLocation.setOnClickListener(view -> {
             Boolean allowStoreLocation = sp.getBoolean("allowStoreLocation", true);
             allowStoreLocation = !allowStoreLocation;
+
+            // 更改按鈕顏色
+            if (allowStoreLocation) {
+                btnLocation.getBackground().setColorFilter(Color.parseColor("#00FF00"), android.graphics.PorterDuff.Mode.MULTIPLY);
+            } else {
+                btnLocation.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.white), android.graphics.PorterDuff.Mode.MULTIPLY);
+            }
+
+            // 儲存設定
             editor.putBoolean("allowStoreLocation", allowStoreLocation);
             editor.commit();
             Toast.makeText(getContext(), allowStoreLocation ? "Location tracking enabled" : "Location tracking disabled", Toast.LENGTH_SHORT).show();
         });
 
         btnAlarm.setOnClickListener(view -> {
-            // TODO: 添加警報延遲檢查
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("警報將於3秒內送出，是否取消")
+                    .setCancelable(false)
+                    .setPositiveButton("取消", (dialog, which) -> {
+                        dialog.cancel();
+                    })
+                    .setNegativeButton("送出", (dialog, which) -> {
+                        sendAlert();
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
 
-            if (connectedThread != null) {
-                connectedThread.btWriteString("alarm", "99", "Alert");
-            } else {
-
-                String provider = user.getProviderData().get(1).getProviderId();
-                String userDisplayName = "";
-                if (provider.contains("google.com")) {
-                    userDisplayName = user.getDisplayName();
+            Handler alertHandler = new Handler();
+            alertHandler.postDelayed(() -> {
+                if (alertDialog != null && alertDialog.isShowing()) {
+                    alertDialog.dismiss();
+                    sendAlert();
                 }
-
-                Map<String, Object> notification = new HashMap<>();
-                notification.put("from", user.getUid());
-                notification.put("title", "緊急通知!");
-                notification.put("body", userDisplayName.isEmpty()?"輪椅使用者":userDisplayName + "發出警報訊號，請立即前往查看。");
-                notification.put("tag", "alert");
-                notification.put("timestamp", new Timestamp(new Date()));
-
-                db.collection("Notifications")
-                        .add(notification)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getContext(), "Alert sent to server", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), "Failed to send alert", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
+            }, 3000);
         });
 
         return rootView;
@@ -190,6 +191,17 @@ public class HomeFragment extends Fragment {
         toolBarTextView = view.findViewById(R.id.toolbar_text);
         toolBarTextView.setText(mySWCName);
         activity.getSupportActionBar().setTitle("");
+    }
+
+    private void intiButtonColor(View btnLocation) {
+        Boolean allowStoreLocation = sp.getBoolean("allowStoreLocation", true);
+
+        // 更改按鈕顏色
+        if (allowStoreLocation) {
+            btnLocation.getBackground().setColorFilter(Color.parseColor("#00FF00"), android.graphics.PorterDuff.Mode.MULTIPLY);
+        } else {
+            btnLocation.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.white), android.graphics.PorterDuff.Mode.MULTIPLY);
+        }
     }
 
     @Override
@@ -251,7 +263,38 @@ public class HomeFragment extends Fragment {
         startActivity(intent);
     }
 
+    private void sendAlert() {
+        if (connectedThread != null) {
+            connectedThread.btWriteString("alarm", "99", "Alert");
+        } else {
+            String provider = user.getProviderData().get(1).getProviderId();
+            String userDisplayName = "";
+            if (provider.contains("google.com")) {
+                userDisplayName = user.getDisplayName();
+            }
+
+            Map<String, Object> notification = new HashMap<>();
+            notification.put("from", user.getUid());
+            notification.put("title", "緊急通知!");
+            notification.put("body", userDisplayName.isEmpty()?"輪椅使用者":userDisplayName + "發出警報訊號，請立即前往查看。");
+            notification.put("tag", "alert");
+            notification.put("timestamp", new Timestamp(new Date()));
+
+            db.collection("Notifications")
+                    .add(notification)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Alert sent to server", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Failed to send alert", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
     private void toolbarDisconnect() {
-        connectedThread.cancel();
+        if (connectedThread != null) {
+            connectedThread.cancel();
+        }
     }
 }
