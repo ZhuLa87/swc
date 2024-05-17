@@ -1,7 +1,10 @@
 package com.zzowo.swc;
 
+import static com.zzowo.swc.MainActivity.binding;
+
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -21,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -52,6 +56,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
+import com.zzowo.swc.databinding.ActivityMainBinding;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,6 +88,7 @@ public class SettingsFragment extends Fragment {
     private ImageView userAvatar;
     private SwitchCompat switchNotification;
     private TextView textVersion;
+    private OnIdentitySelectedListener mListener;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -205,7 +211,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-//        profileUpdates();
+        selectEditProfile(rootView);
         selectUpdatePassword(rootView);
         selectIdentity(rootView);
         btn_logout(rootView);
@@ -213,6 +219,19 @@ public class SettingsFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnIdentitySelectedListener) {
+            mListener = (OnIdentitySelectedListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnIdentitySelectedListener");
+        }
+    }
+
+    public interface OnIdentitySelectedListener {
+        void onIdentitySelected(Boolean primaryUser);
+    }
 
 
     private void initStatusBarColor() {
@@ -297,10 +316,41 @@ public class SettingsFragment extends Fragment {
         textVersion.setText(versionName);
     }
 
-    private void profileUpdates() {
+    private void selectEditProfile(View view) {
+        View selectEditProfile = view.findViewById(R.id.option_profile);
+        selectEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditProfileDialog();
+            }
+        });
+
+    }
+
+    private void showEditProfileDialog() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        final View editProfileDialog = inflater.inflate(R.layout.edit_profile_dialog, null);
+        builder.setView(editProfileDialog);
+        builder.setIcon(R.drawable.baseline_edit_24);
+        builder.setTitle(R.string.change_nickname);
+        builder.setPositiveButton("Save", (dialog, i) -> {
+            EditText editText = editProfileDialog.findViewById(R.id.edit_text);
+            if (editText.length() > 0) {
+                storeUserNameInFirestore(editText.getText().toString().trim());
+            }
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            // this method is called when user click on negative button.
+            dialog.cancel();
+        });
+
+        builder.show();
+    }
+
+    private void storeUserNameInFirestore(String newTitle) {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName("")
-                .setPhotoUri(Uri.parse(""))
+                .setDisplayName(newTitle)
                 .build();
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -308,7 +358,22 @@ public class SettingsFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "User profile updated.");
+                            userName.setText(newTitle);
+                            if (isAdded()) {
+                                Toast.makeText(getContext(), R.string.operation_successful, Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Log.w(TAG, "Error updating profile", task.getException());
+                            if (isAdded()) {
+                                Toast.makeText(getContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
+                            }
                         }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -478,6 +543,7 @@ public class SettingsFragment extends Fragment {
             editor1.putBoolean("primaryUser", false).commit();
             primaryUser = false;
         }
+        mListener.onIdentitySelected(primaryUser);
         storeUserIdentityInFirestore(primaryUser);
     }
 

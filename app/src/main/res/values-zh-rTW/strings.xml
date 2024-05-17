@@ -90,4 +90,6 @@
     <string name="unBoundUserMsg">請先綁定使用者，再使用此功能</string>
     <string name="uid_copied">UID 已複製</string>
     <string name="input_uid">請輸入Uid</string>
+    <string name="enter_new_nickname">輸入新的暱稱</string>
+    <string name="change_nickname">變更暱稱</string>
 </resources>

@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,14 +37,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements LocationThread.LocationListener{
+public class MainActivity extends AppCompatActivity implements LocationThread.LocationListener, SettingsFragment.OnIdentitySelectedListener{
     private static final String TAG = "MainActivity";
     public static Handler BThandler;
     private FirebaseUser user;
     private FirebaseFirestore db;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
-    private ActivityMainBinding binding;
+    static public ActivityMainBinding binding;
     private static LocationThread locationThread;
     private Double lastLatitude = null;
     private Double lastLongitude = null;
@@ -177,19 +178,26 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         Log.d(TAG, "UserUID: " + user.getUid());
     }
 
-    private void bottomNavSetup() {
+    public void bottomNavSetup() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         // 預設首頁
-        currentFragment = new HomeFragment();
-        replaceFragment(currentFragment);
+        Boolean primaryUser = sp.getBoolean("primaryUser", true);
+        if (primaryUser) {
+            currentFragment = new HomeFragment();
+            replaceFragment(currentFragment);
+        } else {
+            currentFragment = new MonitorMapFragment();
+            replaceFragment(currentFragment);
+            binding.bottomNavigationView.setSelectedItemId(R.id.bottom_map);
+            binding.bottomNavigationView.getMenu().removeItem(R.id.bottom_home);
+        }
 
         // 底部導覽列
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             int itemId = item.getItemId();
-            Boolean primaryUser = sp.getBoolean("primaryUser", true);
 
             if (itemId == R.id.bottom_home) {
                 selectedFragment = new HomeFragment();
@@ -251,6 +259,10 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         } else if (selectedOption.equals(getString(R.string.option_caregiver))) {
             editor.putBoolean("primaryUser", false).commit();
             primaryUser = false;
+
+            // 切換至綁定頁面
+            binding.bottomNavigationView.setSelectedItemId(R.id.bottom_binding);
+            binding.bottomNavigationView.getMenu().removeItem(R.id.bottom_home);
         }
         storeUserIdentityInFirestore(primaryUser);
     }
@@ -338,6 +350,15 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                 });
     }
 
+    @Override
+    public void onIdentitySelected(Boolean primaryUser) {
+        if (primaryUser) {
+            bottomNavSetup();
+        } else {
+            bottomNavSetup();
+            binding.bottomNavigationView.getMenu().removeItem(R.id.bottom_home);
+        }
+    }
 
     public Double getLastLatitude() {
         return lastLatitude;
@@ -367,4 +388,5 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
             locationThread.stopThread();
         }
     }
+
 }

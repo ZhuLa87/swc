@@ -1,6 +1,7 @@
 package com.zzowo.swc;
 
 import static com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom;
+import static com.zzowo.swc.MainActivity.binding;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -145,6 +146,8 @@ public class MonitorMapFragment extends Fragment {
     }
 
     private void showNotBoundDialog() {
+        if (getContext() == null) return;
+
         // 顯示未綁定的 Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -153,8 +156,10 @@ public class MonitorMapFragment extends Fragment {
 
         builder.setPositiveButton(R.string.confirm, (dialog, which) -> {
             // 關閉畫面
-            getActivity().finish();
+            binding.bottomNavigationView.setSelectedItemId(R.id.bottom_binding);
         });
+
+        builder.setCancelable(false);
 
         builder.show();
     }
