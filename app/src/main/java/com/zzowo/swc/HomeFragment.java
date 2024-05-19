@@ -1,5 +1,7 @@
 package com.zzowo.swc;
 
+import static com.zzowo.swc.ConnectWheelChairActivity.connectedThread;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,7 +52,6 @@ public class HomeFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private FirebaseUser user;
     private FirebaseFirestore db;
-    public static ConnectedThread connectedThread;
     private TextView toolBarTextView;
     private View btnBeep, btnLocation, btnAlarm;
 
