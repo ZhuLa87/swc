@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     private Boolean getUserIdentityFromSharedPreferences() {
         Log.d(TAG, "Getting primaryUser from SharedPreferences");
         Boolean isContainPrimaryUser = sp.contains("primaryUser");
+        Log.d(TAG, "isContainPrimaryUser: " + isContainPrimaryUser);
         return isContainPrimaryUser;
     }
 
@@ -190,6 +191,12 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                             Log.d(TAG, "Successfully obtained primaryUser from Firestore: " + primaryUser);
                             // 如果已經選擇過身份，則將primaryUser寫入SharedPreferences
                             editor.putBoolean("primaryUser", primaryUser).commit();
+
+                            // 切換首頁
+                            currentFragment = new MonitorMapFragment();
+                            replaceFragment(currentFragment);
+                            binding.bottomNavigationView.setSelectedItemId(R.id.bottom_map);
+                            binding.bottomNavigationView.getMenu().removeItem(R.id.bottom_home);
                             return;
                         }
                     }

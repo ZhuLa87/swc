@@ -143,23 +143,23 @@ public class BindingFragment extends Fragment {
         String provider = null;
         try {
             provider = user.getProviderData().get(1).getProviderId();
+
+            if (provider.contains("google.com")) {
+                // 顯示使用者頭像
+                Uri userAvatarUrl = user.getPhotoUrl();
+                Picasso.get().load(userAvatarUrl).into(userAvatar);
+                lottieAnimationView.setVisibility(View.INVISIBLE);
+                userAvatar.setVisibility(View.VISIBLE);
+
+                // 顯示使用者名稱
+                String userDisplayName = user.getDisplayName();
+                userName.setText(userDisplayName);
+                userName.setVisibility(View.VISIBLE);
+            } else if (provider.contains("password")) {
+                // sign in with password
+            }
         } catch (Exception e) {
             Log.d(TAG, "getProviderData error: " + e);
-        }
-
-        if (provider.contains("google.com")) {
-            // 顯示使用者頭像
-            Uri userAvatarUrl = user.getPhotoUrl();
-            Picasso.get().load(userAvatarUrl).into(userAvatar);
-            lottieAnimationView.setVisibility(View.INVISIBLE);
-            userAvatar.setVisibility(View.VISIBLE);
-
-            // 顯示使用者名稱
-            String userDisplayName = user.getDisplayName();
-            userName.setText(userDisplayName);
-            userName.setVisibility(View.VISIBLE);
-        } else if (provider.contains("password")) {
-            // sign in with password
         }
     }
 
