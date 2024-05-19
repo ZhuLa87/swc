@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -265,32 +266,36 @@ public class HomeFragment extends Fragment {
     }
 
     private void sendAlert() {
+        Log.d(TAG, "sendAlert: " + user.getUid());
+
+        // 藍芽警報
         if (connectedThread != null) {
             connectedThread.btWriteString("alarm", "99", "Alert");
-        } else {
-            String provider = user.getProviderData().get(1).getProviderId();
-            String userDisplayName = "";
-            if (provider.contains("google.com")) {
-                userDisplayName = user.getDisplayName();
-            }
-
-            Map<String, Object> notification = new HashMap<>();
-            notification.put("from", user.getUid());
-            notification.put("title", "緊急通知!");
-            notification.put("body", userDisplayName.isEmpty()?"輪椅使用者":userDisplayName + "發出警報訊號，請立即前往查看。");
-            notification.put("tag", "alert");
-            notification.put("timestamp", new Timestamp(new Date()));
-
-            db.collection("Notifications")
-                    .add(notification)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Alert sent to server", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getContext(), "Failed to send alert", Toast.LENGTH_SHORT).show();
-                        }
-                    });
         }
+
+        // 通知警報
+        String provider = user.getProviderData().get(1).getProviderId();
+        String userDisplayName = "";
+        if (provider.contains("google.com")) {
+            userDisplayName = user.getDisplayName();
+        }
+
+        Map<String, Object> notification = new HashMap<>();
+        notification.put("from", user.getUid());
+        notification.put("title", "緊急通知!");
+        notification.put("body", userDisplayName.isEmpty()?"輪椅使用者":userDisplayName + "發出警報訊號，請立即前往查看。");
+        notification.put("tag", "alert");
+        notification.put("timestamp", new Timestamp(new Date()));
+
+        db.collection("Notifications")
+                .add(notification)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getContext(), "Alert sent to server", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Failed to send alert", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void toolbarDisconnect() {

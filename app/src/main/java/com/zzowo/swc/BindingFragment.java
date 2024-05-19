@@ -226,6 +226,11 @@ public class BindingFragment extends Fragment {
                                 if (task.isSuccessful()) {
                                     // 判斷該使用者是否為主使用者
                                     Boolean isUidUserPrimary = task.getResult().getBoolean("primaryUser");
+                                    if (isUidUserPrimary == null) {
+                                        Toast.makeText(getContext(), "UID not found", Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, "Input UID not found!");
+                                        return;
+                                    }
                                     if (isUidUserPrimary) {
                                         Toast.makeText(getContext(), "Primary user cannot be bound", Toast.LENGTH_SHORT).show();
                                         Log.d(TAG, "Primary user cannot be bound!");
@@ -240,7 +245,6 @@ public class BindingFragment extends Fragment {
                                 } else {
                                     Toast.makeText(getContext(), "UID not found", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, "Input UID not found!");
-
                                 }
                             });
                 }
