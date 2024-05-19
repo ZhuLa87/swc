@@ -140,7 +140,12 @@ public class BindingFragment extends Fragment {
 
     private void initAccountInfo(FirebaseUser user) {
         // get provider
-        String provider = user.getProviderData().get(1).getProviderId();
+        String provider = null;
+        try {
+            provider = user.getProviderData().get(1).getProviderId();
+        } catch (Exception e) {
+            Log.d(TAG, "getProviderData error: " + e);
+        }
 
         if (provider.contains("google.com")) {
             // 顯示使用者頭像
