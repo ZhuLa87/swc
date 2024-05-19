@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
         // 按鈕監聽
         btnBeep.setOnClickListener(view -> {
             if (connectedThread != null) {
-                connectedThread.btWriteString("beep", "1", "1");
+                connectedThread.btWriteString("beep", "1", "toggle");
             } else {
                 Toast.makeText(getContext(), R.string.swc, Toast.LENGTH_SHORT).show();
             }

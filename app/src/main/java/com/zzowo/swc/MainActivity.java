@@ -1,6 +1,7 @@
 package com.zzowo.swc;
 
 import static com.zzowo.swc.BtThread.ConnectThread.bluetoothSocket;
+import static com.zzowo.swc.ConnectWheelChairActivity.connectedThread;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -87,13 +88,54 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                     String controlCode = parts[1];
                     String content = parts[2];
 
-                    // TODO: 根據標籤、控制代碼和內容處理訊息
+                    // 根據標籤、控制代碼和內容處理訊息
                     Log.d(TAG, "handlerReceived - Label: " + label + ", Control Code: " + controlCode + ", Content: " + content);
+
+                    if (label.equals("fullDown")) {
+                        if (controlCode.equals("99")) {
+                            if (content.equals("emergency")) {
+                                sendAlert();
+                            }
+                        }
+                    } else if (label.equals("beep")) {
+                        if (controlCode.equals("0")) {
+                            // TODO: 處理接收到目前蜂鳴器的狀態
+                        }
+                    }
                 }
 
                 return true;
             }
         });
+    }
+
+    public void sendAlert() {
+        if (connectedThread != null) {
+            connectedThread.btWriteString("alarm", "99", "Alert");
+        } else {
+            String provider = user.getProviderData().get(1).getProviderId();
+            String userDisplayName = "";
+            if (provider.contains("google.com")) {
+                userDisplayName = user.getDisplayName();
+            }
+
+            Map<String, Object> notification = new HashMap<>();
+            notification.put("from", user.getUid());
+            notification.put("title", "緊急通知!");
+            notification.put("body", userDisplayName.isEmpty()?"輪椅使用者":userDisplayName + "發出警報訊號，請立即前往查看。");
+            notification.put("tag", "alert");
+            notification.put("timestamp", new Timestamp(new Date()));
+
+            db.collection("Notifications")
+                    .add(notification)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(this, "Alert sent to server", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "Failed to send alert", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
     private void updateFCMToken() {
