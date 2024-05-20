@@ -59,13 +59,6 @@ public class LoginPage extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-//        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-//        firestore.useEmulator("localhost", 8080);
-//
-//        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-//                .setPersistenceEnabled(false)
-//                .build();
-//        firestore.setFirestoreSettings(settings);
 
         // 初始化 Firebase 應用程式的方法, 該方法用於建立與 Firebase 相關的基礎設定, 並設置應用程式與 Firebase 之間的連接
         FirebaseApp.initializeApp(this);
@@ -247,6 +240,7 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void storeUserInfoInFirestoreAndRedirect(FirebaseUser firebaseUser) {
+        Log.d(TAG, "isEmailVerified: " + firebaseUser.isEmailVerified());
         UsersData usersData = new UsersData();
         usersData.setEmail(firebaseUser.getEmail());
         usersData.setFullName(firebaseUser.getDisplayName());
@@ -269,7 +263,13 @@ public class LoginPage extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        // TODO: 添加資料庫錯誤時的處裡邏輯
+                        try {
+                            FirebaseAuth.getInstance().signOut();
+                            mGoogleSignInClient.signOut();
+                        } catch (Exception ex) {
+                            Log.w(TAG, "Google auth logout error: " + ex);
+                        }
+
                         Log.w(TAG, "An error occurred while writing to the database", e);
                         Toast.makeText(getApplicationContext(), R.string.operation_failed_please_try_again, Toast.LENGTH_SHORT).show();
                         logout();
@@ -294,7 +294,7 @@ public class LoginPage extends AppCompatActivity {
         } else if (provider.contains("google.com")) {
             welcomeMsg += user.getDisplayName();
         }
-        Log.d(TAG, "Hi: " + welcomeMsg);
+        Log.d(TAG, "Welcome message sent.");
         Toast.makeText(this, welcomeMsg, Toast.LENGTH_SHORT).show();
     }
 
