@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         initAuth();
         initFirebaseMessaging();
         updateFCMToken();
-        bottomNavSetup();
 
         // check is selected identity
         Boolean isSharedPreferencesContainPrimaryUser = getUserIdentityFromSharedPreferences();
@@ -207,16 +206,21 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Boolean primaryUser = task.getResult().getBoolean("primaryUser");
+                        Log.d(TAG, task.getResult().getData().toString());
                         if (primaryUser != null) {
                             Log.d(TAG, "Successfully obtained primaryUser from Firestore: " + primaryUser);
                             // 如果已經選擇過身份，則將primaryUser寫入SharedPreferences
                             editor.putBoolean("primaryUser", primaryUser).commit();
 
-                            // 切換首頁
-                            currentFragment = new MonitorMapFragment();
-                            replaceFragment(currentFragment);
-                            binding.bottomNavigationView.setSelectedItemId(R.id.bottom_map);
-                            binding.bottomNavigationView.getMenu().removeItem(R.id.bottom_home);
+                            if (!primaryUser) {
+                                // 切換首頁
+                                currentFragment = new MonitorMapFragment();
+                                replaceFragment(currentFragment);
+                                binding.bottomNavigationView.setSelectedItemId(R.id.bottom_map);
+                                binding.bottomNavigationView.getMenu().removeItem(R.id.bottom_home);
+                            }
+
+                            bottomNavSetup();
                             return;
                         }
                     }
@@ -328,10 +332,6 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         } else if (selectedOption.equals(getString(R.string.option_caregiver))) {
             editor.putBoolean("primaryUser", false).commit();
             primaryUser = false;
-
-            // 切換至綁定頁面
-            binding.bottomNavigationView.setSelectedItemId(R.id.bottom_binding);
-            binding.bottomNavigationView.getMenu().removeItem(R.id.bottom_home);
         }
         storeUserIdentityInFirestore(primaryUser);
     }
@@ -348,6 +348,8 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                             Log.d(TAG, "primaryUser added with ID: " + user.getUid());
 
                             editor.putBoolean("isFirstTimeLogin", false).apply(); // 設定為非首次登入
+
+                            bottomNavSetup();
                         } else {
                             Log.w(TAG, "Error adding document to Firestore", task.getException());
 

@@ -71,7 +71,6 @@ import java.util.Map;
  */
 public class SettingsFragment extends Fragment {
     private static final String TAG = "SETTINGS";
-    private FirebaseAuth mAuth;
     private FirebaseUser user;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseFirestore db;
@@ -146,8 +145,7 @@ public class SettingsFragment extends Fragment {
         switchNotification = rootView.findViewById(R.id.switch_notification);
         textVersion = rootView.findViewById(R.id.text_version);
 
-        mAuth = FirebaseAuth.getInstance(); // 第一次寫少了這行, Debug1個半小時才找到, 所以我決定給他個註解; 附上錯誤訊息"java.lang.NullPointerException: Attempt to invoke virtual method 'com.google.firebase.auth.FirebaseUser com.google.firebase.auth.FirebaseAuth.getCurrentUser()' on a null object reference"
-        user = mAuth.getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         db = FirebaseFirestore.getInstance();
 
@@ -603,7 +601,7 @@ public class SettingsFragment extends Fragment {
 
     public void logout() {
         try {
-            mAuth.signOut();
+            FirebaseAuth.getInstance().signOut();
             mGoogleSignInClient.signOut();
         } catch (Exception e) { }
 
