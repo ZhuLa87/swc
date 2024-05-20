@@ -45,7 +45,7 @@ import java.util.Map;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements MainActivity.OnBeepStatusChangedListener {
     private static final String TAG = "HomeFragment";
     private Toolbar toolbar;
     private AppCompatActivity activity;
@@ -123,6 +123,7 @@ public class HomeFragment extends Fragment {
         btnAlarm = rootView.findViewById(R.id.func_03);
 
         intiButtonColor(btnLocation);
+        ((MainActivity) getActivity()).setOnBeepStatusChangedListener(this);
 
         // 按鈕監聽
         btnBeep.setOnClickListener(view -> {
@@ -301,6 +302,15 @@ public class HomeFragment extends Fragment {
     private void toolbarDisconnect() {
         if (connectedThread != null) {
             connectedThread.cancel();
+        }
+    }
+
+    @Override
+    public void onBeepStatusChanged(Boolean isOn) {
+        if (isOn) {
+            btnBeep.getBackground().setColorFilter(Color.parseColor("#00FF00"), android.graphics.PorterDuff.Mode.MULTIPLY);
+        } else {
+            btnBeep.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.white), android.graphics.PorterDuff.Mode.MULTIPLY);
         }
     }
 }

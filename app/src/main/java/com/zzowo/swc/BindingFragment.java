@@ -157,6 +157,13 @@ public class BindingFragment extends Fragment {
                 userName.setVisibility(View.VISIBLE);
             } else if (provider.contains("password")) {
                 // sign in with password
+                String userDisplayName = user.getDisplayName();
+                if (userDisplayName == null) {
+                    userName.setVisibility(View.GONE);
+                } else {
+                    userName.setText(userDisplayName);
+                    userName.setVisibility(View.VISIBLE);
+                }
             }
         } catch (Exception e) {
             Log.d(TAG, "getProviderData error: " + e);

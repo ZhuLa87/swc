@@ -266,6 +266,13 @@ public class SettingsFragment extends Fragment {
             userName.setVisibility(View.VISIBLE);
         } else if (provider.contains("password")) {
             // sign in with password
+            String userDisplayName = user.getDisplayName();
+            if (userDisplayName == null) {
+                userName.setVisibility(View.GONE);
+            } else {
+                userName.setText(userDisplayName);
+                userName.setVisibility(View.VISIBLE);
+            }
         }
 
         userEmail.setText(user.getEmail());

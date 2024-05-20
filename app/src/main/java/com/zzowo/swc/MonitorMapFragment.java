@@ -174,12 +174,14 @@ public class MonitorMapFragment extends Fragment {
                 // 取得綁定使用者的位置
                 Map<String, Object> lastLocation = (Map<String, Object>) task.getResult().get("lastLocation");
 
-                GeoPoint geoPoint = (GeoPoint) lastLocation.get("point");
+                if (lastLocation != null) {
+                    GeoPoint geoPoint = (GeoPoint) lastLocation.get("point");
 
-                // 時間戳
-                Timestamp timestamp = (Timestamp) lastLocation.get("timestamp");
+                    // 時間戳
+                    Timestamp timestamp = (Timestamp) lastLocation.get("timestamp");
 
-                showBoundUserLocation(geoPoint, timestamp);
+                    showBoundUserLocation(geoPoint, timestamp);
+                }
             }
         });
 
@@ -194,6 +196,8 @@ public class MonitorMapFragment extends Fragment {
                 if (value != null && value.exists()) {
                     progressBar.setVisibility(View.VISIBLE);
                     Map<String, Object> lastLocation = (Map<String, Object>) value.get("lastLocation");
+
+                    if (lastLocation == null) return;
 
                     GeoPoint geoPoint = (GeoPoint) lastLocation.get("point");
 

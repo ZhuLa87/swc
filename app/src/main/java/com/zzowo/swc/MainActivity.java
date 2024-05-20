@@ -99,7 +99,17 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                         }
                     } else if (label.equals("beep")) {
                         if (controlCode.equals("0")) {
-                            // TODO: 處理接收到目前蜂鳴器的狀態
+                            if (content.equals("1")) {
+                                // 蜂鳴器開啟, 更新UI
+                                if (onBeepStatusChangedListener != null) {
+                                    onBeepStatusChangedListener.onBeepStatusChanged(true);
+                                }
+                            } else if (content.equals("0")) {
+                                // 蜂鳴器關閉, 更新UI
+                                if (onBeepStatusChangedListener != null) {
+                                    onBeepStatusChangedListener.onBeepStatusChanged(false);
+                                }
+                            }
                         }
                     }
                 }
@@ -107,6 +117,16 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                 return true;
             }
         });
+    }
+
+    public interface OnBeepStatusChangedListener {
+        void onBeepStatusChanged(Boolean isOn);
+    }
+
+    private OnBeepStatusChangedListener onBeepStatusChangedListener;
+
+    public void setOnBeepStatusChangedListener(OnBeepStatusChangedListener listener) {
+        this.onBeepStatusChangedListener = listener;
     }
 
     public void sendAlert() {
@@ -232,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
         setContentView(binding.getRoot());
 
         // 預設首頁
-        Boolean primaryUser = sp.getBoolean("primaryUser", true);
+        Boolean primaryUser = sp.getBoolean("primaryUser", false);
         if (primaryUser) {
             currentFragment = new HomeFragment();
             replaceFragment(currentFragment);
