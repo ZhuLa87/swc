@@ -93,7 +93,25 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
                     if (label.equals("fullDown")) {
                         if (controlCode.equals("99")) {
                             if (content.equals("emergency")) {
-                                sendAlert();
+                                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(MainActivity.this);
+                                builder.setTitle("警報將於3秒內送出，是否取消")
+                                        .setCancelable(false)
+                                        .setPositiveButton("取消", (dialog, which) -> {
+                                            dialog.cancel();
+                                        })
+                                        .setNegativeButton("送出", (dialog, which) -> {
+                                            sendAlert();
+                                        });
+                                androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
+
+                                Handler alertHandler = new Handler();
+                                alertHandler.postDelayed(() -> {
+                                    if (alertDialog != null && alertDialog.isShowing()) {
+                                        alertDialog.dismiss();
+                                        sendAlert();
+                                    }
+                                }, 3000);
                             }
                         }
                     } else if (label.equals("beep")) {
@@ -131,30 +149,30 @@ public class MainActivity extends AppCompatActivity implements LocationThread.Lo
     public void sendAlert() {
         if (connectedThread != null) {
             connectedThread.btWriteString("alarm", "99", "Alert");
-        } else {
-            String provider = user.getProviderData().get(1).getProviderId();
-            String userDisplayName = "";
-            if (provider.contains("google.com")) {
-                userDisplayName = user.getDisplayName();
-            }
-
-            Map<String, Object> notification = new HashMap<>();
-            notification.put("from", user.getUid());
-            notification.put("title", "緊急通知!");
-            notification.put("body", userDisplayName.isEmpty()?"輪椅使用者":userDisplayName + "發出警報訊號，請立即前往查看。");
-            notification.put("tag", "alert");
-            notification.put("timestamp", new Timestamp(new Date()));
-
-            db.collection("Notifications")
-                    .add(notification)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(this, "Alert sent to server", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(this, "Failed to send alert", Toast.LENGTH_SHORT).show();
-                        }
-                    });
         }
+
+        String provider = user.getProviderData().get(1).getProviderId();
+        String userDisplayName = "";
+        if (provider.contains("google.com")) {
+            userDisplayName = user.getDisplayName();
+        }
+
+        Map<String, Object> notification = new HashMap<>();
+        notification.put("from", user.getUid());
+        notification.put("title", "緊急通知!");
+        notification.put("body", userDisplayName.isEmpty()?"輪椅使用者":userDisplayName + "發出警報訊號，請立即前往查看。");
+        notification.put("tag", "alert");
+        notification.put("timestamp", new Timestamp(new Date()));
+
+        db.collection("Notifications")
+                .add(notification)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Alert sent to server", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Failed to send alert", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void updateFCMToken() {
